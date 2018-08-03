@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
+
+    <title>existdb shape demo</title>
+
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"> </script>
+    <link rel="import" href="../existdb-fabric-shape.html"/>
+    <style>
+        body {
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            display: block;
+            font-size:20px;
+        }
+/*
+        existdb-shape{
+            width: 100%;
+            height: 100%;
+        }
+*/
+        h2{
+            color:blue;
+        }
+/*
+        canvas{
+            background: url('../../icon.png') no-repeat;
+        }
+*/
+    </style>
+</head>
+<body>
+
+    <h2>Shapes </h2>
+    <!--<canvas id="c"></canvas>-->
+    <existdb-fabric-shape id="fabric" type="rectangle" from="[25, 150]" to="[200, 300]">
+        <!--<canvas id="c" style="width:800px;height:600px;background:lightsteelblue;"></canvas>-->
+        <canvas id="c"></canvas>
+    </existdb-fabric-shape>
+</body>
+</html>

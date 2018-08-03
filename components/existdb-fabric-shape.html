@@ -1,0 +1,146 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<script type="text/javascript" src="../bower_components/fabric.js/dist/fabric.js"></script>
+
+<dom-module id="existdb-fabric-shape">
+    <template>
+        <style>
+            :host {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+            ::slotted(div.canvas-container) {
+                width: 100%
+                height: 100%;
+                border: steelblue thin solid;
+            }
+
+        </style>
+
+        <button on-click="_logShapes">debug</button>
+        <input id="rotationInput" type="text" value="{{rotation}}">
+        <slot></slot>
+    </template>
+
+    <script>
+        /**
+         * `existdb-fabric-shape`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class ExistdbFabricShape extends Polymer.Element {
+            static get is() {
+                return 'existdb-fabric-shape';
+            }
+
+            static get properties() {
+                return {
+                    prop1: {
+                        type: String
+                    },
+                    rotation:{
+                        type:String,
+                        observer:'_handleRotation',
+                        reflectToAttribute:true
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                console.log(this, 'connectedCallback');
+
+
+
+                this.canvas = new fabric.Canvas('c');
+                console.log('canvas ', this.canvas);
+
+                this.canvas.setHeight('600');
+                this.canvas.setWidth('800');
+                this.canvas.renderAll();
+
+                var rect = new fabric.Rect({
+                    left: 10,
+                    top: 10,
+                    fill: 'transparent',
+                    stroke:'blue',
+                    strokeWidth:2,
+                    width: 120,
+                    height: 220,
+                    data:'a rectangle'
+                });
+
+                console.log('rect ', rect);
+
+                this.canvas.add(rect);
+                this.canvas.renderAll();
+
+                this.canvas.on({
+                    'object:scaling': this._scaling
+                })
+
+//                this.overlay = this.canvas;
+                this.rectA = rect;
+
+
+                var circle = new fabric.Circle({
+                    left:100,
+                    top:100,
+                    radius:50,
+                    fill:'transparent',
+                    stroke:'blue',
+                    strokeWidth:2,
+                });
+                this.canvas.add(circle);
+            }
+
+            ready() {
+                super.ready();
+//                console.log('canvas ', this.overlay);
+//                console.log('canvas ', this.canvas);
+            }
+
+            _logShapes(e){
+                console.log('_logShapes ', e);
+                console.log('_logShapes canvas ', this.canvas);
+                console.log('_logShapes canvas ', JSON.stringify(this.canvas));
+                console.log("_logShapes getWith", this.rectA.get('width'));
+
+
+                this.rotation = this.rectA.get('angle');
+
+                this.rectA.set({
+                    height:this.rectA.get('height'),
+                    width:this.rectA.get('width') * this.rectA.get('scaleX'),
+                    scaleX:1,
+                    scaleY:1,
+                    strokeWidth:2
+
+                });
+                this.canvas.renderAll();
+                console.log('all objects ', this.canvas.getObjects());
+
+                console.log('_logShapes canvas ', JSON.stringify(this.canvas));
+
+            }
+            _scaling(){
+                console.log('scaling...');
+            }
+
+
+            _handleRotation(newValue, oldValue){
+                console.log('_handleRotation ', newValue);
+
+                this.rectA.set('angle',newValue);
+            }
+
+        }
+
+        window.customElements.define(ExistdbFabricShape.is, ExistdbFabricShape);
+    </script>
+</dom-module>

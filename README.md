@@ -30,11 +30,11 @@ What will be needed up-front:
 
 ## Setting up a new application
 
-Don't be scared by this list. It can be done in 3 minutes. Thanks to Chris Misztur there is a more visual description of the process [here](https://medium.com/@chrismisztur/exist-db-polymer-app-template-61e58b1e4000).
+Don't be scared by this list. It can be done in 3 minutes. Thanks to Chris Misztur there is a more visual description of the process [here](https://medium.com/@chrismisztur/exist-db-polymer-epco-61e58b1e4000).
 
 1. download this blueprint as a zip
 1. unpack the zip in your favorite development folder
-1. this creates a folder with starts with 'app-template-'
+1. this creates a folder with starts with 'epco-'
 1. rename the folder to give it your new projectname
 1. execute ´npm install' to install bower and gulp support. Note: do NOT bower install yet. This will be done by Polymer CLI. However if you don't intend to use that you'll have to setup bower yourself.
 1. execute ´ant init´ to name your new app. This will put the new name into all needed config files

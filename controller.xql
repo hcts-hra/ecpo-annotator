@@ -25,7 +25,7 @@ else if ($exist:path = "/") then
 
 else if (ends-with($exist:path, ".html")) then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-        <cache-control cache="yes"/>
+        <cache-control cache="no"/>
     </dispatch>
 
 else

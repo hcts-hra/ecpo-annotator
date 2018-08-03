@@ -25,12 +25,12 @@ var exClient = exist.createClient({
 })
 
 var html5TargetConfiguration = {
-    target: '/db/apps/app-template',
+    target: '/db/apps/epco',
     html5AsBinary: true
 }
 
 var targetConfiguration = {
-    target: '/db/apps/app-template/',
+    target: '/db/apps/epco/',
     html5AsBinary: true
 }
 
@@ -73,7 +73,7 @@ gulp.task('odd:watch', function () {
 // files in project root //
 
 var componentPaths = [
-    '*.html',
+    'components/*.html',
     'bower_components/**/*'
 ];
 
@@ -90,7 +90,8 @@ var otherPaths = [
     'transforms/**/*',
     'resources/**/*',
     '!resources/css/*',
-    'modules/**/*'
+    'modules/**/*',
+    'components/demo/**'
 ];
 
 gulp.task('deploy:other', function () {
@@ -100,21 +101,16 @@ gulp.task('deploy:other', function () {
 })
 
 var components = [
-    '*-*.html'
+    'components/*.html'
 ];
 
-gulp.task('deploy:comp', function () {
-    return gulp.src(components, {base: './'})
-        .pipe(gulp.dest('bower_components/app-template'))
-})
 
-gulp.task('deploy', ['deploy:comp', 'deploy:other', 'deploy:components', 'deploy:styles'])
+gulp.task('deploy', ['deploy:other', 'deploy:components', 'deploy:styles'])
 
 gulp.task('watch', function () {
     gulp.watch('resources/css/!*', ['deploy:styles'])
     gulp.watch(otherPaths, ['deploy:other'])
-    gulp.watch(components, ['deploy:comp'])
-    gulp.watch('*.html', ['deploy:components'])
+    gulp.watch(components, ['deploy:components'])
 })
 
 gulp.task('default', ['watch'])
