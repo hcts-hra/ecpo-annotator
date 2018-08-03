@@ -55,13 +55,19 @@
                 super.connectedCallback();
                 console.log(this, 'connectedCallback');
 
-
+                console.log('offsetWidth ', this.getBoundingClientRect());
+                console.log('offsetWidth ', this.getBoundingClientRect().width);
+                console.log('offsetHeight ', this.getBoundingClientRect().height);
 
                 this.canvas = new fabric.Canvas('c');
                 console.log('canvas ', this.canvas);
 
-                this.canvas.setHeight('600');
-                this.canvas.setWidth('800');
+
+
+
+                //make the canvas same size as surrounding element 'existdb-fabric-shape'
+                this.canvas.setHeight(this.getBoundingClientRect().height);
+                this.canvas.setWidth(this.offsetWidth);
                 this.canvas.renderAll();
 
                 var rect = new fabric.Rect({
@@ -97,6 +103,15 @@
                     strokeWidth:2,
                 });
                 this.canvas.add(circle);
+
+                var img = new fabric.Image(document.getElementById('img1'),{
+                    left:0,
+                    top:0,
+                    angle:0,
+                    width:800
+                });
+                this.canvas.add(img);
+
             }
 
             ready() {
@@ -119,13 +134,15 @@
                     width:this.rectA.get('width') * this.rectA.get('scaleX'),
                     scaleX:1,
                     scaleY:1,
-                    strokeWidth:2
+                    strokeWidth:2,
+                    data:'just a test'
 
                 });
                 this.canvas.renderAll();
                 console.log('all objects ', this.canvas.getObjects());
 
                 console.log('_logShapes canvas ', JSON.stringify(this.canvas));
+                console.log('_logShapes canvas ', this.canvas.toJSON('data'));
 
             }
             _scaling(){
