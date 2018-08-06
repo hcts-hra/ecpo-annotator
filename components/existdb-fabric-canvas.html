@@ -1,0 +1,269 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<script type="text/javascript" src="../bower_components/fabric.js/dist/fabric.js"></script>
+
+<dom-module id="existdb-fabric-canvas">
+    <template>
+        <style>
+            :host {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+            ::slotted(div.canvas-container) {
+                width: 100%;
+                height: 100%;
+                border: steelblue thin solid;
+            }
+
+        </style>
+
+        <div class="buttons">
+            <button on-click="_logShapes">debug</button>
+            <button on-click="_createRect">add rect</button>
+            <button on-click="_createCircle">add circle</button>
+            <button on-click="_createPolygon">add polygon</button>
+            <button on-click="_removeShape">remove shape</button>
+        </div>
+        <slot name="annotationDialog"></slot>
+        <slot></slot>
+    </template>
+
+    <script>
+        /**
+         * `existdb-fabric-canvas`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class ExistdbFabricCanvas extends Polymer.Element {
+            static get is() {
+                return 'existdb-fabric-canvas';
+            }
+
+            static get properties() {
+                return {
+                    selectedShape: {
+                        type: Object
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+                console.log(this, 'connectedCallback');
+
+                console.log('offsetWidth ', this.offsetWidth);
+                console.log('offsetWidth ', this.getBoundingClientRect());
+                console.log('offsetWidth ', this.getBoundingClientRect().width);
+                console.log('offsetHeight ', this.getBoundingClientRect().height);
+
+                this.canvas = new fabric.Canvas('c');
+                console.log('canvas ', this.canvas);
+
+                //make the canvas same size as surrounding element 'existdb-fabric-canvas'
+                this.canvas.setHeight(this.getBoundingClientRect().height);
+                this.canvas.setWidth(this.getBoundingClientRect().width);
+
+//                this.canvas.on('mouse:down', o => this._mouseDown(o));
+//                this.canvas.on('mouse:move', o => this._mouseMove(o));
+//                this.canvas.on('mouse:up', o => this._mouseUp(o));
+//                this.canvas.on('object:selected', o => this._objectModified(o));
+//                this.canvas.on('selected', o => this._rectSelected(o));
+
+//                this.canvas.renderAll();
+
+                /*
+                                var rect = new fabric.Rect({
+
+                                    left: 10,
+                                    top: 10,
+                                    fill: 'transparent',
+                                    stroke:'blue',
+                                    strokeWidth:2,
+                                    width: 120,
+                                    height: 220,
+                                    data:'a rectangle'
+                                });
+
+                                console.log('rect ', rect);
+
+                                this.canvas.add(rect);
+                                this.canvas.renderAll();
+
+                                this.canvas.on({
+                                    'object:scaling': this._scaling
+                                });
+
+                                var circle = new fabric.Circle({
+                                    left:100,
+                                    top:100,
+                                    radius:50,
+                                    fill:'transparent',
+                                    stroke:'blue',
+                                    strokeWidth:2,
+                                });
+                                this.canvas.add(circle);
+                */
+
+            }
+
+            ready() {
+                super.ready();
+            }
+
+            _mouseDown(o) {
+//                console.log('mouseDown', o);
+                console.log('isDown target', o.target);
+
+                var pointer = this.canvas.getPointer(o.e);
+
+
+                this.isDown = true;
+                this.origX = pointer.x;
+                this.origY = pointer.y;
+
+                this.rectangle = new fabric.Rect({
+                    left: this.origX,
+                    top: this.origY,
+                    fill: 'transparent',
+                    stroke: 'red',
+                    strokeWidth: 3
+                });
+
+
+                this.canvas.add(this.rectangle);
+                this.selectedShape = this.rectangle;
+//                this.canvas.renderAll();
+            }
+
+            _mouseMove(o) {
+                if (!this.isDown) return;
+//                console.log('_mouseMove ', o.e);
+//                console.log('isDown ', this.isDown);
+                var pointer = this.canvas.getPointer(o.e);
+                if (this.origX > pointer.x) {
+                    this.rectangle.set({left: Math.abs(pointer.x)});
+                }
+                if (this.origY > pointer.y) {
+                    this.rectangle.set({top: Math.abs(pointer.y)});
+                }
+                this.rectangle.set({width: Math.abs(this.origX - pointer.x)});
+                this.rectangle.set({height: Math.abs(this.origY - pointer.y)});
+                this.canvas.renderAll();
+            }
+
+            _mouseUp(o) {
+//                console.log('_mouseUp ', o);
+//                console.log('_mouseUp rect', this.rectangle);
+//                console.log('_mouseUp selected', this.selected);
+                console.log('_mouseUp selected height', this.selectedShape.height);
+                console.log('_mouseUp selected width', this.selectedShape.width);
+                if (this.selectedShape.width == 0 && this.selectedShape.height == 0) {
+                    console.log('removing.....', this.selectedShape);
+                    this.selected = this.selectedShape = null;
+                    this.canvas.remove(this.selectedShape);
+                    this.canvas.renderAll();
+                }
+                this.isDown = false;
+            }
+
+            _objectModified(o) {
+                console.log('_objectModified ', o);
+                this.selected = o.e.target;
+            }
+
+
+            _removeShape(e) {
+                console.log('_removeShape ', e);
+                console.log('_removeShape ', this.canvas.getActiveObject());
+                this.canvas.remove(this.canvas.getActiveObject());
+                this.canvas.renderAll();
+            }
+
+            _logShapes(e) {
+                console.log('_logShapes ', e);
+//                console.log('_logShapes canvas ', this.canvas);
+//                console.log('_logShapes canvas ', JSON.stringify(this.canvas));
+
+
+                /*
+                                this.rotation = this.rectA.get('angle');
+
+                                this.rectA.set({
+                                    height:this.rectA.get('height'),
+                                    width:this.rectA.get('width') * this.rectA.get('scaleX'),
+                                    scaleX:1,
+                                    scaleY:1,
+                                    strokeWidth:2,
+                                    data:'just a test'
+
+                                });
+                                this.canvas.renderAll();
+                */
+                console.log('all objects ', this.canvas.getObjects());
+
+//                console.log('_logShapes canvas ', JSON.stringify(this.canvas));
+                console.log('_logShapes canvas ', this.canvas.toJSON('data'));
+
+            }
+
+            _rectSelected(o) {
+                console.log('_rectSelected ', o);
+                console.log('_rectSelected canvas ', this.canvas);
+                console.log('_rectSelected target', o.target);
+                this.selectedShape = o.target;
+                console.log('_rectSelected selected', this.canvas.getActiveObject());
+
+            }
+
+            _createRect() {
+                var rect = new fabric.Rect({
+
+                    left: 10,
+                    top: 10,
+                    fill: 'transparent',
+                    stroke: 'blue',
+                    strokeWidth: 2,
+                    width: 100,
+                    height: 100,
+                    opacity: 0.5,
+                    data: 'a rectangle'
+                });
+
+                console.log('rect ', rect);
+                this.canvas.setActiveObject(rect);
+                rect.on('selected', o => this._rectSelected(o));
+
+                this.selectedShape = rect;
+
+                this.canvas.add(rect);
+                this.canvas.renderAll();
+            }
+
+            _createCircle() {
+
+            }
+
+            _createPolygon() {
+
+            }
+
+
+            _scaling() {
+                console.log('scaling...');
+            }
+
+
+            _handleRotation(newValue, oldValue) {
+                console.log('_handleRotation ', newValue);
+            }
+
+        }
+
+        window.customElements.define(ExistdbFabricCanvas.is, ExistdbFabricCanvas);
+    </script>
+</dom-module>

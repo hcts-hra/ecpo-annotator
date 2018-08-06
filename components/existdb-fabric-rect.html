@@ -2,7 +2,7 @@
 
 <script type="text/javascript" src="../bower_components/fabric.js/dist/fabric.js"></script>
 
-<dom-module id="existdb-fabric-shape">
+<dom-module id="existdb-fabric-rect">
     <template>
         <style>
             :host {
@@ -19,29 +19,28 @@
 
         </style>
 
-        <button on-click="_logShapes">debug</button>
-        <input id="rotationInput" type="text" value="{{rotation}}">
+        <button on-click="createShape">add rect</button>
         <slot></slot>
     </template>
 
     <script>
         /**
-         * `existdb-fabric-shape`
+         * `existdb-fabric-rect`
          *
          *
          * @customElement
          * @polymer
          * @demo demo/index.html
          */
-        class ExistdbFabricShape extends Polymer.Element {
+        class ExistdbFabricRect extends Polymer.Element {
             static get is() {
-                return 'existdb-fabric-shape';
+                return 'existdb-fabric-rect';
             }
 
             static get properties() {
                 return {
-                    prop1: {
-                        type: String
+                    rect:{
+                        type: Object
                     },
                     rotation:{
                         type:String,
@@ -55,69 +54,46 @@
                 super.connectedCallback();
                 console.log(this, 'connectedCallback');
 
-                console.log('offsetWidth ', this.offsetWidth());
-                console.log('offsetWidth ', this.getBoundingClientRect());
-                console.log('offsetWidth ', this.getBoundingClientRect().width);
-                console.log('offsetHeight ', this.getBoundingClientRect().height);
+                //strange: seems this log needs to be called to make getBoundingClientRect work
+                console.log('offsetWidth ', this.offsetWidth);
 
                 this.canvas = new fabric.Canvas('c');
                 console.log('canvas ', this.canvas);
 
-
-
-                //make the canvas same size as surrounding element 'existdb-fabric-shape'
+                //make the canvas same size as surrounding element 'existdb-fabric-rect'
+                console.log('offsetWidth ', this.getBoundingClientRect().width);
+                console.log('offsetHeight ', this.getBoundingClientRect().height);
                 this.canvas.setHeight(this.getBoundingClientRect().height);
-                this.canvas.setWidth(this.getBoundingClientRect().width);
+                this.canvas.setWidth(this.offsetWidth);
                 this.canvas.renderAll();
 
-                var rect = new fabric.Rect({
+
+                this.canvas.on({
+                    'object:scaling': this._scaling
+                });
+            }
+
+            ready() {
+                super.ready();
+            }
+
+            createShape(){
+                this.rect = new fabric.Rect({
                     left: 10,
                     top: 10,
                     fill: 'transparent',
                     stroke:'blue',
                     strokeWidth:2,
-                    width: 120,
-                    height: 220,
+                    width: 100,
+                    height: 100,
+                    opacity:0.5,
                     data:'a rectangle'
                 });
 
-                console.log('rect ', rect);
+                console.log('rect ', this.rect);
 
-                this.canvas.add(rect);
+                this.canvas.add(this.rect);
                 this.canvas.renderAll();
-
-                this.canvas.on({
-                    'object:scaling': this._scaling
-                })
-
-//                this.overlay = this.canvas;
-                this.rectA = rect;
-
-
-                var circle = new fabric.Circle({
-                    left:100,
-                    top:100,
-                    radius:50,
-                    fill:'transparent',
-                    stroke:'blue',
-                    strokeWidth:2,
-                });
-                this.canvas.add(circle);
-
-                var img = new fabric.Image(document.getElementById('img1'),{
-                    left:0,
-                    top:0,
-                    angle:0,
-                    width:800
-                });
-                this.canvas.add(img);
-
-            }
-
-            ready() {
-                super.ready();
-//                console.log('canvas ', this.overlay);
-//                console.log('canvas ', this.canvas);
             }
 
             _logShapes(e){
@@ -158,6 +134,6 @@
 
         }
 
-        window.customElements.define(ExistdbFabricShape.is, ExistdbFabricShape);
+        window.customElements.define(ExistdbFabricRect.is, ExistdbFabricRect);
     </script>
 </dom-module>
