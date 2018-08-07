@@ -56,8 +56,8 @@
                 super.connectedCallback();
                 console.log(this, 'connectedCallback');
 
-                console.log('offsetWidth ', this.offsetWidth);
-                console.log('offsetWidth ', this.getBoundingClientRect());
+//                console.log('offsetWidth ', this.offsetWidth);
+//                console.log('offsetWidth ', this.getBoundingClientRect());
                 console.log('offsetWidth ', this.getBoundingClientRect().width);
                 console.log('offsetHeight ', this.getBoundingClientRect().height);
 
@@ -73,8 +73,8 @@
 
 
                 this.canvas.on('mouse:down', o => this._mouseDown(o));
+                this.canvas.on('mouse:up', o => this._mouseUp(o));
                 this.canvas.on('mouse:move', o => this._mouseMove(o));
-//                this.canvas.on('mouse:up', o => this._mouseUp(o));
 //                this.canvas.on('object:selected', o => this._objectModified(o));
 //                this.canvas.on('selected', o => this._rectSelected(o));
 
@@ -90,11 +90,45 @@
                 console.log('mouseDown', options);
                 console.log('isDown target', options.target);
 //                console.log('isDown target.id', options.target.id);
-                console.log('mode ', this.mode);
+                console.log('>>>>> mode ', this.mode);
+
+
 
 
                 if(this.mode == 'rectangle'){
                     console.log('mode = rectangle');
+
+                    var pointer = this.canvas.getPointer(options.e);
+
+
+                    console.log('mouseDown pointer ', pointer);
+
+                    var rect = new fabric.Rect({
+
+                        left: pointer.x,
+                        top: pointer.y,
+                        fill: 'transparent',
+                        stroke: 'blue',
+                        strokeWidth: 2,
+/*
+                        width: 100,
+                        height: 100,
+*/
+                        hasBorders: false,
+                        hasControls: false,
+                        selectable: true,
+                        opacity: 0.5,
+                        data: 'a rectangle'
+                    });
+
+                    console.log('rect ', rect);
+                    this.canvas.add(rect);
+                    this.canvas.setActiveObject(rect);
+                    this.canvas.renderAll();
+
+                    this.activeShape = rect;
+
+
                 }else if (this.mode == 'circle'){
                     console.log('mode = circle');
 
@@ -106,54 +140,61 @@
 
                     // if the target id is the same as the first one created
                     if(options.target && options.target.id == this.pointArray[0].id){
-//                        prototypefabric.polygon.generatePolygon(this.pointArray);
                         this._generatePolygon();
                     }
                     if(this.mode == 'polygon'){
-//                        prototypefabric.polygon.addPoint(options);
                         this._addPoint(options);
                     }
 
 
                 }
 
+            }
 
-/*
-                var pointer = this.canvas.getPointer(o.e);
-                this.isDown = true;
-                this.origX = pointer.x;
-                this.origY = pointer.y;
+            _mouseUp(options){
+                console.log('mouseUp', options);
+                console.log('mouseUp', options.target);
+                if(this.mode == 'rectangle'){
+                    this.activeShape.set('hasBorders', true);
+                    this.activeShape.set('hasControls', true);
+//                    this.activeShape.set('selected', true);
+//                    this.activeShape.set('selectable',true);
+                    this.activeShape.setCoords();
+//                    this.activeShape = false;
+                    this.mode = undefined;
 
-                this.rectangle = new fabric.Rect({
-                    left: this.origX,
-                    top: this.origY,
-                    fill: 'transparent',
-                    stroke: 'red',
-                    strokeWidth: 3
-                });
-
-
-                this.canvas.add(this.rectangle);
-                this.selectedShape = this.rectangle;
-*/
-//                this.canvas.renderAll();
+                }
             }
 
             _mouseMove(options) {
 //                if (!this.isDown) return;
-//                console.log('_mouseMove ', o.e);
+//                console.log('_mouseMove options', options);
 //                console.log('isDown ', this.isDown);
 //                console.log('mode ', this.mode);
 
                 if(this.mode == 'rectangle'){
-                    console.log('mode = rectangle');
+//                    console.log('mode = rectangle ', this.activeShape);
+
+                    if(this.activeShape){
+                        var pointer = this.canvas.getPointer(options.e);
+//                    console.log('pointer ', pointer);
+
+                        console.log('newWidth ',pointer.x - this.activeShape.get('left'));
+                        console.log('newHeight ', pointer.y - this.activeShape.get('top'));
+
+                        this.activeShape.set('width', pointer.x - this.activeShape.get('left'));
+                        this.activeShape.set('height', pointer.y - this.activeShape.get('top'));
+                        this.canvas.renderAll();
+
+
+
+                    }
+
+
                 }else if (this.mode == 'circle'){
                     console.log('mode = circle');
 
                 }else if(this.mode == 'polygon'){
-//                    console.log('mode = polygon');
-//                    console.log('activeLine ', this.activeLine);
-
 
                     if(this.activeLine && this.activeLine.class == "line"){
                         var pointer = this.canvas.getPointer(options.e);
@@ -171,40 +212,12 @@
                     }
                     this.canvas.renderAll();
 
-
                 }
 
 
 
-
-/*
-                var pointer = this.canvas.getPointer(o.e);
-                if (this.origX > pointer.x) {
-                    this.rectangle.set({left: Math.abs(pointer.x)});
-                }
-                if (this.origY > pointer.y) {
-                    this.rectangle.set({top: Math.abs(pointer.y)});
-                }
-                this.rectangle.set({width: Math.abs(this.origX - pointer.x)});
-                this.rectangle.set({height: Math.abs(this.origY - pointer.y)});
-                this.canvas.renderAll();
-*/
             }
 
-            _mouseUp(o) {
-//                console.log('_mouseUp ', o);
-//                console.log('_mouseUp rect', this.rectangle);
-//                console.log('_mouseUp selected', this.selected);
-                console.log('_mouseUp selected height', this.selectedShape.height);
-                console.log('_mouseUp selected width', this.selectedShape.width);
-                if (this.selectedShape.width == 0 && this.selectedShape.height == 0) {
-                    console.log('removing.....', this.selectedShape);
-                    this.selected = this.selectedShape = null;
-                    this.canvas.remove(this.selectedShape);
-                    this.canvas.renderAll();
-                }
-                this.isDown = false;
-            }
 
             _objectModified(o) {
                 console.log('_objectModified ', o);
@@ -235,6 +248,8 @@
             }
 
             _createRect(e) {
+                console.log('_createRect ',e);
+/*
                 var rect = new fabric.Rect({
 
                     left: 10,
@@ -252,6 +267,8 @@
                 this.canvas.add(rect);
                 this.canvas.setActiveObject(rect);
                 this.canvas.renderAll();
+*/
+                this.activeShape = false;
                 this.mode = "rectangle"
             }
 
