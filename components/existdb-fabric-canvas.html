@@ -63,6 +63,7 @@
 
                 this.canvas = new fabric.Canvas('c');
                 console.log('canvas ', this.canvas);
+                this.canvas.selectionColor = 'transparent';
 
                 //make the canvas same size as surrounding element 'existdb-fabric-canvas'
                 this.canvas.setHeight(this.getBoundingClientRect().height);
@@ -92,45 +93,45 @@
 //                console.log('isDown target.id', options.target.id);
                 console.log('>>>>> mode ', this.mode);
 
-
+                var pointer = this.canvas.getPointer(options.e);
 
 
                 if(this.mode == 'rectangle'){
-                    console.log('mode = rectangle');
-
-                    var pointer = this.canvas.getPointer(options.e);
-
-
-                    console.log('mouseDown pointer ', pointer);
-
                     var rect = new fabric.Rect({
-
                         left: pointer.x,
                         top: pointer.y,
                         fill: 'transparent',
                         stroke: 'blue',
                         strokeWidth: 2,
-/*
-                        width: 100,
-                        height: 100,
-*/
                         hasBorders: false,
                         hasControls: false,
-                        selectable: true,
                         opacity: 0.5,
                         data: 'a rectangle'
                     });
 
-                    console.log('rect ', rect);
                     this.canvas.add(rect);
                     this.canvas.setActiveObject(rect);
                     this.canvas.renderAll();
-
                     this.activeShape = rect;
-
 
                 }else if (this.mode == 'circle'){
                     console.log('mode = circle');
+
+                    var circle = new fabric.Circle({
+                        left:pointer.x,
+                        top:pointer.y,
+//                        radius:50,
+                        fill:'transparent',
+                        stroke:'blue',
+                        strokeWidth:2,
+                        hasBorders: false,
+                        hasControls: false,
+                        selectionBackgroundColor:'transparent'
+                    });
+                    this.canvas.add(circle);
+                    this.canvas.setActiveObject(circle);
+                    this.canvas.renderAll();
+                    this.activeShape = circle;
 
                 }else if(this.mode == 'polygon'){
                     this.line = null;
@@ -163,6 +164,11 @@
 //                    this.activeShape = false;
                     this.mode = undefined;
 
+                }else if(this.mode == 'circle'){
+                    this.activeShape.set('hasBorders', true);
+                    this.activeShape.set('hasControls', true);
+                    this.activeShape.setCoords();
+                    this.mode = undefined;
                 }
             }
 
@@ -172,11 +178,12 @@
 //                console.log('isDown ', this.isDown);
 //                console.log('mode ', this.mode);
 
+                var pointer = this.canvas.getPointer(options.e);
+
                 if(this.mode == 'rectangle'){
 //                    console.log('mode = rectangle ', this.activeShape);
 
                     if(this.activeShape){
-                        var pointer = this.canvas.getPointer(options.e);
 //                    console.log('pointer ', pointer);
 
                         console.log('newWidth ',pointer.x - this.activeShape.get('left'));
@@ -185,19 +192,23 @@
                         this.activeShape.set('width', pointer.x - this.activeShape.get('left'));
                         this.activeShape.set('height', pointer.y - this.activeShape.get('top'));
                         this.canvas.renderAll();
-
-
-
                     }
 
 
                 }else if (this.mode == 'circle'){
-                    console.log('mode = circle');
+
+                    if(this.activeShape){
+                        var posX=pointer.x;
+                        var posY=pointer.y;
+                        this.activeShape.set('radius',Math.abs((posX-this.activeShape.get('left'))));
+                        this.canvas.renderAll();
+
+                    }
 
                 }else if(this.mode == 'polygon'){
 
                     if(this.activeLine && this.activeLine.class == "line"){
-                        var pointer = this.canvas.getPointer(options.e);
+//                        var pointer = this.canvas.getPointer(options.e);
                         this.activeLine.set({ x2: pointer.x, y2: pointer.y });
 
                         var points = this.activeShape.get("points");
@@ -273,6 +284,7 @@
             }
 
             _createCircle() {
+/*
                 var circle = new fabric.Circle({
                     left:100,
                     top:100,
@@ -284,7 +296,10 @@
                 this.canvas.add(circle);
                 this.canvas.setActiveObject(circle);
                 this.canvas.renderAll();
+*/
 
+                this.activeShape = false;
+                this.mode = 'circle';
             }
 
             _createPolygon() {
