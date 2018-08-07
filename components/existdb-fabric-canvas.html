@@ -54,15 +54,13 @@
 
             connectedCallback() {
                 super.connectedCallback();
-                console.log(this, 'connectedCallback');
-
+//                console.log(this, 'connectedCallback');
 //                console.log('offsetWidth ', this.offsetWidth);
 //                console.log('offsetWidth ', this.getBoundingClientRect());
                 console.log('offsetWidth ', this.getBoundingClientRect().width);
                 console.log('offsetHeight ', this.getBoundingClientRect().height);
 
                 this.canvas = new fabric.Canvas('c');
-                console.log('canvas ', this.canvas);
                 this.canvas.selectionColor = 'transparent';
 
                 //make the canvas same size as surrounding element 'existdb-fabric-canvas'
@@ -88,8 +86,8 @@
             }
 
             _mouseDown(options) {
-                console.log('mouseDown', options);
-                console.log('isDown target', options.target);
+//                console.log('mouseDown', options);
+//                console.log('isDown target', options.target);
 //                console.log('isDown target.id', options.target.id);
                 console.log('>>>>> mode ', this.mode);
 
@@ -120,7 +118,6 @@
                     var circle = new fabric.Circle({
                         left:pointer.x,
                         top:pointer.y,
-//                        radius:50,
                         fill:'transparent',
                         stroke:'blue',
                         strokeWidth:2,
@@ -158,10 +155,7 @@
                 if(this.mode == 'rectangle'){
                     this.activeShape.set('hasBorders', true);
                     this.activeShape.set('hasControls', true);
-//                    this.activeShape.set('selected', true);
-//                    this.activeShape.set('selectable',true);
                     this.activeShape.setCoords();
-//                    this.activeShape = false;
                     this.mode = undefined;
 
                 }else if(this.mode == 'circle'){
@@ -179,15 +173,15 @@
 //                console.log('mode ', this.mode);
 
                 var pointer = this.canvas.getPointer(options.e);
+//                    console.log('pointer ', pointer);
 
                 if(this.mode == 'rectangle'){
 //                    console.log('mode = rectangle ', this.activeShape);
 
                     if(this.activeShape){
-//                    console.log('pointer ', pointer);
 
-                        console.log('newWidth ',pointer.x - this.activeShape.get('left'));
-                        console.log('newHeight ', pointer.y - this.activeShape.get('top'));
+//                        console.log('newWidth ',pointer.x - this.activeShape.get('left'));
+//                        console.log('newHeight ', pointer.y - this.activeShape.get('top'));
 
                         this.activeShape.set('width', pointer.x - this.activeShape.get('left'));
                         this.activeShape.set('height', pointer.y - this.activeShape.get('top'));
@@ -208,7 +202,6 @@
                 }else if(this.mode == 'polygon'){
 
                     if(this.activeLine && this.activeLine.class == "line"){
-//                        var pointer = this.canvas.getPointer(options.e);
                         this.activeLine.set({ x2: pointer.x, y2: pointer.y });
 
                         var points = this.activeShape.get("points");
@@ -224,8 +217,6 @@
                     this.canvas.renderAll();
 
                 }
-
-
 
             }
 
@@ -259,51 +250,18 @@
             }
 
             _createRect(e) {
-                console.log('_createRect ',e);
-/*
-                var rect = new fabric.Rect({
-
-                    left: 10,
-                    top: 10,
-                    fill: 'transparent',
-                    stroke: 'blue',
-                    strokeWidth: 2,
-                    width: 100,
-                    height: 100,
-                    opacity: 0.5,
-                    data: 'a rectangle'
-                });
-
-                console.log('rect ', rect);
-                this.canvas.add(rect);
-                this.canvas.setActiveObject(rect);
-                this.canvas.renderAll();
-*/
+//                console.log('_createRect ',e);
                 this.activeShape = false;
                 this.mode = "rectangle"
             }
 
             _createCircle() {
-/*
-                var circle = new fabric.Circle({
-                    left:100,
-                    top:100,
-                    radius:50,
-                    fill:'transparent',
-                    stroke:'blue',
-                    strokeWidth:2,
-                });
-                this.canvas.add(circle);
-                this.canvas.setActiveObject(circle);
-                this.canvas.renderAll();
-*/
-
                 this.activeShape = false;
                 this.mode = 'circle';
             }
 
             _createPolygon() {
-                console.log('_createPolygon');
+//                console.log('_createPolygon');
                 this.mode = 'polygon';
                 this.pointArray = new Array();
                 this.lineArray = new Array();
@@ -316,10 +274,6 @@
                 console.log('scaling...');
             }
 
-
-            _handleRotation(newValue, oldValue) {
-                console.log('_handleRotation ', newValue);
-            }
 
             _addPoint (options) {
 
