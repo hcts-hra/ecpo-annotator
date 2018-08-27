@@ -1,0 +1,20 @@
+{
+  "name": "epco-app",
+  "main": "epco-app.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^2.0.0",
+    "paper": "paperjs#^0.11.5",
+    "fabric.js": "fabric#^2.3.3",
+    "v1.0": "https://gitlab.existsolutions.com/eXistdbElements/existdb-image-viewer/tree/v1.0.0",
+    "existdb-image-viewer": "https://gitlab.existsolutions.com/eXistdbElements/existdb-image-viewer/-/archive/master/existdb-image-viewer-master.zip"
+  },
+  "devDependencies": {
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
+    "web-component-tester": "Polymer/web-component-tester#^6.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^1.0.0"
+  },
+  "resolutions": {
+    "polymer": "^2.0.0",
+    "OpenseadragonFabricjsOverlay": "^0.2.0"
+  }
+}

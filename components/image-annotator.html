@@ -1,0 +1,66 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/existdb-image-viewer/existdb-image-viewer.html">
+<link rel="import" href="existdb-fabric-canvas.html">
+
+<script src="../bower_components/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
+
+
+<dom-module id="image-annotator">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <image-viewer
+                overlay="[[canvas]]"
+                style="width:600px;height:400px;"
+                class="viewer"
+                src="../bower_components/img-pan-zoom/demo/images/output.dzi"
+                dzi="true"
+                show-zoom-control="true"
+                show-home-control="true"
+                show-full-page-control="true"
+                zoom-factor="{{zoom-factor}}">
+
+                <existdb-fabric-canvas canvas="{{canvas}}" zoom="[[zoom-factor]]" pan="[[pan]]">
+                    <canvas id="c"></canvas>
+                </existdb-fabric-canvas>
+
+        </image-viewer>
+
+    </template>
+
+    <script>
+        /**
+         * `image-annotator`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class ImageAnnotator extends Polymer.Element {
+            static get is() {
+                return 'image-annotator';
+            }
+
+            static get properties() {
+                return {
+                    prop1:{
+                        type: String
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+
+        }
+
+        window.customElements.define(ImageAnnotator.is, ImageAnnotator);
+    </script>
+</dom-module>
