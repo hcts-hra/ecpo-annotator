@@ -9,15 +9,34 @@
         <style>
             :host {
                 display: block;
+                position: relative;
+
             }
 
-            existdb-fabric-canvas{
+            :host ::slotted(existdb-fabric-canvas){
                 width: 100%;
                 height: 100%;
+            }
+            image-viewer{
+                position: absolute;
+                top:0;
+                left:0;
+                z-index:-1;
+                width: 100vw;
+                height: 100vh;
             }
         </style>
 
         <slot></slot>
+        <image-viewer
+                id="viewer"
+                class="viewer"
+                dzi="true"
+                show-zoom-control="true"
+                show-home-control="true"
+                show-full-page-control="true"
+                zoom-factor="{{zoom-factor}}">
+        </image-viewer>
 
     </template>
 
@@ -53,16 +72,17 @@
                 super.connectedCallback();
 
                 console.log('this.basePath', this.basePath);
-                console.log('viewwer', this.querySelector('image-viewer').viewer);
 
-                this.querySelector('image-viewer').src=this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
+                this.$.viewer.src=this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
 
 
-                console.log('canvas ', this.querySelector('#c'));
+                const fabricCanvas = this.querySelector('existdb-fabric-canvas');
+                console.log('fabric canvas ', fabricCanvas.getCanvas());
 
-                this.viewer = this.querySelector('image-viewer').viewer;
-                this.viewer.addOverlay({element:this.querySelector('#c')});
-//                this.$.viewer.src = this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
+
+                this.$.viewer.src = this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
+                this.$.viewer.addCanvas();
+//                this.viewer.addOverlay({element:this.querySelector('#c')});
 
 
                 console.log('annotator ', 'connectedCallback');

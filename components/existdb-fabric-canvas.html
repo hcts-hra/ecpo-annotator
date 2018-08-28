@@ -12,11 +12,17 @@
             }
 
             ::slotted(div.canvas-container) {
-                width: 100%;
-                height: 100%;
+                position: absolute;
+                left:0;
+                top:0;
+                width: 100vw;
+                height: 100vh;
                 border: steelblue thin solid;
             }
-
+            .buttons{
+                position: absolute;
+                top:-30px;
+            }
         </style>
 
         <div class="buttons">
@@ -81,6 +87,10 @@
 
 
 
+            }
+
+            getCanvas() {
+                return this.canvas;
             }
 
             ready() {
