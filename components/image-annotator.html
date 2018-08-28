@@ -1,8 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../bower_components/existdb-image-viewer/existdb-image-viewer.html">
+<link rel="import" href="../bower_components/existdb-image-viewer/image-viewer.html">
 <link rel="import" href="existdb-fabric-canvas.html">
 
-<script src="../bower_components/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
 
 
 <dom-module id="image-annotator">
@@ -11,24 +10,14 @@
             :host {
                 display: block;
             }
+
+            existdb-fabric-canvas{
+                width: 100%;
+                height: 100%;
+            }
         </style>
 
-        <image-viewer
-                overlay="[[canvas]]"
-                style="width:600px;height:400px;"
-                class="viewer"
-                src="../bower_components/img-pan-zoom/demo/images/output.dzi"
-                dzi="true"
-                show-zoom-control="true"
-                show-home-control="true"
-                show-full-page-control="true"
-                zoom-factor="{{zoom-factor}}">
-
-                <existdb-fabric-canvas canvas="{{canvas}}" zoom="[[zoom-factor]]" pan="[[pan]]">
-                    <canvas id="c"></canvas>
-                </existdb-fabric-canvas>
-
-        </image-viewer>
+        <slot></slot>
 
     </template>
 
@@ -54,8 +43,30 @@
                 };
             }
 
+            constructor(){
+                super();
+                const pathname = window.location.pathname;
+                this.basePath = pathname.substring(0,pathname.lastIndexOf('/components'));
+            }
+
             connectedCallback() {
                 super.connectedCallback();
+
+                console.log('this.basePath', this.basePath);
+                console.log('viewwer', this.querySelector('image-viewer').viewer);
+
+                this.querySelector('image-viewer').src=this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
+
+
+                console.log('canvas ', this.querySelector('#c'));
+
+                this.viewer = this.querySelector('image-viewer').viewer;
+                this.viewer.addOverlay({element:this.querySelector('#c')});
+//                this.$.viewer.src = this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
+
+
+                console.log('annotator ', 'connectedCallback');
+//                console.log('annotator canvas', this.$.canvas.getCanvas());
             }
 
 
