@@ -1,8 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/existdb-image-viewer/image-viewer.html">
 
 <script type="text/javascript" src="../bower_components/fabric.js/dist/fabric.js"></script>
 
-<dom-module id="existdb-fabric-canvas">
+<dom-module id="existdb-image-annotator">
     <template>
         <style>
             :host {
@@ -25,6 +26,19 @@
                 top:-30px;
             }
 */
+
+            image-viewer{
+                position: absolute;
+                top:0;
+                left:0;
+                z-index:-1;
+                width: 100vw;
+                height: 100vh;
+            }
+            .canvasDiv{
+                position: relative;
+            }
+
         </style>
 
         <div class="buttons">
@@ -35,12 +49,25 @@
             <button on-click="_removeShape">remove shape</button>
         </div>
         <slot name="annotationDialog"></slot>
-        <slot></slot>
+
+        <div class="canvasDiv">
+            <slot></slot>
+            <image-viewer
+                    id="viewer"
+                    class="viewer"
+                    dzi="true"
+                    show-zoom-control="true"
+                    show-home-control="true"
+                    show-full-page-control="true"
+                    zoom-factor="{{zoom-factor}}">
+            </image-viewer>
+        </div>
+
     </template>
 
     <script>
         /**
-         * `existdb-fabric-canvas`
+         * `existdb-image-annotator`
          *
          * a canvas that allows interactive drawing of rectangles, circles and polygons
          *
@@ -48,9 +75,9 @@
          * @polymer
          * @demo demo/index.html
          */
-        class ExistdbFabricCanvas extends Polymer.Element {
+        class ExistdbImageAnnotator extends Polymer.Element {
             static get is() {
-                return 'existdb-fabric-canvas';
+                return 'existdb-image-annotator';
             }
 
             static get properties() {
@@ -60,6 +87,13 @@
                     }
                 };
             }
+
+            constructor(){
+                super();
+                const pathname = window.location.pathname;
+                this.basePath = pathname.substring(0,pathname.lastIndexOf('/components'));
+            }
+
 
             connectedCallback() {
                 super.connectedCallback();
@@ -73,7 +107,7 @@
                 this.canvas = new fabric.Canvas('c');
                 this.canvas.selectionColor = 'transparent';
 
-                //make the canvas same size as surrounding element 'existdb-fabric-canvas'
+                //make the canvas same size as surrounding element 'existdb-image-annotator'
                 this.canvas.setHeight(this.getBoundingClientRect().height);
                 this.canvas.setWidth(this.getBoundingClientRect().width);
                 this.mode = null;
@@ -87,6 +121,9 @@
 //                this.canvas.on('object:selected', o => this._objectModified(o));
 //                this.canvas.on('selected', o => this._rectSelected(o));
 
+
+                this.$.viewer.src = this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
+                this.$.viewer.addCanvas();
 
 
             }
@@ -423,6 +460,6 @@
 
         }
 
-        window.customElements.define(ExistdbFabricCanvas.is, ExistdbFabricCanvas);
+        window.customElements.define(ExistdbImageAnnotator.is, ExistdbImageAnnotator);
     </script>
 </dom-module>
