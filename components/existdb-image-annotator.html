@@ -1,106 +1,165 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../bower_components/existdb-image-viewer/image-viewer.html">
-<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
-<link rel="import" href="../bower_components/resize-aware/resize-aware.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/device-icons.html">
+<link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
+<link rel="import" href="../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+
+<!--<link rel="import" href="bower_components/web-animations-js/web-animations.html">-->
+<!--<link rel="import" href="image-loader.html">-->
+
+<script src="../bower_components/openseadragon/built-openseadragon/openseadragon/openseadragon.min.js"></script>
+<script src="../bower_components/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
+<script src="../bower_components/fabric.js/dist/fabric.js"></script>
+<!--<script src="../fabric.js/dist/fabric.min.js"></script>-->
 
 
-<script type="text/javascript" src="../bower_components/fabric.js/dist/fabric.js"></script>
+<!--
+`img-pan-zoom` Image pan zoom element
+
+Images are preloaded by `img-loader` and a spinner is shown until loaded
+Deep Zoom Images are supported
+
+### Styling
+
+Custom property | Description | Default
+----------------|-------------|----------
+`--img-pan-zoom-spinner` | Mixin applied to spinner |
+`--img-pan-zoom-spinner-color` | Spinner color | `#2196F3`
+`--img-pan-zoom-spinner-width` | Spinner width | `5px`
+
+### Credits
+
+<a href="https://openseadragon.github.io">openSeadragon</a>
+
+
+@demo demo/index.html
+-->
 
 <dom-module id="existdb-image-annotator">
     <template>
         <style>
             :host {
                 display: block;
-                width: 100%;
-                height: 100%;
-            }
-
-/*
-            .canvasDiv {
-                width: 100%;
-                height: 100%;
-            }
-*/
-
-            .canvasDiv, ::slotted(div.canvas-container) {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                border: red thin solid;
-                /*background:lightgreen;*/
-            }
-
-            ::slotted(div.canvas-container){
-                z-index:10;
-            }
-
-            ::slotted(#c){
-                border:3px solid green;
-            }
-
-            /*
-                        .buttons{
-                            position: absolute;
-                            top:-30px;
-                        }
-            */
-
-            image-viewer {
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                z-index: -1;
-                /*width: 100vw;*/
-            }
-
-            :host ::slotted(div.canvasDiv), .canvasDiv {
                 position: relative;
-                min-height: 75vh;
+                width: 100%;
+                height: 100%;
+
             }
-            .buttons{
+
+            #viewer {
+                /*position: relative;*/
+                height: 100%;
+                width: 100%;
                 position: absolute;
-                z-index: 20;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                right: 0;
+            }
+
+            paper-spinner-lite {
+                opacity: 0;
+                display: block;
+                transition: opacity 700ms;
+                position: absolute;
+                margin: auto;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                z-index: 1;
+                height: 70px;
+                width: 70px;
+                --paper-spinner-color: var(--img-pan-zoom-spinner-color, #2196F3);
+                --paper-spinner-stroke-width: var(--img-pan-zoom-spinner-width, 5px);
+                @apply(--img-pan-zoom-spinner);
+            }
+
+            paper-spinner-lite[active] {
+                opacity: 1;
+            }
+
+            [hidden] {
+                display: none;
+            }
+
+            .toolbarDiv {
+                background: blue;
+                height: 40px;
+            }
+
+            .canvasDiv, #viewer, #viewer ::slotted(existdb-fabric-canvas) {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .canvasDiv {
+                z-index: -1;
+            }
+
+            .buttonBar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                z-index: 50;
+                background: white;
+                border-bottom: 1px solid;
+            }
+
+            .devider {
+                width: 0px;
+                border-right: thin solid var(--paper-grey-500);
+                display: inline;
+                margin: 0 8px;
             }
         </style>
 
-            <div class="buttons">
-                <button on-click="_logShapes">debug</button>
-                <button on-click="_createRect">add rect</button>
-                <button on-click="_createCircle">add circle</button>
-                <button on-click="_createPolygon">add polygon</button>
-                <button on-click="_removeShape">remove shape</button>
-            </div>
-            <slot name="annotationDialog"></slot>
+        <!-- Only preload regular images -->
+        <!--
+                <template is="dom-if" if="[[!dzi]]">
+                    <paper-spinner-lite hidden$="[[hideSpinner]]" active="[[loading]]"></paper-spinner-lite>
+                    <image-loader loaded="{{loaded}}" loading="{{loading}}" src="[[src]]"></image-loader>
+                </template>
+        -->
 
-        <resize-aware on-element-size-changed="_resize">
-            <div id="canvasDiv" class="canvasDiv">
-                <slot></slot>
-                <image-viewer
-                        id="viewer"
-                        class="viewer"
-                        dzi="true"
-                        zoom-factor="{{zoom-factor}}">
-                </image-viewer>
-            </div>
-        </resize-aware>
+        <!-- Openseadragon -->
+        <!--<div id="toolbarDiv"></div>-->
+        <div class="buttonBar">
+            <paper-icon-button icon="zoom-in" title="zoom in"></paper-icon-button>
+            <paper-icon-button icon="zoom-out" title="zoom out"></paper-icon-button>
+            <paper-icon-button icon="home" title="home"></paper-icon-button>
+            <paper-icon-button icon="fullscreen" title="fullscreen"></paper-icon-button>
+
+            <div class="devider"></div>
+
+            <paper-icon-button icon="hardware:computer" on-click="_logShapes"></paper-icon-button>
+            <!--<button on-click="_logShapes">debug</button>-->
+            <paper-icon-button icon="image:crop-3-2" title="add rectangle" on-click="_createRect"></paper-icon-button>
+
+            <!--<button on-click="_createRect">add rect</button>-->
+            <paper-icon-button icon="image:panorama-fish-eye" title="add circle"
+                               on-click="_createCircle"></paper-icon-button>
+            <!--<button on-click="_createCircle">add circle</button>-->
+            <paper-icon-button icon="device:signal-cellular-null" title="add polygon"
+                               on-click="_createPolygon"></paper-icon-button>
+            <!--<button on-click="_createPolygon">add polygon</button>-->
+            <paper-icon-button icon="remove-circle-outline" title="remove shape"
+                               on-click="_removeShape"></paper-icon-button>
+            <!--<button on-click="_removeShape">remove shape</button>-->
+        </div>
+        <slot></slot>
+
     </template>
-
-
     <script>
-        /**
-         * `existdb-image-annotator`
-         *
-         * a canvas that allows interactive drawing of rectangles, circles and polygons
-         *
-         * @customElement
-         * @polymer
-         * @demo demo/index.html
-         */
-//        class ExistdbImageAnnotator extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
         class ExistdbImageAnnotator extends Polymer.Element {
             static get is() {
                 return 'existdb-image-annotator';
@@ -108,233 +167,433 @@
 
             static get properties() {
                 return {
+                    // Image source
+                    src: {
+                        type: String,
+                        observer: '_srcChanged'
+                    },
+                    // Set to true if you are using a deep zoom image
+                    dzi: {
+                        type: Boolean,
+                        value: false
+                    },
+                    // Fade in new items added to the viewer
+                    fadeIn: {
+                        type: Boolean,
+                        value: true
+                    },
+                    // loading
+                    loading: {
+                        type: Boolean,
+                        readonly: true,
+                        notify: true
+                    },
+                    // hides spinner
+                    hideSpinner: {
+                        type: Boolean,
+                        value: false
+                    },
+                    // loaded
+                    loaded: {
+                        type: Boolean,
+                        readonly: true,
+                        notify: true,
+                        observer: "_loadedChanged"
+                    },
+                    // Set to false to prevent the appearance of the default navigation controls. Note that if set to false, the customs buttons set by the options zoomInButton, zoomOutButton etc, are rendered inactive.
+                    showNavigationControl: {
+                        type: Boolean,
+                        value: true
+                    },
+                    // Set to true to make the navigator minimap appear.
+                    showNavigator: {
+                        type: Boolean,
+                        value: false
+                    },
+                    // The "zoom distance" per mouse click or touch tap. Note: Setting this to 1.0 effectively disables the click-to-zoom feature (also see gestureSettings[Mouse|Touch|Pen].clickToZoom/dblClickToZoom).
+                    zoomPerClick: {
+                        type: Number,
+                        value: 2.0
+                    },
+                    // The "zoom distance" per mouse scroll or touch pinch. Note: Setting this to 1.0 effectively disables the mouse-wheel zoom feature (also see gestureSettings[Mouse|Touch|Pen].scrollToZoom}).
+                    zoomPerScroll: {
+                        type: Number,
+                        value: 1.2
+                    },
+                    // Specifies the animation duration per each OpenSeadragon.Spring which occur when the image is dragged or zoomed.
+                    animationTime: {
+                        type: Number,
+                        value: 1.2
+                    },
+                    // If true then the 'previous' button will wrap to the last image when viewing the first image and the 'next' button will wrap to the first image when viewing the last image.
+                    navPrevNextWrap: {
+                        type: Boolean,
+                        value: false
+                    },
+                    // If true then the rotate left/right controls will be displayed as part of the standard controls. This is also subject to the browser support for rotate (e.g. viewer.drawer.canRotate()).
+                    showRotationControl: {
+                        type: Boolean,
+                        value: false
+                    },
+                    // The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained. Setting it to 0, for example will allow you to zoom out infinity.
+                    minZoomImageRatio: {
+                        type: Number,
+                        value: 1
+                    },
+                    // The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. This can be set to Infinity to allow 'infinite' zooming into the image though it is less effective visually if the HTML5 Canvas is not availble on the viewing device.
+                    maxZoomPixelRatio: {
+                        type: Number,
+                        value: 1.1
+                    },
+                    // Constrain during pan
+                    constrainDuringPan: {
+                        type: Boolean,
+                        value: false
+                    },
+                    // The percentage ( as a number from 0 to 1 ) of the source image which must be kept within the viewport. If the image is dragged beyond that limit, it will 'bounce' back until the minimum visibility ratio is achieved. Setting this to 0 and wrapHorizontal ( or wrapVertical ) to true will provide the effect of an infinitely scrolling viewport.
+                    visibilityRatio: {
+                        type: Number,
+                        value: 1
+                    },
+                    showZoomControl: {
+                        type: Boolean,
+                        value: false
+                    },
+                    showHomeControl: {
+                        type: Boolean,
+                        value: false
+                    },
+                    showFullPageControl: {
+                        type: Boolean,
+                        value: false
+                    },
+                    preserveViewport: {
+                        type: Boolean,
+                        value: true
+                    },
+                    autoHideControls: {
+                        type: Boolean,
+                        value: true
+                    },
+                    defaultZoomLevel: {
+                        type: Number,
+                        value: 0
+                    },
+                    viewer: {
+                        type: Object
+                    },
+                    zoom: {
+                        type: Number
+
+                    },
                     selectedShape: {
                         type: Object
                     },
-                    containerWidth:{
-                        type: Number,
-                        value: 0
-                    },
-                    containerHeight: {
-                        type: Number,
-                        value: 0
+                    mode:{
+                        type: String,
+                        value:'osd'
                     }
+
                 };
             }
 
-            /*
-                        get behaviors() {
-                            return [Polymer.IronResizableBehavior]
-                        }
-            */
-
-            constructor() {
-                super();
-                const pathname = window.location.pathname;
-                this.basePath = pathname.substring(0, pathname.lastIndexOf('/components'));
-            }
 
 
             connectedCallback() {
                 super.connectedCallback();
+//                console.log('connected rootpath: ', this.rootPath);
+//                console.log('connected importPath: ', this.importPath);
+                this.mode = 'osd';
 
-//                console.log(this, 'connectedCallback');
-//                console.log('offsetWidth ', this.offsetWidth);
-//                console.log('offsetWidth ', this.getBoundingClientRect());
+                document.addEventListener('WebComponentsReady', function() {
+                    console.log('webcomponentsready');
+                    // Init openseadragon if we are using a deep zoom image
+                    if (this.dzi) {
+                        // Add src changed observer
+                        this._initOpenSeadragon();
+                        this._initFabric();
+                    }
 
-                // create a canvas in lightDOM which will be appended to 'canvasDiv'
-                const canvas = document.createElement('canvas');
-                canvas.setAttribute('id', 'c');
-                this.appendChild(canvas);
-                this.canvas = canvas;
+                }.bind(this));
 
-                this.resize();
+                /*
+                                this.animationConfig = {
+                                    'fade': {
+                                        name: 'fade-in-animation',
+                                        node: this.$.viewer
+                                    }
+                                };
+                */
 
-//                this.addEventListener('iron-resize', this._resize);
+            }
 
-//                console.log('offsetWidth ', this.getBoundingClientRect().width);
-//                console.log('offsetHeight ', this.getBoundingClientRect().height);
+            _initFabric() {
+                const self = this;
+                const options = {
+                    scale: 1000,
+                    iviewer:this
+                };
+//                console.log('fabricOverlay ', this);
+//                console.log('fabricOverlay ', this.viewer);
 
-                this.canvas = new fabric.Canvas('c');
-                this.canvas.selectionColor = 'transparent';
-
-                //make the canvas same size as surrounding element 'existdb-image-annotator'
-                this.canvas.setHeight(this.getBoundingClientRect().height);
-                this.canvas.setWidth(this.getBoundingClientRect().width);
-
-                // one of 'rectangle', 'circle' or 'polygon'
-                this.mode = null;
-
-                //used for random numbers
-                this.min = 99;
-                this.max = 999999;
-
-
-                this.canvas.on('mouse:down', o => this._mouseDown(o));
-                this.canvas.on('mouse:up', o => this._mouseUp(o));
-                this.canvas.on('mouse:move', o => this._mouseMove(o));
-//                this.canvas.on('object:selected', o => this._objectModified(o));
-//                this.canvas.on('selected', o => this._rectSelected(o));
-
-                console.log('image viewer: ', this.$.viewer)
-                this.$.viewer.src = this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
-                this.$.viewer.addCanvas();
+                this._fabricOverlay = this.viewer.fabricjsOverlay(options);
+//                console.log('fabricOverlay ', this._fabricOverlay);
+//                console.log('_initFabric overlay ', document.getElementById('fabric'));
 
 
 /*
-                this.$.viewer.addHandler('update-viewport', function() {
-                    this.resize();
-                    this.resizecanvas();
+                this._fabricOverlay.fabricCanvas().on('mouse:up', function(options){
+                    console.log('mouse:up ', options);
+                    console.log('mouse:up mode', self.mode);
+                    if (self.mode === 'osd') return;
+                    self._mouseUp(options);
 
                 });
 */
+                /*
+
+                                this._fabricOverlay.fabricCanvas().on('mouse:down', function(options){
+                                    console.log('mouse:down ', options);
+                                    console.log('mouse:down mode', self.mode);
+
+                                    if (self.mode === 'osd') return;
+                                    self._mouseDown(options);
+
+                                });
+                                this._fabricOverlay.fabricCanvas().on('mouse:move', function(options){
+
+                                    if (self.mode === 'osd') return;
+                                    console.log('mouse:move ', options);
+                                    console.log('mouse:move mode', self.mode);
+                //                    self._mouseDown(options);
+
+                                });
+                */
 
 
-//                this.$.viewer.style.width = this._width;
-//                this.$.viewer.style.height = this._height;
+//                this._fabricOverlay.fabricCanvas().on('mouse:up', function(options){
+//                    console.log('mouse up options ', options);
+//                });
+//                this._fabricOverlay.fabricCanvas().on('mouse:move', options => this._mouseMove(options));
 
+
+                /*
+                                var rect = new fabric.Rect({
+                                    left: 0,
+                                    top: 0,
+                                    fill: 'red',
+                                    width: 200,
+                                    height: 200
+                                });
+
+                                this._fabricOverlay.fabricCanvas().add(rect);
+                */
+
+                /*
+                                const self = this;
+                                this.viewer.addHandler('canvas-press', function (event) {
+                                    console.log('overlay: ', self._fabricOverlay.fabricCanvas());
+                                    new OpenSeadragon.MouseTracker({
+                                        element: self._fabricOverlay,
+                                        clickHandler: function (event) {
+                                            const target = event.originalEvent.target;
+                                            console.log('fabric canvas click ', event.originalEvent.target);
+                                        }
+                                    });
+                                });
+                */
             }
 
-            resize() {
-                console.log('resize() get viewer ', this.$.viewer.get('viewer'));
 
-
-                if (this._containerWidth !== this.$.viewer.get('viewer').clientWidth) {
-                    this.containerWidth = this.$.viewer.get('viewer').container.clientWidth;
-                    console.log('resize() containerWidth ', this.containerWidth);
+            // Init openseadragon
+            _initOpenSeadragon() {
+                console.log('_initOpenSeadragon');
+                var tileSources = this.src;
+                if (!this.dzi) {
+                    tileSources = {
+                        type: 'image',
+                        url: this.src,
+                        buildPyramid: false
+                    }
                 }
 
+//                console.log('showZoomControl ', this.showZoomControl);
 
-                if(this.containerHeight !== this.$.viewer.get('viewer').clientHeight){
-                    this.containerHeight = this.$.viewer.get('viewer').container.clientHeight;
-                    console.log('resize() containerHeight ', this.containerHeight);
+                this.viewer = OpenSeadragon({
+                    element: this,
+                    prefixUrl: "/exist/apps/epco/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
+                    visibilityRatio: this.visibilityRatio,
+                    constrainDuringPan: this.constrainDuringPan,
+                    showNavigationControl: this.showNavigationControl,
+                    showNavigator: this.showNavigator,
+                    zoomPerClick: this.zoomPerClick,
+                    zoomPerScroll: this.zoomPerScroll,
+                    animationTime: this.animationTime,
+                    navPrevNextWrap: this.navPrevNextWrap,
+                    showRotationControl: this.showRotationControl,
+                    minZoomImageRatio: this.minZoomImageRatio,
+                    maxZoomPixelRatio: this.maxZoomPixelRatio,
+                    showZoomControl: false,
+                    showHomeControl: false,
+                    showFullPageControl: false,
+                    tileSources: tileSources,
+                    clickToZoom:false
+                });
 
-                    this.$.canvasDiv.setAttribute('height', this.containerHeight);
-//                    this.canvas.setAttribute('height', this._containerHeight);
 
-                    document.querySelector('#c').setAttribute('height', this._containerHeight);
+                /*
+                                     overlays: [{
+                                        id: 'c',
+                                        x: 0.33,
+                                        y: 0.75,
+                                        width: 0.2,
+                                        height: 0.25,
+                                        className: 'highlight'
+                                    }]
+                */
 
-                }
+                const self = this;
 
-/*
-                if (this.containerWidth !== this._viewer.container.clientWidth) {
-                    this.containerWidth = this._viewer.container.clientWidth;
-                    this._canvasdiv.setAttribute('width', this._containerWidth);
-                    this._canvas.setAttribute('width', this._containerWidth);
-                }
+//                console.log('viewer ', this.viewer);
 
-                if (this._containerHeight !== this._viewer.container.clientHeight) {
-                    this._containerHeight = this._viewer.container.clientHeight;
-                    this._canvasdiv.setAttribute('height', this._containerHeight);
-                    this._canvas.setAttribute('height', this._containerHeight);
-                }
-*/
+                /*
+                                this.viewer.addHandler('zoom', function (e) {
+                                    self.dispatchEvent(new CustomEvent('zoom', {
+                                        detail: {target: self}
+                                    }));
+                                });
+                */
 
+                this.init = true;
             }
 
-            resizeCanvas() {
-                console.log('resizeCanvas');
-/*
-                var origin = new OpenSeadragon.Point(0, 0);
-                var viewportZoom = this._viewer.viewport.getZoom(true);
+            addCanvas() {
+                this.viewer.overlays.push(
+                    {
+                        id: 'c',
+                        px: 0,
+                        py: 0,
+                        className: 'highlight'
+                    }
+                );
+            }
 
+            getZoom() {
+                return this.viewer.viewport.getZoom(true);
+            }
 
-                this._fabricCanvas.setWidth(this._containerWidth);
-                this._fabricCanvas.setHeight(this._containerHeight);
-
-                var zoom = this._viewer.viewport._containerInnerSize.x * viewportZoom / this._scale;
-                this._fabricCanvas.setZoom(zoom);
-
-                var viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(origin);
-                var x=Math.round(viewportWindowPoint.x);
-                var y=Math.round(viewportWindowPoint.y);
-
-                var canvasOffset=this._canvasdiv.getBoundingClientRect();
-
-                var pageScroll = OpenSeadragon.getPageScroll();
-
-                this._fabricCanvas.absolutePan(new fabric.Point(canvasOffset.left - x + pageScroll.x, canvasOffset.top - y + pageScroll.y));
-*/
-
+            //Function to destroy the viewer and clean up everything created by OpenSeadragon.
+            destroy() {
+                this.viewer.destroy();
             }
 
             getCanvas() {
-                return this.canvas;
+                return this.querySelector('canvas');
             }
 
-            ready() {
-                super.ready();
+            getPoint() {
+                console.log('getPoint ', OpenSeadragon.Point(0, 0));
+                return OpenSeadragon.Point(0, 0);
             }
 
-            _resize(e) {
-                console.log('resizing ',e.detail.value);
-                const dim = e.detail.value;
-                if(dim){
-//                    console.log('new width: ', dim.width);
-//                    console.log('new height: ', dim.height);
-                    this._width = dim.width;
-                    this._height = dim.height;
+            getScale() {
+                return this.viewer.options._scale
+            }
+
+            getBounds() {
+                this.viewer.getBounds(true);
+            }
+
+            // Zoom in
+            zoomIn() {
+                // TODO: Replace with native openseadragon zoomIn
+                var currentZoom = this.viewer.viewport.getZoom();
+                var maxZoom = this.viewer.viewport.getMaxZoom();
+                var zoomTo = currentZoom + .7;
+                if (zoomTo < maxZoom) {
+                    this.viewer.viewport.zoomTo(zoomTo);
                 }
-
-
-                this.resize();
-                this.resizeCanvas();
-//                console.log('resizing ',e.detail.value.height);
-//                console.log('resizing ',e.target);
-//                this.notifyResize();
-
-//                console.log('resize window.w ', window.innerWidth);
-//                console.log('resize window.w ', window.innerHeight);
-//                console.log('resize this.w ', this.getBoundingClientRect().width);
-//                console.log('resize this.h ', this.getBoundingClientRect().height);
-//                this.width = window.innerWidth;
-//                this.height = window.innerHeight;
-
-//                console.log('canvascontainer: ', this.querySelector('.canvas-container'));
-//                const container = this.querySelector('.canvas-container');
-//                container.style.width = this._width;
-//                container.style.height = this._height;
-//
-//                const canvas = document.getElementById('c');
-//                canvas.style.width = this._width;
-//                canvas.style.height = this._height;
-
-//                this.$.viewer.style.width = this.getBoundingClientRect().width;
-//                this.$.viewer.style.height = this.getBoundingClientRect().height;
-//                this.notifyResize();
-
             }
 
-            _resizeViewer() {
-                console.log('_resizeViewer');
+            // Zoom out
+            zoomOut() {
+                // TODO: Replace with openseadragon native zoomOut
+                var currentZoom = this.viewer.viewport.getZoom();
+                var minZoom = this.viewer.viewport.getMinZoom();
+                var zoomTo = currentZoom - .7;
+                if (zoomTo > minZoom) {
+                    this.viewer.viewport.zoomTo(zoomTo);
+                } else {
+                    if (minZoom != currentZoom) {
+                        this.resetZoom();
+                    }
+                }
             }
 
+            // reset zoom
+            resetZoom() {
+                this.viewer.viewport.goHome();
+            }
 
-            /* ######### shape drawing ######### */
-            /* ######### shape drawing ######### */
+            _srcChanged(newVal, oldVal) {
+                console.log('_srcChanged');
+                if (this.dzi && this.init) {
+                    this._addTiledImage();
+                }
+            }
 
-            /* ######### shape drawing ######### */
+            // Add loaded images to viewer
+            _loadedChanged() {
+                if (this.loaded) {
+                    if (!this.init) {
+                        this._initOpenSeadragon();
+                    } else {
+                        this._addImage();
+                    }
+                }
+            }
 
+            _addImage() {
+                this.viewer.addSimpleImage({url: this.src, index: 0, replace: true});
+            }
+
+            _addTiledImage() {
+                console.log('_addTiledImage ', this.viewer);
+                this.viewer.addTiledImage({tileSource: this.src, index: 0, replace: true});
+            }
+
+            /*
+                        _attachDom(dom) {
+                            this.appendChild(dom);
+                        }
+            */
+
+
+            // ###### Fabric
             _mouseDown(options) {
-                console.log('mouseDown', options);
-                console.log('isDown target', options.target);
+//                console.log('mouseDown', options);
+//                console.log('isDown target', options.target);
 //                console.log('isDown target.id', options.target.id);
+                console.log('>>>>> e ', e);
                 console.log('>>>>> mode ', this.mode);
+                console.log('>>>>> mode ', this._fabricOverlay);
+/*
+                console.log('>>>>> mode ', e.position);
+                console.log('>>>>> mode ', e.position.x);
+                console.log('>>>>> mode ', e.position.y);
+*/
 
-                if (options.target) {
-                    options.e.preventDefaultAction = true;
-                    options.e.preventDefault();
-                    options.e.stopPropagation();
-                }
+                if(this.mode === 'osd') return;
 
-                var pointer = this.canvas.getPointer(options.e);
+//                var pointer = this._fabricOverlay.getPointer(e.pointer);
+//                var pointer = e.pointer;
+//                console.log('>>>>> pointer ', pointer);
 
-                if(this.mode == 'null') return;
 
                 if (this.mode == 'rectangle') {
                     var rect = new fabric.Rect({
-                        left: pointer.x,
-                        top: pointer.y,
+                        left: e.position.x,
+                        top: e.position.y,
                         fill: 'transparent',
                         stroke: 'blue',
                         strokeWidth: 2,
@@ -344,9 +603,9 @@
                         data: 'a rectangle'
                     });
 
-                    this.canvas.add(rect);
-                    this.canvas.setActiveObject(rect);
-                    this.canvas.renderAll();
+                    this._fabricOverlay.fabricCanvas().add(rect);
+                    this._fabricOverlay.fabricCanvas().setActiveObject(rect);
+                    this._fabricOverlay.fabricCanvas().renderAll();
                     this.activeShape = rect;
 
                 } else if (this.mode == 'circle') {
@@ -383,33 +642,38 @@
 
 
                 }
-
             }
 
             _mouseUp(options) {
                 console.log('mouseUp', options);
-                console.log('mouseUp', options.target);
+//                console.log('mouseUp', e.target);
+
+                if(this.mode === 'osd') return;
+
                 if (this.mode == 'rectangle') {
                     this.activeShape.set('hasBorders', true);
                     this.activeShape.set('hasControls', true);
                     this.activeShape.setCoords();
-                    this.mode = undefined;
 
                 } else if (this.mode == 'circle') {
                     this.activeShape.set('hasBorders', true);
                     this.activeShape.set('hasControls', true);
                     this.activeShape.setCoords();
-                    this.mode = undefined;
+                    this.mode = 'osd';
                 }
+
+                this.mode = 'osd';
+
             }
 
-            _mouseMove(options) {
+            _mouseMove(e) {
 //                if (!this.isDown) return;
 //                console.log('_mouseMove options', options);
 //                console.log('isDown ', this.isDown);
 //                console.log('mode ', this.mode);
+                if(this.mode === 'osd') return;
 
-                var pointer = this.canvas.getPointer(options.e);
+//                var pointer = this.canvas.getPointer(options.e);
 //                    console.log('pointer ', pointer);
 
                 if (this.mode == 'rectangle') {
@@ -420,9 +684,9 @@
 //                        console.log('newWidth ',pointer.x - this.activeShape.get('left'));
 //                        console.log('newHeight ', pointer.y - this.activeShape.get('top'));
 
-                        this.activeShape.set('width', pointer.x - this.activeShape.get('left'));
-                        this.activeShape.set('height', pointer.y - this.activeShape.get('top'));
-                        this.canvas.renderAll();
+                        this.activeShape.set('width', e.position.x - this.activeShape.get('left'));
+                        this.activeShape.set('height', e.position.y - this.activeShape.get('top'));
+                        this._fabricOverlay.fabricCanvas().renderAll();
                     }
 
 
@@ -432,7 +696,7 @@
                         var posX = pointer.x;
                         var posY = pointer.y;
                         this.activeShape.set('radius', Math.abs((posX - this.activeShape.get('left'))));
-                        this.canvas.renderAll();
+                        this._fabricOverlay.fabricCanvas().renderAll();
 
                     }
 
@@ -449,20 +713,13 @@
                         this.activeShape.set({
                             points: points
                         });
-                        this.canvas.renderAll();
+                        this._fabricOverlay.fabricCanvas().renderAll();
                     }
-                    this.canvas.renderAll();
+                    this._fabricOverlay.fabricCanvas().renderAll();
 
                 }
 
             }
-
-
-            _objectModified(o) {
-                console.log('_objectModified ', o);
-                this.selected = o.e.target;
-            }
-
 
             _removeShape(e) {
                 console.log('_removeShape ', e);
@@ -486,8 +743,9 @@
 
             }
 
+
             _createRect(e) {
-//                console.log('_createRect ',e);
+                console.log('_createRect ', e);
                 this.activeShape = false;
                 this.mode = "rectangle"
             }
@@ -497,8 +755,9 @@
                 this.mode = 'circle';
             }
 
+
             _createPolygon() {
-//                console.log('_createPolygon');
+                console.log('_createPolygon');
                 this.mode = 'polygon';
                 this.pointArray = new Array();
                 this.lineArray = new Array();
@@ -506,146 +765,11 @@
 
             }
 
-
-            _scaling() {
-                console.log('scaling...');
-            }
-
-
-            _addPoint(options) {
-
-                var random = Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
-                var id = new Date().getTime() + random;
-                var circle = new fabric.Circle({
-                    radius: 5,
-                    fill: '#ffffff',
-                    stroke: '#333333',
-                    strokeWidth: 0.5,
-                    left: (options.e.layerX / this.canvas.getZoom()),
-                    top: (options.e.layerY / this.canvas.getZoom()),
-                    selectable: false,
-                    hasBorders: false,
-                    hasControls: false,
-                    originX: 'center',
-                    originY: 'center',
-                    id: id,
-                    objectCaching: false
-                });
-                if (this.pointArray.length == 0) {
-                    circle.set({
-                        fill: 'red'
-                    })
-                }
-                var points = [(options.e.layerX / this.canvas.getZoom()), (options.e.layerY / this.canvas.getZoom()), (options.e.layerX / this.canvas.getZoom()), (options.e.layerY / this.canvas.getZoom())];
-                this.line = new fabric.Line(points, {
-                    strokeWidth: 2,
-                    fill: '#999999',
-                    stroke: '#999999',
-                    class: 'line',
-                    originX: 'center',
-                    originY: 'center',
-                    selectable: false,
-                    hasBorders: false,
-                    hasControls: false,
-                    evented: false,
-                    objectCaching: false
-                });
-                if (this.activeShape) {
-                    var pos = this.canvas.getPointer(options.e);
-                    var points = this.activeShape.get("points");
-                    points.push({
-                        x: pos.x,
-                        y: pos.y
-                    });
-                    var polygon = new fabric.Polygon(points, {
-                        stroke: '#333333',
-                        strokeWidth: 1,
-                        fill: '#cccccc',
-                        opacity: 0.3,
-                        selectable: false,
-                        hasBorders: false,
-                        hasControls: false,
-                        evented: false,
-                        objectCaching: false
-                    });
-                    this.canvas.remove(this.activeShape);
-                    this.canvas.add(polygon);
-                    this.activeShape = polygon;
-                    this.canvas.renderAll();
-                }
-                else {
-                    var polyPoint = [{
-                        x: (options.e.layerX / this.canvas.getZoom()),
-                        y: (options.e.layerY / this.canvas.getZoom())
-                    }];
-                    var polygon = new fabric.Polygon(polyPoint, {
-                        stroke: '#333333',
-                        strokeWidth: 1,
-                        fill: '#cccccc',
-                        opacity: 0.3,
-                        selectable: false,
-                        hasBorders: false,
-                        hasControls: false,
-                        evented: false,
-                        objectCaching: false
-                    });
-                    this.activeShape = polygon;
-                    this.canvas.add(polygon);
-                }
-                this.activeLine = this.line;
-
-                this.pointArray.push(circle);
-                this.lineArray.push(this.line);
-
-                this.canvas.add(this.line);
-                this.canvas.add(circle);
-                this.canvas.selection = false;
-            }
-
-
-            _generatePolygon() {
-                console.log('_generatePolygon ', this);
-                console.log('_generatePolygon pointArray', this.pointArray);
-                var points = new Array();
-
-                var that = this;
-                this.pointArray.forEach(function (point) {
-                    points.push({
-                        x: point.left,
-                        y: point.top
-                    });
-                    that.canvas.remove(point);
-
-                });
-
-                this.lineArray.forEach(function (line) {
-                    that.canvas.remove(line);
-                });
-
-                this.canvas.remove(this.activeShape).remove(this.activeLine);
-                var polygon = new fabric.Polygon(points, {
-                    stroke: 'blue',
-                    strokeWidth: 2,
-                    fill: 'transparent',
-                    opacity: 0.5,
-                    hasBorders: true,
-                    hasControls: true
-                });
-                this.canvas.add(polygon);
-
-                console.log("polygon boundingbox: ", polygon.getBoundingRect());
-                console.log("canvas active: ", this.canvas.getActiveObject());
-                this.canvas.setActiveObject(polygon);
-
-
-                this.activeLine = null;
-                this.activeShape = null;
-                this.mode = null;
-                this.canvas.selection = true;
-
-                this.pointArray = [];
-                this.lineArray = [];
-            }
+            /*
+                                    _attachDom(dom) {
+                                        this.appendChild(dom);
+                                    }
+            */
 
         }
 

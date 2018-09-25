@@ -1,0 +1,680 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/existdb-image-viewer/image-viewer.html">
+<link rel="import" href="../bower_components/iron-resizable-behavior/iron-resizable-behavior.html">
+<!--<link rel="import" href="../bower_components/resize-aware/resize-aware.html">-->
+
+
+<script type="text/javascript" src="../bower_components/fabric.js/dist/fabric.js"></script>
+
+<dom-module id="existdb-image-annotator">
+    <template>
+        <style>
+            :host {
+                display: block;
+                width: 100%;
+                height: 100%;
+            }
+
+/*
+            .canvasDiv {
+                width: 100%;
+                height: 100%;
+            }
+*/
+
+            .canvasDiv, ::slotted(div.canvas-container) {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                border: red thin solid;
+                /*background:lightgreen;*/
+            }
+
+            ::slotted(div.canvas-container){
+                z-index:10;
+            }
+
+            ::slotted(#c){
+                border:3px solid green;
+            }
+
+            /*
+                        .buttons{
+                            position: absolute;
+                            top:-30px;
+                        }
+            */
+
+            image-viewer {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                z-index: -1;
+                /*width: 100vw;*/
+            }
+
+            :host ::slotted(div.canvasDiv), .canvasDiv {
+                position: relative;
+                min-height: 75vh;
+            }
+            .buttons{
+                position: absolute;
+                z-index: 20;
+            }
+        </style>
+
+            <div class="buttons">
+                <paper-icon-button icon="zoom-in"></paper-icon-button>
+                <paper-icon-button icon="zoom-out"></paper-icon-button>
+                <paper-icon-button icon="home"></paper-icon-button>
+                <paper-icon-button icon="fullscreen"></paper-icon-button>
+
+                <button on-click="_logShapes">debug</button>
+                <button on-click="_createRect">add rect</button>
+                <button on-click="_createCircle">add circle</button>
+                <button on-click="_createPolygon">add polygon</button>
+                <button on-click="_removeShape">remove shape</button>
+            </div>
+            <slot name="annotationDialog"></slot>
+
+        <!--<resize-aware on-element-size-changed="_resize">-->
+            <div id="canvasDiv" class="canvasDiv">
+                <slot></slot>
+<!--
+                <image-viewer
+                        id="viewer"
+                        class="viewer"
+                        dzi="true"
+                zoom-factor="{{zoom-factor}}"
+                on-viewer-resized="resize"
+                on-zoom="_zoom"
+                on-update-viewport="_updateView">
+-->
+
+                </image-viewer>
+            </div>
+        <!--</resize-aware>-->
+    </template>
+
+
+    <script>
+        /**
+         * `existdb-image-annotator`
+         *
+         * a canvas that allows interactive drawing of rectangles, circles and polygons
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+//        class ExistdbImageAnnotator extends Polymer.mixinBehaviors([Polymer.IronResizableBehavior], Polymer.Element) {
+        class ExistdbImageAnnotator extends Polymer.Element {
+            static get is() {
+                return 'existdb-image-annotator';
+            }
+
+            static get properties() {
+                return {
+                    selectedShape: {
+                        type: Object
+                    },
+                    containerWidth:{
+                        type: Number,
+                        value: 0
+                    },
+                    containerHeight: {
+                        type: Number,
+                        value: 0
+                    }
+                };
+            }
+
+            /*
+                        get behaviors() {
+                            return [Polymer.IronResizableBehavior]
+                        }
+            */
+
+            constructor() {
+                super();
+                const pathname = window.location.pathname;
+                this.basePath = pathname.substring(0, pathname.lastIndexOf('/components'));
+            }
+
+
+            connectedCallback() {
+                super.connectedCallback();
+
+//                console.log(this, 'connectedCallback');
+//                console.log('offsetWidth ', this.offsetWidth);
+//                console.log('offsetWidth ', this.getBoundingClientRect());
+
+                // create a canvas in lightDOM which will be appended to 'canvasDiv'
+                const canvas = document.createElement('canvas');
+                canvas.setAttribute('id', 'c');
+                this.appendChild(canvas);
+                this.canvas = canvas;
+
+//                this.resize();
+
+//                this.addEventListener('iron-resize', this._resize);
+
+//                console.log('offsetWidth ', this.getBoundingClientRect().width);
+//                console.log('offsetHeight ', this.getBoundingClientRect().height);
+
+                this.canvas = new fabric.Canvas('c');
+                this.canvas.selectionColor = 'transparent';
+
+                //make the canvas same size as surrounding element 'existdb-image-annotator'
+                this.canvas.setHeight(this.getBoundingClientRect().height);
+                this.canvas.setWidth(this.getBoundingClientRect().width);
+
+                // one of 'rectangle', 'circle' or 'polygon'
+                this.mode = null;
+
+                //used for random numbers
+                this.min = 99;
+                this.max = 999999;
+
+
+                this.canvas.on('mouse:down', o => this._mouseDown(o));
+                this.canvas.on('mouse:up', o => this._mouseUp(o));
+                this.canvas.on('mouse:move', o => this._mouseMove(o));
+//                this.canvas.on('object:selected', o => this._objectModified(o));
+//                this.canvas.on('selected', o => this._rectSelected(o));
+
+//                console.log('image viewer: ', this.$.viewer)
+//                this.$.viewer.src = this.basePath + '/bower_components/img-pan-zoom/demo/images/output.dzi';
+//                this.$.viewer.addCanvas();
+
+
+/*
+                this.$.viewer.addHandler('update-viewport', function() {
+                    this.resize();
+                    this.resizecanvas();
+
+                });
+*/
+
+
+//                this.$.viewer.style.width = this._width;
+//                this.$.viewer.style.height = this._height;
+
+            }
+
+            _zoom(e){
+                console.log("zoooming");
+                console.log('zoom ' ,this.$.viewer.getZoom());
+
+            }
+
+            _updateView(e){
+                console.log('update viewport fired',e);
+                this.resize(e);
+                this.resizeCanvas();
+            }
+
+            resize(e) {
+                console.log('resize() get viewer ', this.$.viewer.get('viewer'));
+
+
+                if (this.containerWidth !== this.$.viewer.get('viewer').clientWidth) {
+                    this.containerWidth = this.$.viewer.get('viewer').container.clientWidth;
+                    console.log('resize() containerWidth ', this.containerWidth);
+                    this.$.canvasDiv.setAttribute('width', this.containerWidth);
+                    this.canvas.setAttribute('width', this.containerWidth);
+
+                }
+
+
+                if(this.containerHeight !== this.$.viewer.get('viewer').clientHeight){
+                    this.containerHeight = this.$.viewer.get('viewer').container.clientHeight;
+                    console.log('resize() containerHeight ', this.containerHeight);
+
+                    this.$.canvasDiv.setAttribute('height', this.containerHeight);
+                    this.canvas.setAttribute('height', this._containerHeight);
+
+                    document.querySelector('#c').setAttribute('height', this._containerHeight);
+
+                }
+
+/*
+                if (this.containerWidth !== this._viewer.container.clientWidth) {
+                    this.containerWidth = this._viewer.container.clientWidth;
+                    this._canvasdiv.setAttribute('width', this._containerWidth);
+                    this._canvas.setAttribute('width', this._containerWidth);
+                }
+
+                if (this._containerHeight !== this._viewer.container.clientHeight) {
+                    this._containerHeight = this._viewer.container.clientHeight;
+                    this._canvasdiv.setAttribute('height', this._containerHeight);
+                    this._canvas.setAttribute('height', this._containerHeight);
+                }
+*/
+
+            }
+
+            resizeCanvas() {
+                console.log('resizeCanvas');
+/*
+                var origin = new OpenSeadragon.Point(0, 0);
+                var viewportZoom = this._viewer.viewport.getZoom(true);
+
+
+                this._fabricCanvas.setWidth(this._containerWidth);
+                this._fabricCanvas.setHeight(this._containerHeight);
+
+                var zoom = this._viewer.viewport._containerInnerSize.x * viewportZoom / this._scale;
+                this._fabricCanvas.setZoom(zoom);
+
+                var viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(origin);
+                var x=Math.round(viewportWindowPoint.x);
+                var y=Math.round(viewportWindowPoint.y);
+
+                var canvasOffset=this._canvasdiv.getBoundingClientRect();
+
+                var pageScroll = OpenSeadragon.getPageScroll();
+
+                this._fabricCanvas.absolutePan(new fabric.Point(canvasOffset.left - x + pageScroll.x, canvasOffset.top - y + pageScroll.y));
+*/
+
+            }
+
+            getCanvas() {
+                return this.canvas;
+            }
+
+            ready() {
+                super.ready();
+            }
+
+            _resize(e) {
+                console.log('resizing ',e.detail.value);
+                const dim = e.detail.value;
+                if(dim){
+//                    console.log('new width: ', dim.width);
+//                    console.log('new height: ', dim.height);
+                    this._width = dim.width;
+                    this._height = dim.height;
+                }
+
+
+                this.resize();
+                this.resizeCanvas();
+//                console.log('resizing ',e.detail.value.height);
+//                console.log('resizing ',e.target);
+//                this.notifyResize();
+
+//                console.log('resize window.w ', window.innerWidth);
+//                console.log('resize window.w ', window.innerHeight);
+//                console.log('resize this.w ', this.getBoundingClientRect().width);
+//                console.log('resize this.h ', this.getBoundingClientRect().height);
+//                this.width = window.innerWidth;
+//                this.height = window.innerHeight;
+
+//                console.log('canvascontainer: ', this.querySelector('.canvas-container'));
+//                const container = this.querySelector('.canvas-container');
+//                container.style.width = this._width;
+//                container.style.height = this._height;
+//
+//                const canvas = document.getElementById('c');
+//                canvas.style.width = this._width;
+//                canvas.style.height = this._height;
+
+//                this.$.viewer.style.width = this.getBoundingClientRect().width;
+//                this.$.viewer.style.height = this.getBoundingClientRect().height;
+//                this.notifyResize();
+
+            }
+
+            _resizeViewer() {
+                console.log('_resizeViewer');
+            }
+
+
+            /* ######### shape drawing ######### */
+            /* ######### shape drawing ######### */
+
+            /* ######### shape drawing ######### */
+
+            _mouseDown(options) {
+                console.log('mouseDown', options);
+                console.log('isDown target', options.target);
+//                console.log('isDown target.id', options.target.id);
+                console.log('>>>>> mode ', this.mode);
+
+                if (options.target) {
+                    options.e.preventDefaultAction = true;
+                    options.e.preventDefault();
+                    options.e.stopPropagation();
+                }
+
+                var pointer = this.canvas.getPointer(options.e);
+
+                if(this.mode == 'null') return;
+
+                if (this.mode == 'rectangle') {
+                    var rect = new fabric.Rect({
+                        left: pointer.x,
+                        top: pointer.y,
+                        fill: 'transparent',
+                        stroke: 'blue',
+                        strokeWidth: 2,
+                        hasBorders: false,
+                        hasControls: false,
+                        opacity: 0.5,
+                        data: 'a rectangle'
+                    });
+
+                    this.canvas.add(rect);
+                    this.canvas.setActiveObject(rect);
+                    this.canvas.renderAll();
+                    this.activeShape = rect;
+
+                } else if (this.mode == 'circle') {
+                    console.log('mode = circle');
+
+                    var circle = new fabric.Circle({
+                        left: pointer.x,
+                        top: pointer.y,
+                        fill: 'transparent',
+                        stroke: 'blue',
+                        strokeWidth: 2,
+                        hasBorders: false,
+                        hasControls: false,
+                        selectionBackgroundColor: 'transparent'
+                    });
+                    this.canvas.add(circle);
+                    this.canvas.setActiveObject(circle);
+                    this.canvas.renderAll();
+                    this.activeShape = circle;
+
+                } else if (this.mode == 'polygon') {
+                    this.line = null;
+                    this.activeLine = null;
+
+                    console.log('pointArray ', this.pointArray);
+
+                    // if the target id is the same as the first one created
+                    if (options.target && options.target.id == this.pointArray[0].id) {
+                        this._generatePolygon();
+                    }
+                    if (this.mode == 'polygon') {
+                        this._addPoint(options);
+                    }
+
+
+                }
+
+            }
+
+            _mouseUp(options) {
+                console.log('mouseUp', options);
+                console.log('mouseUp', options.target);
+                if (this.mode == 'rectangle') {
+                    this.activeShape.set('hasBorders', true);
+                    this.activeShape.set('hasControls', true);
+                    this.activeShape.setCoords();
+                    this.mode = undefined;
+
+                } else if (this.mode == 'circle') {
+                    this.activeShape.set('hasBorders', true);
+                    this.activeShape.set('hasControls', true);
+                    this.activeShape.setCoords();
+                    this.mode = undefined;
+                }
+            }
+
+            _mouseMove(options) {
+//                if (!this.isDown) return;
+//                console.log('_mouseMove options', options);
+//                console.log('isDown ', this.isDown);
+//                console.log('mode ', this.mode);
+
+                var pointer = this.canvas.getPointer(options.e);
+//                    console.log('pointer ', pointer);
+
+                if (this.mode == 'rectangle') {
+//                    console.log('mode = rectangle ', this.activeShape);
+
+                    if (this.activeShape) {
+
+//                        console.log('newWidth ',pointer.x - this.activeShape.get('left'));
+//                        console.log('newHeight ', pointer.y - this.activeShape.get('top'));
+
+                        this.activeShape.set('width', pointer.x - this.activeShape.get('left'));
+                        this.activeShape.set('height', pointer.y - this.activeShape.get('top'));
+                        this.canvas.renderAll();
+                    }
+
+
+                } else if (this.mode == 'circle') {
+
+                    if (this.activeShape) {
+                        var posX = pointer.x;
+                        var posY = pointer.y;
+                        this.activeShape.set('radius', Math.abs((posX - this.activeShape.get('left'))));
+                        this.canvas.renderAll();
+
+                    }
+
+                } else if (this.mode == 'polygon') {
+
+                    if (this.activeLine && this.activeLine.class == "line") {
+                        this.activeLine.set({x2: pointer.x, y2: pointer.y});
+
+                        var points = this.activeShape.get("points");
+                        points[this.pointArray.length] = {
+                            x: pointer.x,
+                            y: pointer.y
+                        }
+                        this.activeShape.set({
+                            points: points
+                        });
+                        this.canvas.renderAll();
+                    }
+                    this.canvas.renderAll();
+
+                }
+
+            }
+
+
+            _objectModified(o) {
+                console.log('_objectModified ', o);
+                this.selected = o.e.target;
+            }
+
+
+            _removeShape(e) {
+                console.log('_removeShape ', e);
+                console.log('_removeShape ', this.canvas.getActiveObject());
+                this.canvas.remove(this.canvas.getActiveObject());
+                this.canvas.renderAll();
+            }
+
+            _logShapes(e) {
+                console.log('_logShapes ', e);
+                console.log('all objects ', this.canvas.getObjects());
+                console.log('_logShapes canvas ', this.canvas.toJSON('data'));
+            }
+
+            _rectSelected(o) {
+                console.log('_rectSelected ', o);
+                console.log('_rectSelected canvas ', this.canvas);
+                console.log('_rectSelected target', o.target);
+                this.selectedShape = o.target;
+                console.log('_rectSelected selected', this.canvas.getActiveObject());
+
+            }
+
+            _createRect(e) {
+//                console.log('_createRect ',e);
+                this.activeShape = false;
+                this.mode = "rectangle"
+            }
+
+            _createCircle() {
+                this.activeShape = false;
+                this.mode = 'circle';
+            }
+
+            _createPolygon() {
+//                console.log('_createPolygon');
+                this.mode = 'polygon';
+                this.pointArray = new Array();
+                this.lineArray = new Array();
+                this.activeShape = false;
+
+            }
+
+
+            _scaling() {
+                console.log('scaling...');
+            }
+
+
+            _addPoint(options) {
+
+                var random = Math.floor(Math.random() * (this.max - this.min + 1)) + this.min;
+                var id = new Date().getTime() + random;
+                var circle = new fabric.Circle({
+                    radius: 5,
+                    fill: '#ffffff',
+                    stroke: '#333333',
+                    strokeWidth: 0.5,
+                    left: (options.e.layerX / this.canvas.getZoom()),
+                    top: (options.e.layerY / this.canvas.getZoom()),
+                    selectable: false,
+                    hasBorders: false,
+                    hasControls: false,
+                    originX: 'center',
+                    originY: 'center',
+                    id: id,
+                    objectCaching: false
+                });
+                if (this.pointArray.length == 0) {
+                    circle.set({
+                        fill: 'red'
+                    })
+                }
+                var points = [(options.e.layerX / this.canvas.getZoom()), (options.e.layerY / this.canvas.getZoom()), (options.e.layerX / this.canvas.getZoom()), (options.e.layerY / this.canvas.getZoom())];
+                this.line = new fabric.Line(points, {
+                    strokeWidth: 2,
+                    fill: '#999999',
+                    stroke: '#999999',
+                    class: 'line',
+                    originX: 'center',
+                    originY: 'center',
+                    selectable: false,
+                    hasBorders: false,
+                    hasControls: false,
+                    evented: false,
+                    objectCaching: false
+                });
+                if (this.activeShape) {
+                    var pos = this.canvas.getPointer(options.e);
+                    var points = this.activeShape.get("points");
+                    points.push({
+                        x: pos.x,
+                        y: pos.y
+                    });
+                    var polygon = new fabric.Polygon(points, {
+                        stroke: '#333333',
+                        strokeWidth: 1,
+                        fill: '#cccccc',
+                        opacity: 0.3,
+                        selectable: false,
+                        hasBorders: false,
+                        hasControls: false,
+                        evented: false,
+                        objectCaching: false
+                    });
+                    this.canvas.remove(this.activeShape);
+                    this.canvas.add(polygon);
+                    this.activeShape = polygon;
+                    this.canvas.renderAll();
+                }
+                else {
+                    var polyPoint = [{
+                        x: (options.e.layerX / this.canvas.getZoom()),
+                        y: (options.e.layerY / this.canvas.getZoom())
+                    }];
+                    var polygon = new fabric.Polygon(polyPoint, {
+                        stroke: '#333333',
+                        strokeWidth: 1,
+                        fill: '#cccccc',
+                        opacity: 0.3,
+                        selectable: false,
+                        hasBorders: false,
+                        hasControls: false,
+                        evented: false,
+                        objectCaching: false
+                    });
+                    this.activeShape = polygon;
+                    this.canvas.add(polygon);
+                }
+                this.activeLine = this.line;
+
+                this.pointArray.push(circle);
+                this.lineArray.push(this.line);
+
+                this.canvas.add(this.line);
+                this.canvas.add(circle);
+                this.canvas.selection = false;
+            }
+
+
+            _generatePolygon() {
+                console.log('_generatePolygon ', this);
+                console.log('_generatePolygon pointArray', this.pointArray);
+                var points = new Array();
+
+                var that = this;
+                this.pointArray.forEach(function (point) {
+                    points.push({
+                        x: point.left,
+                        y: point.top
+                    });
+                    that.canvas.remove(point);
+
+                });
+
+                this.lineArray.forEach(function (line) {
+                    that.canvas.remove(line);
+                });
+
+                this.canvas.remove(this.activeShape).remove(this.activeLine);
+                var polygon = new fabric.Polygon(points, {
+                    stroke: 'blue',
+                    strokeWidth: 2,
+                    fill: 'transparent',
+                    opacity: 0.5,
+                    hasBorders: true,
+                    hasControls: true
+                });
+                this.canvas.add(polygon);
+
+                console.log("polygon boundingbox: ", polygon.getBoundingRect());
+                console.log("canvas active: ", this.canvas.getActiveObject());
+                this.canvas.setActiveObject(polygon);
+
+
+                this.activeLine = null;
+                this.activeShape = null;
+                this.mode = null;
+                this.canvas.selection = true;
+
+                this.pointArray = [];
+                this.lineArray = [];
+            }
+
+        }
+
+        window.customElements.define(ExistdbImageAnnotator.is, ExistdbImageAnnotator);
+    </script>
+</dom-module>

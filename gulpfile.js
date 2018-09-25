@@ -101,7 +101,8 @@ gulp.task('deploy:other', function () {
 })
 
 var components = [
-    'components/*.html'
+    'components/*.html',
+    'bower_components/**/*'
 ];
 
 
