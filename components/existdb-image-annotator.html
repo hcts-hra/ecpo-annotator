@@ -13,7 +13,7 @@
 <!--<link rel="import" href="image-loader.html">-->
 
 <script src="../bower_components/openseadragon/built-openseadragon/openseadragon/openseadragon.min.js"></script>
-<script src="../bower_components/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
+<script src="OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
 <script src="../bower_components/fabric.js/dist/fabric.js"></script>
 <!--<script src="../fabric.js/dist/fabric.min.js"></script>-->
 
@@ -284,14 +284,13 @@ Custom property | Description | Default
                     },
                     zoom: {
                         type: Number
-
                     },
                     selectedShape: {
                         type: Object
                     },
                     mode:{
                         type: String,
-                        value:'osd'
+                        value: 'osd' // open seadragon mode
                     }
 
                 };
@@ -303,7 +302,7 @@ Custom property | Description | Default
                 super.connectedCallback();
 //                console.log('connected rootpath: ', this.rootPath);
 //                console.log('connected importPath: ', this.importPath);
-                this.mode = 'osd';
+                this.mode = 'osd'; 
 
                 document.addEventListener('WebComponentsReady', function() {
                     console.log('webcomponentsready');
@@ -330,8 +329,7 @@ Custom property | Description | Default
             _initFabric() {
                 const self = this;
                 const options = {
-                    scale: 1000,
-                    iviewer:this
+                    annotator:this
                 };
 //                console.log('fabricOverlay ', this);
 //                console.log('fabricOverlay ', this.viewer);
@@ -417,7 +415,8 @@ Custom property | Description | Default
                     }
                 }
 
-//                console.log('showZoomControl ', this.showZoomControl);
+
+                console.log('showZoomControl ', this.showZoomControl);
 
                 this.viewer = OpenSeadragon({
                     element: this,
@@ -433,11 +432,13 @@ Custom property | Description | Default
                     showRotationControl: this.showRotationControl,
                     minZoomImageRatio: this.minZoomImageRatio,
                     maxZoomPixelRatio: this.maxZoomPixelRatio,
-                    showZoomControl: false,
+                    showZoomControl: this.showZoomControl,
                     showHomeControl: false,
                     showFullPageControl: false,
                     tileSources: tileSources,
-                    clickToZoom:false
+                    gestureSettingsMouse: {
+                        clickToZoom: true
+                    }
                 });
 
 
@@ -465,17 +466,6 @@ Custom property | Description | Default
                 */
 
                 this.init = true;
-            }
-
-            addCanvas() {
-                this.viewer.overlays.push(
-                    {
-                        id: 'c',
-                        px: 0,
-                        py: 0,
-                        className: 'highlight'
-                    }
-                );
             }
 
             getZoom() {
