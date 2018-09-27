@@ -78,7 +78,7 @@ var componentPaths = [
 ];
 
 gulp.task('deploy:components', function () {
-    return gulp.src(componentPaths, {base: './'})
+    return gulp.src(components, {base: './'})
         .pipe(exClient.newer(html5TargetConfiguration))
         .pipe(exClient.dest(html5TargetConfiguration))
 })
@@ -102,13 +102,14 @@ gulp.task('deploy:other', function () {
 
 var components = [
     'components/*.html',
-    'bower_components/**/*'
+    'components/**/*.js',
+    // 'bower_components/**/*'
 ];
 
 
 gulp.task('deploy', ['deploy:other', 'deploy:components', 'deploy:styles'])
 
-gulp.task('watch', function () {
+gulp.task('watch', ['deploy'], function () {
     gulp.watch('resources/css/!*', ['deploy:styles'])
     gulp.watch(otherPaths, ['deploy:other'])
     gulp.watch(components, ['deploy:components'])
