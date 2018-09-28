@@ -17,7 +17,7 @@
     console.log("fabricjsOverlay options ", options);
     console.log("fabricjsOverlay options ", options.iviewer);
     this._fabricjsOverlayInfo = new Overlay(this);
-    this._fabricjsOverlayInfo._scale = options.scale || 100;
+    this._fabricjsOverlayInfo._scale = options.scale || 1000;
     this._fabricjsOverlayInfo._annotator = options.annotator;
 
     console.log("fabricjsOverlayInfo ", this._fabricjsOverlayInfo);
@@ -60,29 +60,6 @@
     // disable fabric selection because default click is tracked by OSD
     this._fabricCanvas.selection = false;
 
-    // prevent OSD click elements on fabric objects
-    /*
-                this._viewer.addHandler('mouse:down', function (options) {
-                    console.log('fabric overlay mousedown options: ',options);
-                    if (options.target) {
-                        options.e.preventDefaultAction = true;
-                        options.e.preventDefault();
-                        options.e.stopPropagation();
-                    }
-                    self._mouseDown(this.options);
-
-                });
-        */
-
-    console.log("this.fabric ", this);
-    console.log("this._viewer ", this._viewer);
-
-    /*
-                this._fabricCanvas.on('mouse:up', function(options){
-                    console.log('mouse:up ', options);
-                });
-        */
-
     this._viewer.addHandler("update-viewport", function() {
       self.resize();
       self.resizecanvas();
@@ -93,43 +70,18 @@
       self.resizecanvas();
     });
 
-    this._viewer.addHandler(
-      "canvas-press",
-      function(options) {
-        console.log("fabric canvas-press options ", options);
+    this._tracker = new OpenSeadragon.MouseTracker({
+        element: this._viewer.canvas,
+        pressHandler: this._mouseDown.bind(this),
+        dragHandler: this._mouseMove.bind(this),
+        releaseHandler: this._mouseUp.bind(this),
+    })
 
-        if (this._annotator.mode === "osd") return;
-
-        this._viewer.setMouseNavEnabled(false);
-        this._viewer.outerTracker.setTracking(true);
-        // this._fabricCanvas.isDrawingMode = true;
-
-        this._mouseDown(options);
-      }.bind(this)
-    );
-  
-    // this._viewer.addHandler("canvas-release", this._mouseUp.bind(this))
-
-    this._viewer.addHandler("canvas-release", function(options) {
-        console.log("fabric canvas-release options ", options);
-        if (this._annotator.mode === "osd") return;
-
-        this._viewer.outerTracker.setTracking(false);
-        this._viewer.setMouseNavEnabled(true);
-        // this._fabricCanvas.isDrawingMode = false;
-
-        this._mouseUp(options);
-      }.bind(this)
-    );
-
-    this._viewer.addHandler("canvas-drag", function(options) {
-        if (this._annotator.mode === "osd") return;
-        this._mouseMove(options);
-    }.bind(this));
   };
 
   // ----------
   Overlay.prototype = {
+    modes: ['rectangle', 'circle', 'polygon'],
     // ----------
     canvas: function() {
       return this._canvas;
@@ -154,22 +106,22 @@
       }
     },
     resizecanvas: function() {
-      var origin = new OpenSeadragon.Point(0, 0);
-      var viewportZoom = this._viewer.viewport.getZoom(true);
+      const origin = new OpenSeadragon.Point(0, 0);
+      const viewportZoom = this._viewer.viewport.getZoom(true);
       this._fabricCanvas.setWidth(this._containerWidth);
       this._fabricCanvas.setHeight(this._containerHeight);
-      var zoom =
+      const zoom =
         (this._viewer.viewport._containerInnerSize.x * viewportZoom) /
         this._scale;
       this._fabricCanvas.setZoom(zoom);
-      var viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(
+      const viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(
         origin
       );
-      var x = Math.round(viewportWindowPoint.x);
-      var y = Math.round(viewportWindowPoint.y);
-      var canvasOffset = this._canvasdiv.getBoundingClientRect();
+      const x = Math.round(viewportWindowPoint.x);
+      const y = Math.round(viewportWindowPoint.y);
+      const canvasOffset = this._canvasdiv.getBoundingClientRect();
 
-      var pageScroll = OpenSeadragon.getPageScroll();
+      const pageScroll = OpenSeadragon.getPageScroll();
 
       this._fabricCanvas.absolutePan(
         new fabric.Point(
@@ -178,122 +130,118 @@
         )
       );
     },
+    reset: function () {
+      this.pointArray = [];
+      this.lineArray = [];
+      this.activeShape = null;
+      this.activeLine = null;
+    },
+    track: function (mode) {
+      const doTrack = this.modes.indexOf(mode) >= 0
+      this._tracker.setTracking(doTrack)
+    },
 
     _mouseDown: function(options) {
-      console.log("fabricjs mouseDown", options);
       const mode = this._annotator.mode
-      //                console.log('isDown target', options.target);
-      //                console.log('isDown target.id', options.target.id);
-
-      var pointer = this._fabricCanvas.getPointer(options.e);
-
-      if (mode == "rectangle") {
-        var rect2 = new fabric.Rect({
-            left: 20,
-            top: 20,
-            fill: 'red',
-            width: 20,
-            height: 20
-        });
-        this._fabricCanvas.add(rect2);
-
-        var rect = new fabric.Rect({
-          left: pointer.x,
-          top: pointer.y,
-          fill: "transparent",
-          stroke: "blue",
-          strokeWidth: 2,
-          hasBorders: false,
-          hasControls: false,
-          opacity: 0.5,
-          data: "a rectangle"
-        });
-
-        this._fabricCanvas.add(rect);
-        this._fabricCanvas.setActiveObject(rect);
-        this._fabricCanvas.renderAll();
-        this.activeShape = rect;
-      } else if (mode == "circle") {
-        console.log("mode = circle");
-
-        var circle = new fabric.Circle({
-          left: pointer.x,
-          top: pointer.y,
-          fill: "transparent",
-          stroke: "blue",
-          strokeWidth: 2,
-          hasBorders: false,
-          hasControls: false,
-          selectionBackgroundColor: "transparent"
-        });
-        this._fabricCanvas.add(circle);
-        this._fabricCanvas.setActiveObject(circle);
-        this._fabricCanvas.renderAll();
-        this.activeShape = circle;
-      } else if (mode == "polygon") {
-        this.line = null;
-        this.activeLine = null;
-
-        console.log("pointArray ", this.pointArray);
-
-        // if the target id is the same as the first one created
-        if (options.target && options.target.id == this.pointArray[0].id) {
-          this._generatePolygon();
-        }
-        if (mode == "polygon") {
-          this._addPoint(options);
-        }
+      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      const defaultStyle = {
+        fill: "transparent",
+        stroke: "blue",
+        strokeWidth: 2,
+        hasBorders: false,
+        hasControls: false
       }
+
+      switch (mode) {
+        case "rectangle":
+          const rect = new fabric.Rect(Object.assign({}, defaultStyle, {
+            left: pointer.x,
+            top: pointer.y
+          }));
+
+          this._fabricCanvas.add(rect);
+          this._fabricCanvas.setActiveObject(rect);
+          this._fabricCanvas.renderAll();
+          this.activeShape = rect;
+          break
+        case "circle":
+          const circle = new fabric.Circle(Object.assign({}, defaultStyle, {
+            left: pointer.x,
+            top: pointer.y,
+            selectionBackgroundColor: "transparent"
+          }));
+
+          this._fabricCanvas.add(circle);
+          this._fabricCanvas.setActiveObject(circle);
+          this._fabricCanvas.renderAll();
+          this.activeShape = circle;
+          break
+        case "polygon":
+          // if the target id is the same as the first one created
+          if (options.target && options.target.id == this.pointArray[0].id) {
+            this._generatePolygon();
+            this.line = null;
+            this.activeLine = null;
+            break;
+          }
+          this._addPoint(options);
+          break
+        default: 
+          console.warn('_mouseUp called with unknown mode', options);
+      }
+      return options
     },
 
     _mouseMove: function(options) {
-        console.log('mouse move', options)
-      const pointer = this._fabricCanvas.getPointer(options.e);
+      console.log('mouse move', options)
       const mode = this._annotator.mode
-      if (!this.activeShape) {    return console.warn('NO ACTIVE SHAPE');    }
 
-      if (mode == "rectangle") {
-        this.activeShape.set( "width", pointer.x - this.activeShape.get("left") );
-        this.activeShape.set( "height", pointer.y - this.activeShape.get("top") );
-    } else if (mode == "circle") {
-        var posX = pointer.x;
-        var posY = pointer.y;
-        this.activeShape.set( "radius", Math.abs(posX - this.activeShape.get("left")));
-      } else if (mode == "polygon") {
-        if (this.activeLine && this.activeLine.class == "line") {
+      if (!(this.activeShape || this.activeLine)) { return console.warn('NO ACTIVE SHAPE'); }
+
+      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      switch (mode) {
+        case "rectangle":
+          this.activeShape.set("width", pointer.x - this.activeShape.get("left"));
+          this.activeShape.set("height", pointer.y - this.activeShape.get("top"));
+          break
+        case "circle":
+          this.activeShape.set("radius", Math.abs(pointer.x - this.activeShape.get("left")));
+          break
+        case "polygon":
+          if (!this.activeLine || this.activeLine.class != "line") { break }
+
           this.activeLine.set({ x2: pointer.x, y2: pointer.y });
-
-          var points = this.activeShape.get("points");
-          points[this.pointArray.length] = {
-            x: pointer.x,
-            y: pointer.y
-          };
-          this.activeShape.set({
-            points: points
-          });
-        }
+          let points = this.activeShape.get("points");
+          // set last point of shape to current position
+          points[this.pointArray.length] = { x: pointer.x, y: pointer.y };
+          this.activeShape.set({ points: points });
+          break
+        default: 
+          console.warn('_mouseMove called with unknown mode', options);
       }
       this._fabricCanvas.renderAll();
     },
 
     _mouseUp: function(options) {
-      console.log("mouseUp", options);
-      console.log("this.activeShape", this.activeShape);
       const mode = this._annotator.mode;
+      console.log("mouseUp", mode);
 
-      if (mode === "osd") return;
+      console.log("this.activeShape", this.activeShape);
 
-      if (mode == "rectangle") {
-        this.activeShape.set("hasBorders", true);
-        this.activeShape.set("hasControls", true);
-        this.activeShape.setCoords();
-      } else if (mode == "circle") {
-        this.activeShape.set("hasBorders", true);
-        this.activeShape.set("hasControls", true);
-        this.activeShape.setCoords();
+      switch(mode) {
+        case 'rectangle':
+          this.activeShape.set("hasBorders", true);
+          this.activeShape.set("hasControls", true);
+          this.activeShape.setCoords();
+        break;
+        case 'circle': 
+          this.activeShape.set("hasBorders", true);
+          this.activeShape.set("hasControls", true);
+          this.activeShape.setCoords();
+        break;
+        default: 
+          console.warn('_mouseUp called with unknown mode', options);
       }
-
-      this._annotator.mode = "osd";
     }
   };
 })();

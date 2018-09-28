@@ -136,25 +136,21 @@ Custom property | Description | Default
         <div class="buttonBar">
             <paper-icon-button icon="zoom-in" title="zoom in"></paper-icon-button>
             <paper-icon-button icon="zoom-out" title="zoom out"></paper-icon-button>
-            <paper-icon-button icon="home" title="home"></paper-icon-button>
+            <paper-icon-button icon="home" title="home" on-click="_setModeToOSD"></paper-icon-button>
             <paper-icon-button icon="fullscreen" title="fullscreen"></paper-icon-button>
 
             <div class="devider"></div>
 
             <paper-icon-button icon="hardware:computer" on-click="_logShapes"></paper-icon-button>
-            <!--<button on-click="_logShapes">debug</button>-->
             <paper-icon-button icon="image:crop-3-2" title="add rectangle" on-click="_createRect"></paper-icon-button>
 
-            <!--<button on-click="_createRect">add rect</button>-->
             <paper-icon-button icon="image:panorama-fish-eye" title="add circle"
                                on-click="_createCircle"></paper-icon-button>
-            <!--<button on-click="_createCircle">add circle</button>-->
             <paper-icon-button icon="device:signal-cellular-null" title="add polygon"
                                on-click="_createPolygon"></paper-icon-button>
-            <!--<button on-click="_createPolygon">add polygon</button>-->
             <paper-icon-button icon="remove-circle-outline" title="remove shape"
                                on-click="_removeShape"></paper-icon-button>
-            <!--<button on-click="_removeShape">remove shape</button>-->
+            <span id="cursorWindowPosition"></span>
         </div>
         <slot></slot>
 
@@ -290,7 +286,8 @@ Custom property | Description | Default
                     },
                     mode:{
                         type: String,
-                        value: 'osd' // open seadragon mode
+                        value: 'osd', // open seadragon mode
+                        observer: '_modeChanged'
                     }
 
                 };
@@ -311,6 +308,32 @@ Custom property | Description | Default
                         // Add src changed observer
                         this._initOpenSeadragon();
                         this._initFabric();
+
+                        function onMouseTrackerMove(event) {
+                            function pointToString(point) {
+            return point.x.toPrecision(4) + "," + point.y.toPrecision(4);
+        }
+
+            let viewerX = event.position.x;
+            let viewerY = event.position.y;
+            let windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
+            this.$.cursorWindowPosition.innerHTML = pointToString(windowPoint);
+            // let containerPoint = windowPoint.minus(
+            //         OpenSeadragon.getElementPosition(viewer.element));
+            //         this.$.cursorWindowPosition.text(pointToString(containerPoint));
+            // let image1 = viewer.world.getItemAt(0);
+            // let imagePoint = image1.windowToImageCoordinates(windowPoint);
+            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
+            // let image2 = viewer.world.getItemAt(1);
+            // let imagePoint = image2.windowToImageCoordinates(windowPoint);
+            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
+            // let viewportPoint = viewer.viewport.windowToViewportCoordinates(windowPoint);
+            // this.$.cursorWindowPosition.text(pointToString(viewportPoint));
+        }
+        const mouseTracker = new OpenSeadragon.MouseTracker({
+            element: document,
+            moveHandler: onMouseTrackerMove.bind(this)
+        }).setTracking(true);
                     }
 
                 }.bind(this));
@@ -331,75 +354,7 @@ Custom property | Description | Default
                 const options = {
                     annotator:this
                 };
-//                console.log('fabricOverlay ', this);
-//                console.log('fabricOverlay ', this.viewer);
-
                 this._fabricOverlay = this.viewer.fabricjsOverlay(options);
-//                console.log('fabricOverlay ', this._fabricOverlay);
-//                console.log('_initFabric overlay ', document.getElementById('fabric'));
-
-
-/*
-                this._fabricOverlay.fabricCanvas().on('mouse:up', function(options){
-                    console.log('mouse:up ', options);
-                    console.log('mouse:up mode', self.mode);
-                    if (self.mode === 'osd') return;
-                    self._mouseUp(options);
-
-                });
-*/
-                /*
-
-                                this._fabricOverlay.fabricCanvas().on('mouse:down', function(options){
-                                    console.log('mouse:down ', options);
-                                    console.log('mouse:down mode', self.mode);
-
-                                    if (self.mode === 'osd') return;
-                                    self._mouseDown(options);
-
-                                });
-                                this._fabricOverlay.fabricCanvas().on('mouse:move', function(options){
-
-                                    if (self.mode === 'osd') return;
-                                    console.log('mouse:move ', options);
-                                    console.log('mouse:move mode', self.mode);
-                //                    self._mouseDown(options);
-
-                                });
-                */
-
-
-//                this._fabricOverlay.fabricCanvas().on('mouse:up', function(options){
-//                    console.log('mouse up options ', options);
-//                });
-//                this._fabricOverlay.fabricCanvas().on('mouse:move', options => this._mouseMove(options));
-
-
-                /*
-                                var rect = new fabric.Rect({
-                                    left: 0,
-                                    top: 0,
-                                    fill: 'red',
-                                    width: 200,
-                                    height: 200
-                                });
-
-                                this._fabricOverlay.fabricCanvas().add(rect);
-                */
-
-                /*
-                                const self = this;
-                                this.viewer.addHandler('canvas-press', function (event) {
-                                    console.log('overlay: ', self._fabricOverlay.fabricCanvas());
-                                    new OpenSeadragon.MouseTracker({
-                                        element: self._fabricOverlay,
-                                        clickHandler: function (event) {
-                                            const target = event.originalEvent.target;
-                                            console.log('fabric canvas click ', event.originalEvent.target);
-                                        }
-                                    });
-                                });
-                */
             }
 
 
@@ -442,30 +397,8 @@ Custom property | Description | Default
                 });
 
 
-                /*
-                                     overlays: [{
-                                        id: 'c',
-                                        x: 0.33,
-                                        y: 0.75,
-                                        width: 0.2,
-                                        height: 0.25,
-                                        className: 'highlight'
-                                    }]
-                */
-
                 const self = this;
-
-//                console.log('viewer ', this.viewer);
-
-                /*
-                                this.viewer.addHandler('zoom', function (e) {
-                                    self.dispatchEvent(new CustomEvent('zoom', {
-                                        detail: {target: self}
-                                    }));
-                                });
-                */
-
-                this.init = true;
+               this.init = true;
             }
 
             getZoom() {
@@ -552,165 +485,6 @@ Custom property | Description | Default
                 this.viewer.addTiledImage({tileSource: this.src, index: 0, replace: true});
             }
 
-            /*
-                        _attachDom(dom) {
-                            this.appendChild(dom);
-                        }
-            */
-
-
-            // ###### Fabric
-            _mouseDown(options) {
-//                console.log('mouseDown', options);
-//                console.log('isDown target', options.target);
-//                console.log('isDown target.id', options.target.id);
-                console.log('>>>>> e ', e);
-                console.log('>>>>> mode ', this.mode);
-                console.log('>>>>> mode ', this._fabricOverlay);
-/*
-                console.log('>>>>> mode ', e.position);
-                console.log('>>>>> mode ', e.position.x);
-                console.log('>>>>> mode ', e.position.y);
-*/
-
-                if(this.mode === 'osd') return;
-
-//                var pointer = this._fabricOverlay.getPointer(e.pointer);
-//                var pointer = e.pointer;
-//                console.log('>>>>> pointer ', pointer);
-
-
-                if (this.mode == 'rectangle') {
-                    var rect = new fabric.Rect({
-                        left: e.position.x,
-                        top: e.position.y,
-                        fill: 'transparent',
-                        stroke: 'blue',
-                        strokeWidth: 2,
-                        hasBorders: false,
-                        hasControls: false,
-                        opacity: 0.5,
-                        data: 'a rectangle'
-                    });
-
-                    this._fabricOverlay.fabricCanvas().add(rect);
-                    this._fabricOverlay.fabricCanvas().setActiveObject(rect);
-                    this._fabricOverlay.fabricCanvas().renderAll();
-                    this.activeShape = rect;
-
-                } else if (this.mode == 'circle') {
-                    console.log('mode = circle');
-
-                    var circle = new fabric.Circle({
-                        left: pointer.x,
-                        top: pointer.y,
-                        fill: 'transparent',
-                        stroke: 'blue',
-                        strokeWidth: 2,
-                        hasBorders: false,
-                        hasControls: false,
-                        selectionBackgroundColor: 'transparent'
-                    });
-                    this.canvas.add(circle);
-                    this.canvas.setActiveObject(circle);
-                    this.canvas.renderAll();
-                    this.activeShape = circle;
-
-                } else if (this.mode == 'polygon') {
-                    this.line = null;
-                    this.activeLine = null;
-
-                    console.log('pointArray ', this.pointArray);
-
-                    // if the target id is the same as the first one created
-                    if (options.target && options.target.id == this.pointArray[0].id) {
-                        this._generatePolygon();
-                    }
-                    if (this.mode == 'polygon') {
-                        this._addPoint(options);
-                    }
-
-
-                }
-            }
-
-            _mouseUp(options) {
-                console.log('mouseUp', options);
-//                console.log('mouseUp', e.target);
-
-                if(this.mode === 'osd') return;
-
-                if (this.mode == 'rectangle') {
-                    this.activeShape.set('hasBorders', true);
-                    this.activeShape.set('hasControls', true);
-                    this.activeShape.setCoords();
-
-                } else if (this.mode == 'circle') {
-                    this.activeShape.set('hasBorders', true);
-                    this.activeShape.set('hasControls', true);
-                    this.activeShape.setCoords();
-                    this.mode = 'osd';
-                }
-
-                this.mode = 'osd';
-
-            }
-
-            _mouseMove(e) {
-//                if (!this.isDown) return;
-//                console.log('_mouseMove options', options);
-//                console.log('isDown ', this.isDown);
-//                console.log('mode ', this.mode);
-                if(this.mode === 'osd') return;
-
-//                var pointer = this.canvas.getPointer(options.e);
-//                    console.log('pointer ', pointer);
-
-                if (this.mode == 'rectangle') {
-//                    console.log('mode = rectangle ', this.activeShape);
-
-                    if (this.activeShape) {
-
-//                        console.log('newWidth ',pointer.x - this.activeShape.get('left'));
-//                        console.log('newHeight ', pointer.y - this.activeShape.get('top'));
-
-                        this.activeShape.set('width', e.position.x - this.activeShape.get('left'));
-                        this.activeShape.set('height', e.position.y - this.activeShape.get('top'));
-                        this._fabricOverlay.fabricCanvas().renderAll();
-                    }
-
-
-                } else if (this.mode == 'circle') {
-
-                    if (this.activeShape) {
-                        var posX = pointer.x;
-                        var posY = pointer.y;
-                        this.activeShape.set('radius', Math.abs((posX - this.activeShape.get('left'))));
-                        this._fabricOverlay.fabricCanvas().renderAll();
-
-                    }
-
-                } else if (this.mode == 'polygon') {
-
-                    if (this.activeLine && this.activeLine.class == "line") {
-                        this.activeLine.set({x2: pointer.x, y2: pointer.y});
-
-                        var points = this.activeShape.get("points");
-                        points[this.pointArray.length] = {
-                            x: pointer.x,
-                            y: pointer.y
-                        }
-                        this.activeShape.set({
-                            points: points
-                        });
-                        this._fabricOverlay.fabricCanvas().renderAll();
-                    }
-                    this._fabricOverlay.fabricCanvas().renderAll();
-
-                }
-
-            }
-
             _removeShape(e) {
                 console.log('_removeShape ', e);
                 console.log('_removeShape ', this.canvas.getActiveObject());
@@ -733,34 +507,28 @@ Custom property | Description | Default
 
             }
 
-
-            _createRect(e) {
-                console.log('_createRect ', e);
-                this.activeShape = false;
+            _createRect() {
                 this.mode = "rectangle"
             }
 
             _createCircle() {
-                this.activeShape = false;
                 this.mode = 'circle';
             }
 
 
             _createPolygon() {
-                console.log('_createPolygon');
                 this.mode = 'polygon';
-                this.pointArray = new Array();
-                this.lineArray = new Array();
-                this.activeShape = false;
-
             }
 
-            /*
-                                    _attachDom(dom) {
-                                        this.appendChild(dom);
-                                    }
-            */
-
+            _modeChanged(newMode) {
+                if (!newMode || !this.viewer) { return }
+                this.viewer.setMouseNavEnabled(newMode === 'osd');
+                this._fabricOverlay.track(newMode)
+            }
+            _setModeToOSD() { 
+                this.mode = 'osd'
+                this._fabricOverlay.reset();
+            }
         }
 
         window.customElements.define(ExistdbImageAnnotator.is, ExistdbImageAnnotator);
