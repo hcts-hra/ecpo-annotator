@@ -24,17 +24,8 @@
 
     return this._fabricjsOverlayInfo;
   };
-  // static counter for multiple overlays differentiation
-  var counter = (function() {
-    var i = 1;
-
-    return function() {
-      return i++;
-    };
-  })();
   // ----------
-  var Overlay = function(viewer) {
-    var self = this;
+  const Overlay = function(viewer) {
 
     this._viewer = viewer;
 
@@ -60,15 +51,20 @@
     // disable fabric selection because default click is tracked by OSD
     this._fabricCanvas.selection = false;
 
+    this.activeLine = null;
+    this.activeShape = null;
+    this.pointArray = [];
+    this.lineArray = [];
+
     this._viewer.addHandler("update-viewport", function() {
-      self.resize();
-      self.resizecanvas();
-    });
+      this.resize();
+      this.resizecanvas();
+    }.bind(this));
 
     this._viewer.addHandler("open", function() {
-      self.resize();
-      self.resizecanvas();
-    });
+      this.resize();
+      this.resizecanvas();
+    }.bind(this));
 
     this._tracker = new OpenSeadragon.MouseTracker({
         element: this._viewer.canvas,
@@ -230,18 +226,146 @@
 
       switch(mode) {
         case 'rectangle':
-          this.activeShape.set("hasBorders", true);
-          this.activeShape.set("hasControls", true);
-          this.activeShape.setCoords();
-        break;
         case 'circle': 
           this.activeShape.set("hasBorders", true);
           this.activeShape.set("hasControls", true);
           this.activeShape.setCoords();
+          this._annotator.mode = 'osd'
         break;
         default: 
           console.warn('_mouseUp called with unknown mode', options);
       }
+    },
+
+    _addPoint: function (options) {
+      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+
+      const random = Math.floor(Math.random() * 1);
+      const id = new Date().getTime() + random;
+      const circle = new fabric.Circle({
+          radius: 5,
+          fill: '#ffffff',
+          stroke: '#333333',
+          strokeWidth: 0.5,
+          left: (pointer.x),
+          top: (pointer.y),
+          selectable: false,
+          hasBorders: false,
+          hasControls: false,
+          originX:'center',
+          originY:'center',
+          id:id,
+          objectCaching:false
+      });
+      if (this.pointArray.length == 0) {
+          circle.set({ fill:'red' })
+      }
+      const points = [
+        pointer.x, pointer.y,
+        pointer.x, pointer.y,
+      ];
+      this.line = new fabric.Line(points, {
+          strokeWidth: 2,
+          fill: '#999999',
+          stroke: '#999999',
+          class:'line',
+          originX:'center',
+          originY:'center',
+          selectable: false,
+          hasBorders: false,
+          hasControls: false,
+          evented: false,
+          objectCaching:false
+      });
+      if (this.activeShape) {
+          const activePoints = this.activeShape.get("points");
+          activePoints.push({
+              x: pointer.x,
+              y: pointer.y
+          });
+          const polygon = new fabric.Polygon(points,{
+              stroke:'#333333',
+              strokeWidth:1,
+              fill: '#cccccc',
+              opacity: 0.3,
+              selectable: false,
+              hasBorders: false,
+              hasControls: false,
+              evented: false,
+              objectCaching:false
+          });
+          this._fabricCanvas.remove(this.activeShape);
+          this._fabricCanvas.add(polygon);
+          this.activeShape = polygon;
+          this._fabricCanvas.renderAll();
+      }
+      else {
+          const polyPoint = [{ x:pointer.x, y:pointer.y }];
+          const polygon = new fabric.Polygon(polyPoint,{
+              stroke:'#333333',
+              strokeWidth:1,
+              fill: '#cccccc',
+              opacity: 0.3,
+              selectable: false,
+              hasBorders: false,
+              hasControls: false,
+              evented: false,
+              objectCaching:false
+          });
+          this.activeShape = polygon;
+          this._fabricCanvas.add(polygon);
     }
+      this.activeLine = this.line;
+
+      this.pointArray.push(circle);
+      this.lineArray.push(this.line);
+
+      this._fabricCanvas.add(this.line);
+      this._fabricCanvas.add(circle);
+      this._fabricCanvas.selection = false;
+  },
+
+  _generatePolygon: function () {
+      console.log('_generatePolygon ', this);
+      console.log('_generatePolygon pointArray', this.pointArray);
+      const points = [];
+
+      this.pointArray.forEach(function(point) {
+        points.push({
+            x: point.left,
+            y: point.top
+        });
+        this._fabricCanvas.remove(point);
+      }.bind(this));
+
+      this.lineArray.forEach(function(line) {
+        this._fabricCanvas.remove(line);
+      }.bind(this));
+
+      this._fabricCanvas.remove(this.activeShape).remove(this.activeLine);
+      const polygon = new fabric.Polygon(points, {
+        stroke:'blue',
+        strokeWidth: 2,
+        fill: 'transparent',
+        opacity: 0.5,
+        hasBorders: true,
+        hasControls: true
+      });
+      this._fabricCanvas.add(polygon);
+
+      console.log("polygon boundingbox: ", polygon.getBoundingRect());
+      console.log("canvas active: ", this._fabricCanvas.getActiveObject());
+      this._fabricCanvas.setActiveObject(polygon);
+
+      this.activeLine = null;
+      this.activeShape = null;
+      this.mode = null;
+      this._fabricCanvas.selection = true;
+
+      this.pointArray = [];
+      this.lineArray = [];
+  }
+
+
   };
 })();
