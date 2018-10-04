@@ -158,6 +158,8 @@
       this.lineArray = [];
       this.activeShape = null;
       this.activeLine = null;
+      this._fabricCanvas.discardActiveObject();
+      this._fabricCanvas.renderAll();
     },
 
     _mouseDown: function(options) {

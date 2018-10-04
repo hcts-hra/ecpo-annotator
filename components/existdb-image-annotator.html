@@ -151,6 +151,7 @@ Custom property | Description | Default
             <paper-icon-button icon="remove-circle-outline" title="remove shape" on-click="_removeShape"></paper-icon-button>
             <span id="cursorWindowPosition"></span>
         </div>
+        <div id="osd"></div>
         <slot></slot>
 
     </template>
@@ -359,7 +360,7 @@ Custom property | Description | Default
                 console.log('showZoomControl ', this.showZoomControl);
 
                 this.viewer = OpenSeadragon({
-                    element: this,
+                    element: this.$.osd,
                     prefixUrl: "/exist/apps/epco/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
                     visibilityRatio: this.visibilityRatio,
                     constrainDuringPan: this.constrainDuringPan,
