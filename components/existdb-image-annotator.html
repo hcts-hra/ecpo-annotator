@@ -12,7 +12,7 @@
 <!--<link rel="import" href="bower_components/web-animations-js/web-animations.html">-->
 <!--<link rel="import" href="image-loader.html">-->
 
-<script src="../bower_components/openseadragon/built-openseadragon/openseadragon/openseadragon.min.js"></script>
+<script src="OpenseadragonFabricjsOverlay/openseadragon/openseadragon.min.js"></script>
 <script src="OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
 <script src="../bower_components/fabric.js/dist/fabric.js"></script>
 <!--<script src="../fabric.js/dist/fabric.min.js"></script>-->
@@ -93,7 +93,9 @@ Custom property | Description | Default
                 height: 40px;
             }
 
-            .canvasDiv, #viewer, #viewer ::slotted(existdb-fabric-canvas) {
+            .canvasDiv,
+            #viewer,
+            #viewer ::slotted(existdb-fabric-canvas) {
                 position: absolute;
                 top: 0;
                 left: 0;
@@ -144,12 +146,9 @@ Custom property | Description | Default
             <paper-icon-button icon="hardware:computer" on-click="_logShapes"></paper-icon-button>
             <paper-icon-button icon="image:crop-3-2" title="add rectangle" on-click="_createRect"></paper-icon-button>
 
-            <paper-icon-button icon="image:panorama-fish-eye" title="add circle"
-                               on-click="_createCircle"></paper-icon-button>
-            <paper-icon-button icon="device:signal-cellular-null" title="add polygon"
-                               on-click="_createPolygon"></paper-icon-button>
-            <paper-icon-button icon="remove-circle-outline" title="remove shape"
-                               on-click="_removeShape"></paper-icon-button>
+            <paper-icon-button icon="image:panorama-fish-eye" title="add circle" on-click="_createCircle"></paper-icon-button>
+            <paper-icon-button icon="device:signal-cellular-null" title="add polygon" on-click="_createPolygon"></paper-icon-button>
+            <paper-icon-button icon="remove-circle-outline" title="remove shape" on-click="_removeShape"></paper-icon-button>
             <span id="cursorWindowPosition"></span>
         </div>
         <slot></slot>
@@ -284,24 +283,21 @@ Custom property | Description | Default
                     selectedShape: {
                         type: Object
                     },
-                    mode:{
+                    mode: {
                         type: String,
-                        value: 'osd', // open seadragon mode
-                        observer: '_modeChanged'
+                        value: 'osd' // open seadragon mode
                     }
 
                 };
             }
 
-
-
             connectedCallback() {
                 super.connectedCallback();
-//                console.log('connected rootpath: ', this.rootPath);
-//                console.log('connected importPath: ', this.importPath);
-                this.mode = 'osd'; 
+                //                console.log('connected rootpath: ', this.rootPath);
+                //                console.log('connected importPath: ', this.importPath);
+                this.mode = 'osd';
 
-                document.addEventListener('WebComponentsReady', function() {
+                document.addEventListener('WebComponentsReady', function () {
                     console.log('webcomponentsready');
                     // Init openseadragon if we are using a deep zoom image
                     if (this.dzi) {
@@ -311,49 +307,38 @@ Custom property | Description | Default
 
                         function onMouseTrackerMove(event) {
                             function pointToString(point) {
-            return point.x.toPrecision(4) + "," + point.y.toPrecision(4);
-        }
+                                return point.x.toPrecision(4) + "," + point.y.toPrecision(4);
+                            }
 
-            let viewerX = event.position.x;
-            let viewerY = event.position.y;
-            let windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
-            this.$.cursorWindowPosition.innerHTML = pointToString(windowPoint);
-            // let containerPoint = windowPoint.minus(
-            //         OpenSeadragon.getElementPosition(viewer.element));
-            //         this.$.cursorWindowPosition.text(pointToString(containerPoint));
-            // let image1 = viewer.world.getItemAt(0);
-            // let imagePoint = image1.windowToImageCoordinates(windowPoint);
-            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
-            // let image2 = viewer.world.getItemAt(1);
-            // let imagePoint = image2.windowToImageCoordinates(windowPoint);
-            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
-            // let viewportPoint = viewer.viewport.windowToViewportCoordinates(windowPoint);
-            // this.$.cursorWindowPosition.text(pointToString(viewportPoint));
-        }
-        const mouseTracker = new OpenSeadragon.MouseTracker({
-            element: document,
-            moveHandler: onMouseTrackerMove.bind(this)
-        }).setTracking(true);
+                            let viewerX = event.position.x;
+                            let viewerY = event.position.y;
+                            let windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
+                            this.$.cursorWindowPosition.innerHTML = pointToString(windowPoint);
+                            // let containerPoint = windowPoint.minus(
+                            //         OpenSeadragon.getElementPosition(viewer.element));
+                            //         this.$.cursorWindowPosition.text(pointToString(containerPoint));
+                            // let image1 = viewer.world.getItemAt(0);
+                            // let imagePoint = image1.windowToImageCoordinates(windowPoint);
+                            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
+                            // let image2 = viewer.world.getItemAt(1);
+                            // let imagePoint = image2.windowToImageCoordinates(windowPoint);
+                            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
+                            // let viewportPoint = viewer.viewport.windowToViewportCoordinates(windowPoint);
+                            // this.$.cursorWindowPosition.text(pointToString(viewportPoint));
+                        }
+                        const mouseTracker = new OpenSeadragon.MouseTracker({
+                            element: document,
+                            moveHandler: onMouseTrackerMove.bind(this)
+                        }).setTracking(true);
                     }
 
                 }.bind(this));
-
-                /*
-                                this.animationConfig = {
-                                    'fade': {
-                                        name: 'fade-in-animation',
-                                        node: this.$.viewer
-                                    }
-                                };
-                */
 
             }
 
             _initFabric() {
                 const self = this;
-                const options = {
-                    annotator:this
-                };
+                const options = { annotator: this };
                 this._fabricOverlay = this.viewer.fabricjsOverlay(options);
             }
 
@@ -392,13 +377,14 @@ Custom property | Description | Default
                     showFullPageControl: false,
                     tileSources: tileSources,
                     gestureSettingsMouse: {
-                        clickToZoom: true
+                        clickToZoom: false
                     }
                 });
+                this.viewer.setMouseNavEnabled(false);
 
 
                 const self = this;
-               this.init = true;
+                this.init = true;
             }
 
             getZoom() {
@@ -477,12 +463,12 @@ Custom property | Description | Default
             }
 
             _addImage() {
-                this.viewer.addSimpleImage({url: this.src, index: 0, replace: true});
+                this.viewer.addSimpleImage({ url: this.src, index: 0, replace: true });
             }
 
             _addTiledImage() {
                 console.log('_addTiledImage ', this.viewer);
-                this.viewer.addTiledImage({tileSource: this.src, index: 0, replace: true});
+                this.viewer.addTiledImage({ tileSource: this.src, index: 0, replace: true });
             }
 
             _removeShape(e) {
@@ -520,12 +506,7 @@ Custom property | Description | Default
                 this.mode = 'polygon';
             }
 
-            _modeChanged(newMode) {
-                if (!newMode || !this.viewer) { return }
-                this.viewer.setMouseNavEnabled(newMode === 'osd');
-                this._fabricOverlay.track(newMode)
-            }
-            _setModeToOSD() { 
+            _setModeToOSD() {
                 this.mode = 'osd'
                 this._fabricOverlay.reset();
             }

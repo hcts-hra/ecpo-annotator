@@ -66,22 +66,42 @@
       this.resizecanvas();
     }.bind(this));
 
-      self.resize();
-      self.resizecanvas();
-    });
+    this._fabricCanvas.on('mouse:down', function (options) {
+      console.log('fabric', 'mouse:down', options)
+      console.log('fabric', 'mouse:down', options.e)
+      
+      if (this.captureEvent(options)) {
+        options.e.preventDefaultAction = true;
+        options.e.preventDefault();
+        options.e.stopPropagation();
+        return this._mouseDown(options)
+      }
+      // zoom per click
+      console.log('fabric', 'default OSD action: zoomPerClick')
+      this._viewer.viewport.zoomBy(this._viewer.zoomPerClick);
+      this._viewer.viewport.applyConstraints();
+    }.bind(this))
 
-    this._tracker = new OpenSeadragon.MouseTracker({
-        element: this._viewer.canvas,
-        pressHandler: this._mouseDown.bind(this),
-        dragHandler: this._mouseMove.bind(this),
-        releaseHandler: this._mouseUp.bind(this),
-    })
+    this._fabricCanvas.on('mouse:up', function (options) {
+        console.log('fabric', 'mouse:up', options)
+        this._mouseUp(options)
 
+    }.bind(this))
+
+    this._fabricCanvas.on('mouse:move', function (options) {
+      if (this.modes.indexOf(this._annotator.mode) < 0) { return }
+
+      console.log('fabric', 'mouse:move', options)
+      options.e.preventDefaultAction = true;
+      options.e.preventDefault();
+      options.e.stopPropagation();
+      return this._mouseMove(options)
+    }.bind(this))
   };
 
   // ----------
   Overlay.prototype = {
-    modes: ['rectangle', 'circle', 'polygon'],
+    modes: ['rectangle', 'circle', 'polygon', 'remove', 'select'],
     // ----------
     canvas: function() {
       return this._canvas;
@@ -130,20 +150,24 @@
         )
       );
     },
+    captureEvent: function (options) {
+      return (options.target || this.modes.indexOf(this._annotator.mode) >= 0)
+    },
     reset: function () {
       this.pointArray = [];
       this.lineArray = [];
       this.activeShape = null;
       this.activeLine = null;
     },
-    track: function (mode) {
-      const doTrack = this.modes.indexOf(mode) >= 0
-      this._tracker.setTracking(doTrack)
-    },
 
     _mouseDown: function(options) {
+      console.log('________________________')
       const mode = this._annotator.mode
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      console.log(this._fabricCanvas.getActiveObject())
+      // this._annotator.viewer.setMouseNavEnabled(this._fabricCanvas.getActiveObject())
+
+
       const defaultStyle = {
         fill: "transparent",
         stroke: "blue",
@@ -318,7 +342,7 @@
           });
           this.activeShape = polygon;
           this._fabricCanvas.add(polygon);
-    }
+      }
       this.activeLine = this.line;
 
       this.pointArray.push(circle);
