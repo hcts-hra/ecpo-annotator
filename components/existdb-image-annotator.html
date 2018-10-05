@@ -468,24 +468,21 @@ Custom property | Description | Default
             }
 
             _removeShape(e) {
-                console.log('_removeShape ', e);
-                console.log('_removeShape ', this.canvas.getActiveObject());
-                this.canvas.remove(this.canvas.getActiveObject());
-                this.canvas.renderAll();
+                this._fabricOverlay.remove()
             }
 
             _logShapes(e) {
                 console.log('_logShapes ', e);
-                console.log('all objects ', this.canvas.getObjects());
-                console.log('_logShapes canvas ', this.canvas.toJSON('data'));
+                console.log('all objects ', this._fabricOverlay._fabricCanvas.getObjects());
+                console.log('_logShapes canvas ', this._fabricOverlay._fabricCanvas.toJSON('data'));
             }
 
             _rectSelected(o) {
                 console.log('_rectSelected ', o);
-                console.log('_rectSelected canvas ', this.canvas);
+                console.log('_rectSelected canvas ', this._fabricOverlay._fabricCanvas);
                 console.log('_rectSelected target', o.target);
                 this.selectedShape = o.target;
-                console.log('_rectSelected selected', this.canvas.getActiveObject());
+                console.log('_rectSelected selected', this._fabricOverlay._fabricCanvas.getActiveObject());
 
             }
 

@@ -24,9 +24,9 @@
 
     return this._fabricjsOverlayInfo;
   };
+
   // ----------
   const Overlay = function(viewer) {
-
     this._viewer = viewer;
 
     this._containerWidth = 0;
@@ -49,7 +49,7 @@
     this.resize();
     this._fabricCanvas = new fabric.Canvas(this._canvas);
     // disable fabric selection because default click is tracked by OSD
-    this._fabricCanvas.selection = false;
+    // this._fabricCanvas.selection = false;
 
     this.activeLine = null;
     this.activeShape = null;
@@ -82,21 +82,9 @@
       this._viewer.viewport.applyConstraints();
     }.bind(this))
 
-    this._fabricCanvas.on('mouse:up', function (options) {
-        console.log('fabric', 'mouse:up', options)
-        this._mouseUp(options)
+    this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
+    this._fabricCanvas.on('mouse:move', this._mouseMove.bind(this))
 
-    }.bind(this))
-
-    this._fabricCanvas.on('mouse:move', function (options) {
-      if (this.modes.indexOf(this._annotator.mode) < 0) { return }
-
-      console.log('fabric', 'mouse:move', options)
-      options.e.preventDefaultAction = true;
-      options.e.preventDefault();
-      options.e.stopPropagation();
-      return this._mouseMove(options)
-    }.bind(this))
   };
 
   // ----------
@@ -192,13 +180,18 @@
       this._fabricCanvas.discardActiveObject();
       this._fabricCanvas.renderAll();
     },
+    remove: function () {
+      this._fabricCanvas.remove(this._fabricCanvas.getActiveObject());
+      this._fabricCanvas.renderAll();
+
+    },
 
     _mouseDown: function(options) {
       const mode = this._annotator.mode
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
-      if (options.target) {
-        this._fabricCanvas.setActiveObject(options.target);
+      if (options.target && mode === 'osd') {
+        return this._fabricCanvas.setActiveObject(options.target);
       }
 
       console.log("active object ", this._fabricCanvas.getActiveObject());
@@ -217,6 +210,7 @@
           this.activeShape = rect;
           break
         case "circle":
+          // TODO improve circle painting
           const circle = new fabric.Circle(Object.assign({}, this.defaultStyle, {
             left: pointer.x,
             top: pointer.y,
@@ -230,28 +224,26 @@
           break
         case "polygon":
           // if the target id is the same as the first one created
-          if (options.target && options.target.id == this.pointArray[0].id) {
+          if (options.target && this.pointArray.length && options.target.id === this.pointArray[0].id) {
             this._generatePolygon();
             this.line = null;
             this.activeLine = null;
             this._annotator.mode = 'osd'
             break;
           }
+          this._fabricCanvas.selection = false;
           this._addPoint(options);
           break
-        default: 
-          console.warn('_mouseUp called with unknown mode', options);
+        // default: 
+        //   console.warn('_mouseUp called with unknown mode', options);
       }
       return options
     },
 
     _mouseMove: function(options) {
-      console.log('mouse move', options)
       const mode = this._annotator.mode
 
-      if (!(this.activeShape || this.activeLine)) { 
-        return console.warn('NO ACTIVE SHAPE');
-      }
+      if (!(this.activeShape || this.activeLine)) { return }
 
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
       switch (mode) {
@@ -318,8 +310,8 @@
       this.line = new fabric.Line(newLinePoints, this.lineStyle);
 
       // draw new intermediate polygon
-      const activeObject = this._fabricCanvas.getActiveObject()
-      const polyPoints = activeObject ? activeObject.get('points') : []
+      const activeShape = this.activeShape
+      const polyPoints = activeShape ? activeShape.get('points') : []
 
       polyPoints.push({ x: pointer.x, y: pointer.y })
       const polygon = new fabric.Polygon(polyPoints, {
@@ -331,60 +323,47 @@
         hasBorders: false,
         hasControls: false,
         evented: false,
-        objectCaching:false
-    });
+        objectCaching: false
+      });
 
-    // render changes to fabric canvas
-    if (activeObject) {
-      this._fabricCanvas.remove(this.activeShape);
-    }
-    this._fabricCanvas.add(polygon);
-    this._fabricCanvas.add(this.line);
-    this._fabricCanvas.add(circle);
-    this._fabricCanvas.selection = false;
-    this._fabricCanvas.renderAll();
+      // render changes to fabric canvas
+      if (activeShape) {
+        this._fabricCanvas.remove(activeShape);
+      }
+      this._fabricCanvas.add(polygon);
+      this._fabricCanvas.add(this.line);
+      this._fabricCanvas.add(circle);
+      this._fabricCanvas.renderAll();
+      this._fabricCanvas.setActiveObject(polygon);
 
-    // set inner overlay state
-    this.activeShape = polygon;
-    this.activeLine = this.line;
-    this.pointArray.push(circle);
-    this.lineArray.push(this.line);
-  },
+      // set inner overlay state
+      this.activeShape = polygon;
+      this.activeLine = this.line;
+      this.pointArray.push(circle);
+      this.lineArray.push(this.line);
+    },
 
-  _generatePolygon: function () {
-      console.log('_generatePolygon ', this);
+    _generatePolygon: function () {
+      console.log('_generatePolygon ', this.activeShape.get("points"));
       console.log('_generatePolygon pointArray', this.pointArray);
-      const points = [];
+      const points = this.pointArray.map(p => ({ x:p.left, y:p.top }));
 
-      this.pointArray.forEach(function(point) {
-        points.push({
-            x: point.left,
-            y: point.top
-        });
-        this._fabricCanvas.remove(point);
-      }.bind(this));
-
-      this.lineArray.forEach(function(line) {
-        this._fabricCanvas.remove(line);
-      }.bind(this));
-
+      this.pointArray.forEach(point => this._fabricCanvas.remove(point));
+      this.lineArray.forEach(line => this._fabricCanvas.remove(line));
       this._fabricCanvas.remove(this.activeShape).remove(this.activeLine);
+
       const polygon = new fabric.Polygon(points, this.defaultStyle);
       this._fabricCanvas.add(polygon);
 
-      console.log("polygon boundingbox: ", polygon.getBoundingRect());
       console.log("canvas active: ", this._fabricCanvas.getActiveObject());
       this._fabricCanvas.setActiveObject(polygon);
 
       this.activeLine = null;
       this.activeShape = null;
-      this.mode = null;
       this._fabricCanvas.selection = true;
 
       this.pointArray = [];
       this.lineArray = [];
   }
-
-
   };
 })();
