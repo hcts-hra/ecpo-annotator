@@ -347,15 +347,11 @@ Custom property | Description | Default
             // Init openseadragon
             _initOpenSeadragon() {
                 console.log('_initOpenSeadragon');
-                var tileSources = this.src;
-                if (!this.dzi) {
-                    tileSources = {
-                        type: 'image',
-                        url: this.src,
-                        buildPyramid: false
-                    }
-                }
-
+                const tileSources = this.dzi ? this.src : {
+                    type: 'image',
+                    url: this.src,
+                    buildPyramid: false
+                };
 
                 console.log('showZoomControl ', this.showZoomControl);
 
@@ -383,10 +379,10 @@ Custom property | Description | Default
                     zoomInButton: this.$.zoomIn,
                     zoomOutButton: this.$.zoomOut
                 });
+
+                // prevent capturing mouse events (specifically mouse down) of OSD
                 this.viewer.setMouseNavEnabled(false);
 
-
-                const self = this;
                 this.init = true;
             }
 
@@ -394,13 +390,10 @@ Custom property | Description | Default
                 return this.viewer.viewport.getZoom(true);
             }
 
-            //Function to destroy the viewer and clean up everything created by OpenSeadragon.
+            // Function to destroy the viewer and clean up everything created by OpenSeadragon.
             destroy() {
+                // TODO destroy fabricJSoverlay?
                 this.viewer.destroy();
-            }
-
-            getCanvas() {
-                return this.querySelector('canvas');
             }
 
             getPoint() {
@@ -497,15 +490,18 @@ Custom property | Description | Default
             }
 
             _createRect() {
-                this.mode = "rectangle"
+                this._fabricOverlay.reset();
+                this.mode = "rectangle";
             }
 
             _createCircle() {
+                this._fabricOverlay.reset();
                 this.mode = 'circle';
             }
 
 
             _createPolygon() {
+                this._fabricOverlay.reset();
                 this.mode = 'polygon';
             }
 

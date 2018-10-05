@@ -102,6 +102,39 @@
   // ----------
   Overlay.prototype = {
     modes: ['rectangle', 'circle', 'polygon', 'remove', 'select'],
+    defaultStyle: {
+      stroke:'blue',
+      strokeWidth: 2,
+      fill: 'transparent',
+      opacity: 0.5,
+      hasBorders: true,
+      hasControls: true
+    },
+    pointStyle: {
+      radius: 5,
+      fill: '#ffffff',
+      stroke: '#333333',
+      strokeWidth: 0.5,
+      selectable: false,
+      hasBorders: false,
+      hasControls: false,
+      originX: 'center',
+      originY: 'center',
+      objectCaching: false
+    },
+    lineStyle: {
+      strokeWidth: 1,
+      fill: '#449',
+      stroke: '#449',
+      class:'line',
+      originX:'center',
+      originY:'center',
+      selectable: false,
+      hasBorders: false,
+      hasControls: false,
+      evented: false,
+      objectCaching:false
+    },
     // ----------
     canvas: function() {
       return this._canvas;
@@ -134,9 +167,7 @@
         (this._viewer.viewport._containerInnerSize.x * viewportZoom) /
         this._scale;
       this._fabricCanvas.setZoom(zoom);
-      const viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(
-        origin
-      );
+      const viewportWindowPoint = this._viewer.viewport.viewportToWindowCoordinates(origin);
       const x = Math.round(viewportWindowPoint.x);
       const y = Math.round(viewportWindowPoint.y);
       const canvasOffset = this._canvasdiv.getBoundingClientRect();
@@ -163,30 +194,19 @@
     },
 
     _mouseDown: function(options) {
-      console.log('________________________', options);
       const mode = this._annotator.mode
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
-      if(options.target){
-          this._fabricCanvas.setActiveObject(options.target);
+      if (options.target) {
+        this._fabricCanvas.setActiveObject(options.target);
       }
 
       console.log("active object ", this._fabricCanvas.getActiveObject());
       // this._annotator.viewer.setMouseNavEnabled(this._fabricCanvas.getActiveObject())
 
-
-
-      const defaultStyle = {
-        fill: "transparent",
-        stroke: "blue",
-        strokeWidth: 2,
-        hasBorders: false,
-        hasControls: false
-      }
-
       switch (mode) {
         case "rectangle":
-          const rect = new fabric.Rect(Object.assign({}, defaultStyle, {
+          const rect = new fabric.Rect(Object.assign({}, this.defaultStyle, {
             left: pointer.x,
             top: pointer.y
           }));
@@ -197,7 +217,7 @@
           this.activeShape = rect;
           break
         case "circle":
-          const circle = new fabric.Circle(Object.assign({}, defaultStyle, {
+          const circle = new fabric.Circle(Object.assign({}, this.defaultStyle, {
             left: pointer.x,
             top: pointer.y,
             selectionBackgroundColor: "transparent"
@@ -214,6 +234,7 @@
             this._generatePolygon();
             this.line = null;
             this.activeLine = null;
+            this._annotator.mode = 'osd'
             break;
           }
           this._addPoint(options);
@@ -228,7 +249,9 @@
       console.log('mouse move', options)
       const mode = this._annotator.mode
 
-      if (!(this.activeShape || this.activeLine)) { return console.warn('NO ACTIVE SHAPE'); }
+      if (!(this.activeShape || this.activeLine)) { 
+        return console.warn('NO ACTIVE SHAPE');
+      }
 
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
       switch (mode) {
@@ -276,89 +299,56 @@
     _addPoint: function (options) {
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
-      const random = Math.floor(Math.random() * 1);
-      const id = new Date().getTime() + random;
-      const circle = new fabric.Circle({
-          radius: 5,
-          fill: '#ffffff',
-          stroke: '#333333',
-          strokeWidth: 0.5,
-          left: (pointer.x),
-          top: (pointer.y),
-          selectable: false,
-          hasBorders: false,
-          hasControls: false,
-          originX:'center',
-          originY:'center',
-          id:id,
-          objectCaching:false
-      });
-      if (this.pointArray.length == 0) {
-          circle.set({ fill:'red' })
+      // new point marker
+      const circle = new fabric.Circle(Object.assign({}, this.pointStyle, {
+          left: pointer.x,
+          top: pointer.y,
+          id: 'p-' + Date.now() + Math.floor(Math.random() * 11),
+      }));
+      // first point marker is special
+      if (this.pointArray.length === 0) {
+          circle.set({ fill: 'tomato' })
       }
-      const points = [
+
+      // start a new line with length zero
+      const newLinePoints = [
         pointer.x, pointer.y,
         pointer.x, pointer.y,
       ];
-      this.line = new fabric.Line(points, {
-          strokeWidth: 2,
-          fill: '#999999',
-          stroke: '#999999',
-          class:'line',
-          originX:'center',
-          originY:'center',
-          selectable: false,
-          hasBorders: false,
-          hasControls: false,
-          evented: false,
-          objectCaching:false
-      });
-      if (this.activeShape) {
-          const activePoints = this.activeShape.get("points");
-          activePoints.push({
-              x: pointer.x,
-              y: pointer.y
-          });
-          const polygon = new fabric.Polygon(points,{
-              stroke:'#333333',
-              strokeWidth:1,
-              fill: '#cccccc',
-              opacity: 0.3,
-              selectable: false,
-              hasBorders: false,
-              hasControls: false,
-              evented: false,
-              objectCaching:false
-          });
-          this._fabricCanvas.remove(this.activeShape);
-          this._fabricCanvas.add(polygon);
-          this.activeShape = polygon;
-          this._fabricCanvas.renderAll();
-      }
-      else {
-          const polyPoint = [{ x:pointer.x, y:pointer.y }];
-          const polygon = new fabric.Polygon(polyPoint,{
-              stroke:'#333333',
-              strokeWidth:1,
-              fill: '#cccccc',
-              opacity: 0.3,
-              selectable: false,
-              hasBorders: false,
-              hasControls: false,
-              evented: false,
-              objectCaching:false
-          });
-          this.activeShape = polygon;
-          this._fabricCanvas.add(polygon);
-      }
-      this.activeLine = this.line;
+      this.line = new fabric.Line(newLinePoints, this.lineStyle);
 
-      this.pointArray.push(circle);
-      this.lineArray.push(this.line);
+      // draw new intermediate polygon
+      const activeObject = this._fabricCanvas.getActiveObject()
+      const polyPoints = activeObject ? activeObject.get('points') : []
 
-      this._fabricCanvas.add(this.line);
-      this._fabricCanvas.add(circle);
-      this._fabricCanvas.selection = false;
+      polyPoints.push({ x: pointer.x, y: pointer.y })
+      const polygon = new fabric.Polygon(polyPoints, {
+        stroke:'#336',
+        strokeWidth: 2,
+        fill: '#aaf',
+        opacity: 0.3,
+        selectable: false,
+        hasBorders: false,
+        hasControls: false,
+        evented: false,
+        objectCaching:false
+    });
+
+    // render changes to fabric canvas
+    if (activeObject) {
+      this._fabricCanvas.remove(this.activeShape);
+    }
+    this._fabricCanvas.add(polygon);
+    this._fabricCanvas.add(this.line);
+    this._fabricCanvas.add(circle);
+    this._fabricCanvas.selection = false;
+    this._fabricCanvas.renderAll();
+
+    // set inner overlay state
+    this.activeShape = polygon;
+    this.activeLine = this.line;
+    this.pointArray.push(circle);
+    this.lineArray.push(this.line);
   },
 
   _generatePolygon: function () {
@@ -379,14 +369,7 @@
       }.bind(this));
 
       this._fabricCanvas.remove(this.activeShape).remove(this.activeLine);
-      const polygon = new fabric.Polygon(points, {
-        stroke:'blue',
-        strokeWidth: 2,
-        fill: 'transparent',
-        opacity: 0.5,
-        hasBorders: true,
-        hasControls: true
-      });
+      const polygon = new fabric.Polygon(points, this.defaultStyle);
       this._fabricCanvas.add(polygon);
 
       console.log("polygon boundingbox: ", polygon.getBoundingRect());
