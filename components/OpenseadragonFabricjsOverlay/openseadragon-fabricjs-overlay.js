@@ -163,11 +163,17 @@
     },
 
     _mouseDown: function(options) {
-      console.log('________________________')
+      console.log('________________________', options);
       const mode = this._annotator.mode
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
-      console.log(this._fabricCanvas.getActiveObject())
+
+      if(options.target){
+          this._fabricCanvas.setActiveObject(options.target);
+      }
+
+      console.log("active object ", this._fabricCanvas.getActiveObject());
       // this._annotator.viewer.setMouseNavEnabled(this._fabricCanvas.getActiveObject())
+
 
 
       const defaultStyle = {
@@ -256,13 +262,13 @@
 
       switch(mode) {
         case 'rectangle':
-        case 'circle': 
+        case 'circle':
           this.activeShape.set("hasBorders", true);
           this.activeShape.set("hasControls", true);
           this.activeShape.setCoords();
           this._annotator.mode = 'osd'
         break;
-        default: 
+        default:
           console.warn('_mouseUp called with unknown mode', options);
       }
     },

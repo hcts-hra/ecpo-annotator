@@ -136,10 +136,10 @@ Custom property | Description | Default
         <!-- Openseadragon -->
         <!--<div id="toolbarDiv"></div>-->
         <div class="buttonBar">
-            <paper-icon-button icon="zoom-in" title="zoom in"></paper-icon-button>
-            <paper-icon-button icon="zoom-out" title="zoom out"></paper-icon-button>
-            <paper-icon-button icon="home" title="home" on-click="_setModeToOSD"></paper-icon-button>
-            <paper-icon-button icon="fullscreen" title="fullscreen"></paper-icon-button>
+            <paper-icon-button id="zoomIn" icon="zoom-in" title="zoom in"></paper-icon-button>
+            <paper-icon-button id="zoomOut" icon="zoom-out" title="zoom out"></paper-icon-button>
+            <paper-icon-button id="homeBtn" icon="home" title="home" on-click="_onHome"></paper-icon-button>
+            <paper-icon-button id="fullScreen" icon="fullscreen" title="fullscreen" on-click="_onFullScreen"></paper-icon-button>
 
             <div class="devider"></div>
 
@@ -151,7 +151,7 @@ Custom property | Description | Default
             <paper-icon-button icon="remove-circle-outline" title="remove shape" on-click="_removeShape"></paper-icon-button>
             <span id="cursorWindowPosition"></span>
         </div>
-        <div id="osd"></div>
+        <!--<div id="osd"></div>-->
         <slot></slot>
 
     </template>
@@ -360,7 +360,7 @@ Custom property | Description | Default
                 console.log('showZoomControl ', this.showZoomControl);
 
                 this.viewer = OpenSeadragon({
-                    element: this.$.osd,
+                    element: this,
                     prefixUrl: "/exist/apps/epco/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
                     visibilityRatio: this.visibilityRatio,
                     constrainDuringPan: this.constrainDuringPan,
@@ -379,7 +379,9 @@ Custom property | Description | Default
                     tileSources: tileSources,
                     gestureSettingsMouse: {
                         clickToZoom: false
-                    }
+                    },
+                    zoomInButton: this.$.zoomIn,
+                    zoomOutButton: this.$.zoomOut
                 });
                 this.viewer.setMouseNavEnabled(false);
 
@@ -507,10 +509,32 @@ Custom property | Description | Default
                 this.mode = 'polygon';
             }
 
-            _setModeToOSD() {
+            /*
+            code stolen from osd and routed to this.viewer.
+             */
+            _onFullScreen(e) {
+                if ( this.viewer.isFullPage() && !this.viewer.isFullScreen() ) {
+                    // Is fullPage but not fullScreen
+                    this.viewer.setFullPage( false );
+                } else {
+                    this.viewer.setFullScreen( !this.viewer.isFullPage() );
+                }
+                // correct for no mouseout event on change
+                if ( this.viewer.buttons ) {
+                    this.viewer.buttons.emulateExit();
+                }
+                this.viewer.fullPageButton.element.focus();
+                if ( this.viewer.viewport ) {
+                    this.viewer.viewport.applyConstraints();
+                }
+            }
+
+            _onHome(e){
                 this.mode = 'osd'
                 this._fabricOverlay.reset();
+                this.viewer.viewport.goHome();
             }
+
         }
 
         window.customElements.define(ExistdbImageAnnotator.is, ExistdbImageAnnotator);
