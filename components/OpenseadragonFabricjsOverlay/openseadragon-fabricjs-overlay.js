@@ -49,7 +49,7 @@
     this.resize();
     this._fabricCanvas = new fabric.Canvas(this._canvas);
     // disable fabric selection because default click is tracked by OSD
-    // this._fabricCanvas.selection = false;
+    this._fabricCanvas.selection = false;
 
     this.activeLine = null;
     this.activeShape = null;
@@ -132,7 +132,7 @@
     },
     // ----------
     clear: function() {
-      this._fabricCanvas.clearAll();
+      this._fabricCanvas.clear();
     },
     // ----------
     resize: function() {
@@ -181,9 +181,19 @@
       this._fabricCanvas.renderAll();
     },
     remove: function () {
-      this._fabricCanvas.remove(this._fabricCanvas.getActiveObject());
+      const ao = this._fabricCanvas.getActiveObject()
+      const json = ao.toJSON(['id', 'data'])
+      this._fabricCanvas.remove(ao);
       this._fabricCanvas.renderAll();
-
+      document.dispatchEvent(new CustomEvent('shape-deleted', {composed: true, bubbles: true, detail: {shape: json}}));
+    },
+    serialize: function () {
+      console.log('all objects ', this._fabricCanvas.getObjects());
+      console.log('_logShapes canvas ', this._fabricCanvas.toJSON('data'));
+      return this._fabricCanvas.toJSON(['id','data'])
+    },
+    load: function (json) {
+      this._fabricCanvas.loadFromJSON(json)
     },
 
     _mouseDown: function(options) {
@@ -263,17 +273,15 @@
           points[this.pointArray.length] = { x: pointer.x, y: pointer.y };
           this.activeShape.set({ points: points });
           break
-        default: 
-          console.warn('_mouseMove called with unknown mode', options);
+        // default: 
+        //   console.warn('_mouseMove called with unknown mode', options);
       }
       this._fabricCanvas.renderAll();
     },
 
     _mouseUp: function(options) {
       const mode = this._annotator.mode;
-      console.log("mouseUp", mode);
-
-      console.log("this.activeShape", this.activeShape);
+      let json
 
       switch(mode) {
         case 'rectangle':
@@ -281,8 +289,17 @@
           this.activeShape.set("hasBorders", true);
           this.activeShape.set("hasControls", true);
           this.activeShape.setCoords();
+          this.activeShape.data = 's-' + Date.now() + Math.floor(Math.random() * 11)
+          this.activeShape.id = 's-' + Date.now() + Math.floor(Math.random() * 11)
+          json = this._fabricCanvas.getActiveObject().toJSON(['id', 'data'])
+          document.dispatchEvent(new CustomEvent('shape-created', {composed:true, bubbles: true, detail: {shape: json }}));
           this._annotator.mode = 'osd'
         break;
+        case 'osd':
+          if (!options.target) { break }
+          json = options.target.toJSON(['id', 'data'])
+          document.dispatchEvent(new CustomEvent('shape-changed', {composed: true, bubbles: true, detail: {shape: json }}));
+        break
         default:
           console.warn('_mouseUp called with unknown mode', options);
       }

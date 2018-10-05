@@ -334,7 +334,9 @@ Custom property | Description | Default
                     }
 
                 }.bind(this));
-
+                document.addEventListener('shape-created', this._newShapeHandler.bind(this))
+                document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
+                document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
             }
 
             _initFabric() {
@@ -384,6 +386,17 @@ Custom property | Description | Default
                 this.viewer.setMouseNavEnabled(false);
 
                 this.init = true;
+            }
+
+            _newShapeHandler (e) {
+                console.log('NEW SHAPE', e.detail.shape)
+            }
+
+            _changedShapeHandler (e) {
+                console.log('CHANGED SHAPE', e.detail.shape)
+            }
+            _deletedShapeHandler (e) {
+                console.log('DELETED SHAPE', e.detail.shape)
             }
 
             getZoom() {
@@ -471,10 +484,16 @@ Custom property | Description | Default
                 this._fabricOverlay.remove()
             }
 
-            _logShapes(e) {
-                console.log('_logShapes ', e);
-                console.log('all objects ', this._fabricOverlay._fabricCanvas.getObjects());
-                console.log('_logShapes canvas ', this._fabricOverlay._fabricCanvas.toJSON('data'));
+            _logShapes() {
+                this._data = this._fabricOverlay.serialize();
+            }
+
+            _loadShapes() {
+                this._fabricOverlay.load(this._data);
+            }
+
+            _clear() {
+                this._fabricOverlay.clear();
             }
 
             _rectSelected(o) {
