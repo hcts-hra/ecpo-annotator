@@ -14,14 +14,9 @@
    *      Fabric 'virtual' canvas size, for creating objects
    **/
   OpenSeadragon.Viewer.prototype.fabricjsOverlay = function(options) {
-    console.log("fabricjsOverlay options ", options);
-    console.log("fabricjsOverlay options ", options.iviewer);
     this._fabricjsOverlayInfo = new Overlay(this);
     this._fabricjsOverlayInfo._scale = options.scale || 1000;
     this._fabricjsOverlayInfo._annotator = options.annotator;
-
-    console.log("fabricjsOverlayInfo ", this._fabricjsOverlayInfo);
-
     return this._fabricjsOverlayInfo;
   };
 
@@ -67,8 +62,8 @@
     }.bind(this));
 
     this._fabricCanvas.on('mouse:down', function (options) {
-      console.log('fabric', 'mouse:down', options)
-      console.log('fabric', 'mouse:down', options.e)
+      // console.log('fabric', 'mouse:down', options)
+      // console.log('fabric', 'mouse:down', options.e)
       
       if (this.captureEvent(options)) {
         options.e.preventDefaultAction = true;
@@ -173,7 +168,7 @@
       return (options.target || this.modes.indexOf(this._annotator.mode) >= 0)
     },
     highlight: function (idOrElement) {
-      let object = (typeof idOrElement === 'string') ? this.getObjectById(id) : idOrElement
+      let object = (typeof idOrElement === 'string') ? this.getObjectById(idOrElement) : idOrElement
 
       if (!object) {
         return console.error('nothing found to highlight')
@@ -210,7 +205,7 @@
       const json = ao.toJSON(['id', 'data'])
       this._fabricCanvas.remove(ao);
       this._fabricCanvas.renderAll();
-      document.dispatchEvent(new CustomEvent('shape-deleted', {composed: true, bubbles: true, detail: {shape: json}}));
+      this._canvas.dispatchEvent(new CustomEvent('shape-deleted', {composed: true, bubbles: true, detail: {shape: json}}));
     },
     serialize: function () {
       console.log('all objects ', this._fabricCanvas.getObjects());
@@ -225,7 +220,11 @@
       const mode = this._annotator.mode
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
+      // selection
       if (options.target && mode === 'osd') {
+        // if (this._fabricCanvas.getActiveObject() === options.target) {
+        //   return
+        // }
         return this.highlight(options.target);
       }
 
@@ -402,14 +401,14 @@
     _notifyShapeCreated: function (object) {
       const detail = {shape: object.toJSON(['id', 'data'])}
       const event = new CustomEvent('shape-created', {composed:true, bubbles: true, detail: detail})
-      document.dispatchEvent(event);
+      this._canvas.dispatchEvent(event);
     },
 
     _notifyShapeChanged: function (object) {
       if (!object) { return }
       const detail = {shape: object.toJSON(['id', 'data'])}
       const event = new CustomEvent('shape-changed', {composed: true, bubbles: true, detail: detail})
-      document.dispatchEvent(event);
+      this._canvas.dispatchEvent(event);
     },
 
     _getShapeId () {
