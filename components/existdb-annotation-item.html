@@ -1,0 +1,49 @@
+<link rel="import" href="bower_components/polymer/polymer-element.html">
+
+<dom-module id="existdb-annotation-item">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+
+        <slot></slot>
+    </template>
+
+    <script>
+        /**
+         * `existdb-annotation-item`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/existdb-annotation-item.html
+         */
+        class ExistdbAnnotationItem extends Polymer.Element {
+            static get is() {
+                return 'existdb-annotation-item';
+            }
+
+            static get properties() {
+                return {
+                    data:{
+                        type: Object,
+                        value: _ => {}
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+            ready(){
+                super.ready();
+            }
+
+        }
+
+        window.customElements.define(ExistdbAnnotationItem.is, ExistdbAnnotationItem);
+    </script>
+</dom-module>
