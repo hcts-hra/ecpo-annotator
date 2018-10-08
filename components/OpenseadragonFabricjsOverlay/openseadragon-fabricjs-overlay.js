@@ -172,6 +172,31 @@
     captureEvent: function (options) {
       return (options.target || this.modes.indexOf(this._annotator.mode) >= 0)
     },
+    highlight: function (idOrElement) {
+      let object = (typeof idOrElement === 'string') ? this.getObjectById(id) : idOrElement
+
+      if (!object) {
+        return console.error('nothing found to highlight')
+      }
+      this.deselect()
+      object.set({stroke: 'tomato'})
+      console.log('highlight', object)
+      this.activeShape = object
+      this._fabricCanvas.setActiveObject(object)
+      this._fabricCanvas.renderAll()
+    },
+    deselect: function () {
+      if (this.activeShape == null) { return }
+      this.activeShape.set({stroke: 'blue'})
+      this.activeShape = null;
+      this._fabricCanvas.renderAll()
+    },
+    getObjectById: function (id) {
+      const result = this._fabricCanvas.getObjects().filter(function (o) {
+        return o.id && o.id === id
+      })
+      return result[0];
+    },
     reset: function () {
       this.pointArray = [];
       this.lineArray = [];
@@ -201,7 +226,7 @@
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
       if (options.target && mode === 'osd') {
-        return this._fabricCanvas.setActiveObject(options.target);
+        return this.highlight(options.target);
       }
 
       console.log("active object ", this._fabricCanvas.getActiveObject());
@@ -236,8 +261,7 @@
           // if the target id is the same as the first one created
           if (options.target && this.pointArray.length && options.target.id === this.pointArray[0].id) {
             this._generatePolygon();
-            this.line = null;
-            this.activeLine = null;
+            this._fabricCanvas.selection = true;
             this._annotator.mode = 'osd'
             break;
           }
@@ -281,7 +305,6 @@
 
     _mouseUp: function(options) {
       const mode = this._annotator.mode;
-      let json
 
       switch(mode) {
         case 'rectangle':
@@ -289,16 +312,12 @@
           this.activeShape.set("hasBorders", true);
           this.activeShape.set("hasControls", true);
           this.activeShape.setCoords();
-          this.activeShape.data = 's-' + Date.now() + Math.floor(Math.random() * 11)
-          this.activeShape.id = 's-' + Date.now() + Math.floor(Math.random() * 11)
-          json = this._fabricCanvas.getActiveObject().toJSON(['id', 'data'])
-          document.dispatchEvent(new CustomEvent('shape-created', {composed:true, bubbles: true, detail: {shape: json }}));
+          this.activeShape.id = this._getShapeId()
+          this.highlight(this.activeShape)
+          this._notifyShapeCreated(this.activeShape)
           this._annotator.mode = 'osd'
         break;
-        case 'osd':
-          if (!options.target) { break }
-          json = options.target.toJSON(['id', 'data'])
-          document.dispatchEvent(new CustomEvent('shape-changed', {composed: true, bubbles: true, detail: {shape: json }}));
+        case 'osd': this._notifyShapeChanged(options.target)
         break
         default:
           console.warn('_mouseUp called with unknown mode', options);
@@ -361,9 +380,7 @@
     },
 
     _generatePolygon: function () {
-      console.log('_generatePolygon ', this.activeShape.get("points"));
-      console.log('_generatePolygon pointArray', this.pointArray);
-      const points = this.pointArray.map(p => ({ x:p.left, y:p.top }));
+      const points = this.pointArray.map(point => ({ x: point.left, y: point.top }));
 
       this.pointArray.forEach(point => this._fabricCanvas.remove(point));
       this.lineArray.forEach(line => this._fabricCanvas.remove(line));
@@ -371,16 +388,32 @@
 
       const polygon = new fabric.Polygon(points, this.defaultStyle);
       this._fabricCanvas.add(polygon);
+      polygon.id = this._getShapeId()
+      this.highlight(polygon);
+      this._notifyShapeCreated(polygon)
 
-      console.log("canvas active: ", this._fabricCanvas.getActiveObject());
-      this._fabricCanvas.setActiveObject(polygon);
-
+      this.line = null;
       this.activeLine = null;
-      this.activeShape = null;
-      this._fabricCanvas.selection = true;
 
       this.pointArray = [];
       this.lineArray = [];
-  }
+    },
+
+    _notifyShapeCreated: function (object) {
+      const detail = {shape: object.toJSON(['id', 'data'])}
+      const event = new CustomEvent('shape-created', {composed:true, bubbles: true, detail: detail})
+      document.dispatchEvent(event);
+    },
+
+    _notifyShapeChanged: function (object) {
+      if (!object) { return }
+      const detail = {shape: object.toJSON(['id', 'data'])}
+      const event = new CustomEvent('shape-changed', {composed: true, bubbles: true, detail: detail})
+      document.dispatchEvent(event);
+    },
+
+    _getShapeId () {
+      return 's-' + Date.now() + Math.floor(Math.random() * 11)
+    }
   };
 })();

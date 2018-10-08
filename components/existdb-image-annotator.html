@@ -117,41 +117,36 @@ Custom property | Description | Default
                 border-bottom: 1px solid;
             }
 
-            .devider {
-                width: 0px;
-                border-right: thin solid var(--paper-grey-500);
+            .divider {
                 display: inline;
                 margin: 0 8px;
+                border-right: thin solid var(--paper-grey-500);
             }
         </style>
 
-        <!-- Only preload regular images -->
-        <!--
-                <template is="dom-if" if="[[!dzi]]">
-                    <paper-spinner-lite hidden$="[[hideSpinner]]" active="[[loading]]"></paper-spinner-lite>
-                    <image-loader loaded="{{loaded}}" loading="{{loading}}" src="[[src]]"></image-loader>
-                </template>
-        -->
-
-        <!-- Openseadragon -->
-        <!--<div id="toolbarDiv"></div>-->
         <div class="buttonBar">
+            <!-- Openseadragon controls -->
             <paper-icon-button id="zoomIn" icon="zoom-in" title="zoom in"></paper-icon-button>
             <paper-icon-button id="zoomOut" icon="zoom-out" title="zoom out"></paper-icon-button>
             <paper-icon-button id="homeBtn" icon="home" title="home" on-click="_onHome"></paper-icon-button>
             <paper-icon-button id="fullScreen" icon="fullscreen" title="fullscreen" on-click="_onFullScreen"></paper-icon-button>
 
-            <div class="devider"></div>
+            <div class="divider"></div>
 
+            <!-- Overlay controls -->
             <paper-icon-button icon="hardware:computer" on-click="_logShapes"></paper-icon-button>
-            <paper-icon-button icon="image:crop-3-2" title="add rectangle" on-click="_createRect"></paper-icon-button>
 
+            <paper-icon-button icon="image:crop-3-2" title="add rectangle" on-click="_createRect"></paper-icon-button>
             <paper-icon-button icon="image:panorama-fish-eye" title="add circle" on-click="_createCircle"></paper-icon-button>
             <paper-icon-button icon="device:signal-cellular-null" title="add polygon" on-click="_createPolygon"></paper-icon-button>
+
+            <!-- TODO: show if active selection -->
             <paper-icon-button icon="remove-circle-outline" title="remove shape" on-click="_removeShape"></paper-icon-button>
+            <!-- TODO: add group selection -->
             <span id="cursorWindowPosition"></span>
         </div>
-        <!--<div id="osd"></div>-->
+
+        <!-- Openseadragon is attached to host -->
         <slot></slot>
 
     </template>
@@ -286,6 +281,7 @@ Custom property | Description | Default
                     },
                     mode: {
                         type: String,
+                        observer: '_modeChange',
                         value: 'osd' // open seadragon mode
                     }
 
@@ -294,9 +290,7 @@ Custom property | Description | Default
 
             connectedCallback() {
                 super.connectedCallback();
-                //                console.log('connected rootpath: ', this.rootPath);
-                //                console.log('connected importPath: ', this.importPath);
-                this.mode = 'osd';
+                // this.mode = 'osd';
 
                 document.addEventListener('WebComponentsReady', function () {
                     console.log('webcomponentsready');
@@ -399,6 +393,10 @@ Custom property | Description | Default
                 console.log('DELETED SHAPE', e.detail.shape)
             }
 
+            highlight(shapeId) {
+                this._fabricOverlay.highlight(shapeId)
+            }
+
             getZoom() {
                 return this.viewer.viewport.getZoom(true);
             }
@@ -496,30 +494,9 @@ Custom property | Description | Default
                 this._fabricOverlay.clear();
             }
 
-            _rectSelected(o) {
-                console.log('_rectSelected ', o);
-                console.log('_rectSelected canvas ', this._fabricOverlay._fabricCanvas);
-                console.log('_rectSelected target', o.target);
-                this.selectedShape = o.target;
-                console.log('_rectSelected selected', this._fabricOverlay._fabricCanvas.getActiveObject());
-
-            }
-
-            _createRect() {
-                this._fabricOverlay.reset();
-                this.mode = "rectangle";
-            }
-
-            _createCircle() {
-                this._fabricOverlay.reset();
-                this.mode = 'circle';
-            }
-
-
-            _createPolygon() {
-                this._fabricOverlay.reset();
-                this.mode = 'polygon';
-            }
+            _createRect() { this.mode = "rectangle" }
+            _createCircle() { this.mode = 'circle' }
+            _createPolygon() { this.mode = 'polygon' }
 
             /*
             code stolen from osd and routed to this.viewer.
@@ -541,9 +518,17 @@ Custom property | Description | Default
                 }
             }
 
+            _modeChange(mode) {
+                if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon') {
+                    this._fabricOverlay.deselect();
+                    this._fabricOverlay.reset();
+                }
+            }
+
             _onHome(e){
                 this.mode = 'osd'
                 this._fabricOverlay.reset();
+                this._fabricOverlay.deselect();
                 this.viewer.viewport.goHome();
             }
 
