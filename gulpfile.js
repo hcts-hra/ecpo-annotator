@@ -2,12 +2,7 @@
 
 var gulp = require('gulp'),
     exist = require('gulp-exist'),
-    watch = require('gulp-watch'),
-    less = require('gulp-less'),
-    del = require('del'),
-    path = require('path'),
-    LessPluginCleanCSS = require('less-plugin-clean-css'),
-    LessAutoprefix = require('less-plugin-autoprefix')
+    del = require('del')
 
 var PRODUCTION = (!!process.env.NODE_ENV || process.env.NODE_ENV === 'production')
 
@@ -25,56 +20,31 @@ var exClient = exist.createClient({
 })
 
 var html5TargetConfiguration = {
-    target: '/db/apps/epco',
+    target: '/db/apps/ecpo',
     html5AsBinary: true
 }
 
 var targetConfiguration = {
-    target: '/db/apps/epco/',
-    html5AsBinary: true
+    target: '/db/apps/ecpo/',
+    html5AsBinary: false
 }
 
 gulp.task('clean', function () {
     return del(['build/**/*']);
 });
 
-// styles //
-
-var lessPath = './resources/css/style.less'
-var stylesPath = 'resources/css/*'
-var cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
-var autoprefix = new LessAutoprefix({browsers: ['last 2 versions']})
-
-gulp.task('styles', function () {
-    return gulp.src(lessPath)
-        .pipe(less({plugins: [cleanCSSPlugin, autoprefix]}))
-        .pipe(gulp.dest('./resources/css'))
-})
-
-gulp.task('deploy:styles', ['styles'], function () {
+gulp.task('deploy:styles', function () {
     return gulp.src('resources/css/*.css', {base: './'})
         .pipe(exClient.newer(targetConfiguration))
         .pipe(exClient.dest(targetConfiguration))
 })
 
-// odd files //
-
-var oddPath = 'resources/odd/**/*';
-gulp.task('odd:deploy', function () {
-    return gulp.src(oddPath, {base: './'})
-        .pipe(exClient.newer(targetConfiguration))
-        .pipe(exClient.dest(targetConfiguration))
-})
-
-gulp.task('odd:watch', function () {
-    gulp.watch(oddPath, ['odd:deploy'])
-})
-
 // files in project root //
 
-var componentPaths = [
+var components = [
     'components/*.html',
-    'bower_components/**/*'
+    'components/**/*.js',
+    // 'bower_components/**/*'
 ];
 
 gulp.task('deploy:components', function () {
@@ -99,13 +69,6 @@ gulp.task('deploy:other', function () {
         .pipe(exClient.newer(targetConfiguration))
         .pipe(exClient.dest(targetConfiguration))
 })
-
-var components = [
-    'components/*.html',
-    'components/**/*.js',
-    // 'bower_components/**/*'
-];
-
 
 gulp.task('deploy', ['deploy:other', 'deploy:components', 'deploy:styles'])
 
