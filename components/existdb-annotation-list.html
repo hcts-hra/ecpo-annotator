@@ -8,9 +8,9 @@
                 display: block;
             }
         </style>
-        <h2>the list</h2>
-        <template is="dom-repeat" items="{{items}}" as="item">
-            <existdb-annotation-item data="{{item}}"></existdb-annotation-item>
+        <h2>Annotations</h2>
+        <template is="dom-repeat" items="{{annotations}}" as="annotation">
+            <existdb-annotation-item id="{{annotation.id}}" body="{{annotation.body}}" target="{{annotation.target}}"></existdb-annotation-item>
         </template>
       
     </template>
@@ -31,21 +31,37 @@
 
             static get properties() {
                 return {
-                    items:{
+                    annotations: {
                         type: Array,
                         value: _ => []
+                    },
+                    targetToAnnotationMap: {
+                        type: Object,
+                        value: _ => { return {} }
                     }
                 };
             }
 
-            itemIndexByShapeId(id) {
-                const item = this.items.filter(entry => entry.id === id)[0]
-                if (!item) { return -1 }
-                return this.items.indexOf(item)
+            itemIndexByShapeId (id) {
+                const annotationId = this.targetToAnnotationMap[id]
+                return this.annotations
+                    .map(annotation => annotation.id)
+                    .indexOf(annotationId)
+            }
+
+            itemByShapeId (id) {
+                const annotationId = this.targetToAnnotationMap[id]
+                const index = this.annotations
+                    .map(annotation => annotation.id)
+                    .indexOf(annotationId)
+                return this.get(["annotation", index])
             }
 
             connectedCallback() {
                 super.connectedCallback();
+                console.log("this.targetToAnnotationMap", this.targetToAnnotationMap)
+                console.log("this.annotations", this.annotations)
+                console.log("this.test", this.test)
             }
 
             ready(){
@@ -56,19 +72,32 @@
                 if (!e.detail.shape || !e.detail.shape.id) {
                     return console.warn('list handler called without a shape')
                 }
+
+                const shapeId = e.detail.shape.id
                 if (e.type === 'shape-created') {
-                    return this.push('items', e.detail.shape)
+                    const newAnnotation = {
+                        id: 's-' + Date.now(),
+                        body: [],
+                        target: [e.detail.shape]
+                    }
+                    this.targetToAnnotationMap[shapeId] = newAnnotation.id
+                    return this.push('annotations', newAnnotation)
                 }
-                const index = this.itemIndexByShapeId(e.detail.shape.id) 
+                const index = this.itemIndexByShapeId(shapeId) 
+                if (index < 0) { return }
+
+                const old = this.get(['annotations', index])
+                const targetIndex = old.target.map(shape => shape.id).indexOf(shapeId)
                 if (e.type === 'shape-deleted') {
                     // find index of connected entry by e.detail.id
-                    return this.splice('items', index, 1)
+                    this.splice('targetToAnnotationMap', this.targetToAnnotationMap.indexOf(shapeId), 1)
+                    return this.splice(['annotations', index, 'target'], targetIndex, 1)
                 }
                 if (e.type === 'shape-changed') {
                     // find index of connected entry by e.detail.id
-                    return this.splice('items', index, 1, e.detail.shape)
+                    return this.splice(['annotations', index, 'target'], targetIndex, 1, e.detail.shape)
                 }
-                // console.log('annotation-list', 'GOT IT', e)
+                console.log('annotation-list', 'unhandled', e)
             }
 
         }

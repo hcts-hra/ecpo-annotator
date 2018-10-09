@@ -269,13 +269,15 @@ Custom property | Description | Default
                         value: 0
                     },
                     viewer: {
-                        type: Object
+                        type: Object,
+                        value: () => { return {} }
                     },
                     zoom: {
                         type: Number
                     },
                     selectedShape: {
-                        type: Object
+                        type: Object,
+                        value: () => { return {} }
                     },
                     mode: {
                         type: String,
@@ -341,7 +343,7 @@ Custom property | Description | Default
             // Init openseadragon
             _initOpenSeadragon() {
                 console.log('_initOpenSeadragon');
-                const tileSources = this.dzi ? this.src : {
+                const tileSource = this.dzi ? this.src : {
                     type: 'image',
                     url: this.src,
                     buildPyramid: false
@@ -366,7 +368,8 @@ Custom property | Description | Default
                     showZoomControl: this.showZoomControl,
                     showHomeControl: false,
                     showFullPageControl: false,
-                    tileSources: tileSources,
+                    sequenceMode: true,
+                    tileSources: [ tileSource ],
                     gestureSettingsMouse: {
                         clickToZoom: false
                     },
