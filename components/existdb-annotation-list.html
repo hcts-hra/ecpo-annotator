@@ -1,0 +1,78 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="existdb-annotation-item.html">
+
+<dom-module id="existdb-annotation-list">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+        </style>
+        <h2>the list</h2>
+        <template is="dom-repeat" items="{{items}}" as="item">
+            <existdb-annotation-item data="{{item}}"></existdb-annotation-item>
+        </template>
+      
+    </template>
+
+    <script>
+        /**
+         * `existdb-annotation-list`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class ExistdbAnnotationList extends Polymer.Element {
+            static get is() {
+                return 'existdb-annotation-list';
+            }
+
+            static get properties() {
+                return {
+                    items:{
+                        type: Array,
+                        value: _ => []
+                    }
+                };
+            }
+
+            itemIndexByShapeId(id) {
+                const item = this.items.filter(entry => entry.id === id)[0]
+                if (!item) { return -1 }
+                return this.items.indexOf(item)
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+            ready(){
+                super.ready();
+            }
+
+            handle (e) {
+                if (!e.detail.shape || !e.detail.shape.id) {
+                    return console.warn('list handler called without a shape')
+                }
+                if (e.type === 'shape-created') {
+                    return this.push('items', e.detail.shape)
+                }
+                const index = this.itemIndexByShapeId(e.detail.shape.id) 
+                if (e.type === 'shape-deleted') {
+                    // find index of connected entry by e.detail.id
+                    return this.splice('items', index, 1)
+                }
+                if (e.type === 'shape-changed') {
+                    // find index of connected entry by e.detail.id
+                    return this.splice('items', index, 1, e.detail.shape)
+                }
+                // console.log('annotation-list', 'GOT IT', e)
+            }
+
+        }
+
+        window.customElements.define(ExistdbAnnotationList.is, ExistdbAnnotationList);
+    </script>
+</dom-module>

@@ -1,0 +1,83 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+
+<dom-module id="existdb-annotation-item">
+    <template>
+        <style>
+            :host {
+                display: block;
+                font-family: sans-serif;
+            }
+            dl {
+                border-top: medium solid grey;
+            }
+            dt, dd {
+                margin-left: 0.4em; 
+                display: block;
+                float: left;
+            }
+            dd {
+                margin-left: 0.2em;
+                min-width: 40%;
+            }
+            dl:after {
+                content: '';
+                display:block;
+                clear: both;
+            }
+            dt {
+                font-weight: bold;
+                min-width: 17%;
+                clear: left;
+            }
+        </style>
+
+        <dl on-click="highlight">
+            <dt>id</dt><dd>{{data.id}}</dd>
+            <dt>type</dt><dd>{{data.type}}</dd>
+            <dt>top</dt><dd>{{data.top}}</dd>
+            <dt>left</dt><dd>{{data.left}}</dd>
+        </dl>
+    </template>
+
+    <script>
+        /**
+         * `existdb-annotation-item`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/existdb-annotation-item.html
+         */
+        class ExistdbAnnotationItem extends Polymer.Element {
+            static get is() {
+                return 'existdb-annotation-item';
+            }
+
+            static get properties() {
+                return {
+                    data: {
+                        type: Object,
+                        value: _ => {}
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+            ready(){
+                super.ready();
+            }
+
+            highlight() {
+                this.dispatchEvent(
+                    new CustomEvent('highlight-target', {
+                        bubbles:true, composed:true, detail: { id: this.data.id }}))
+            }
+
+        }
+
+        window.customElements.define(ExistdbAnnotationItem.is, ExistdbAnnotationItem);
+    </script>
+</dom-module>

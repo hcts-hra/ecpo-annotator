@@ -1,0 +1,69 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer/app-drawer.html">
+<link rel="import" href="../bower_components/app-layout/app-drawer-layout/app-drawer-layout.html">
+<link rel="import" href="existdb-image-annotator.html">
+<link rel="import" href="existdb-annotation-list.html">
+
+<dom-module id="epco-app">
+    <template>
+        <app-drawer-layout>
+            <app-drawer slot="drawer" opened>
+                <existdb-annotation-list id="thelist" class="alist" on-highlight-target="highlightTarget"></existdb-annotation-list>
+            </app-drawer>
+
+            <existdb-image-annotator id="viewer" class="viewer" dzi="true"
+                                        show-zoom-control="show-zoom-control"
+                                        show-home-control="false"
+                                        show-full-page-control="true"
+                                        on-shape-created="handleShapeEvent" 
+                                        on-shape-deleted="handleShapeEvent" 
+                                        on-shape-changed="handleShapeEvent"
+                                        src="../../bower_components/img-pan-zoom/demo/images/output.dzi">
+            </existdb-image-annotator>
+            <slot></slot>
+        </app-drawer-layout>
+    </template>
+        
+    <script>
+        /**
+         * `epco-app`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class EpcoApp extends Polymer.Element {
+            static get is() {
+                return 'epco-app';
+            }
+
+            static get properties() {
+                return {
+                    prop1:{
+                        type: String
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+            ready(){
+                super.ready();
+            }
+
+            handleShapeEvent (e) {
+                this.$.thelist.handle(e)
+            }
+
+            highlightTarget (e) {
+                this.$.viewer.highlight(e.detail.id)
+            }
+
+        }
+
+        window.customElements.define(EpcoApp.is, EpcoApp);
+    </script>
+</dom-module>
