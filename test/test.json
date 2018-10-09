@@ -1,0 +1,167 @@
+{
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "id": "http://host:port/annotation/w3c/aea27124-b3be-417a-a3f3-ce9803f9afb4/ee152332-d4a0-4366-94e8-3f48882cb761",
+  "type": "Annotation",
+  "dcterms:created": "2018-02-06T10:19:59Z",
+  "creator": "urn:uuid:c4dbcb3f-f03f-3ff6-8c6d-c0cdb44a06ac",
+  "dcterms:issued": "2018-02-16T10:15:08Z",
+  "generator": {
+    "id": "urn:uuid:2369a1aa-2cb1-3796-9d29-f3119011815d",
+    "type": [
+      "http://www.w3.org/ns/prov/SoftwareAgent",
+      "https://github.com/anno4j/ns#Agent",
+      "https://github.com/anno4j/ns#Resource"
+    ],
+    "name": "PageXML Parsing"
+  },
+  "body": [
+    {
+      "id": "urn:anno4j:d6439efb-5b19-47d3-8c90-316e8df71738",
+      "type": [
+        "oa:EmbeddedContent",
+        "TextualBody",
+        "https://github.com/anno4j/ns#CreationProvenance",
+        "https://github.com/anno4j/ns#ExternalWebResource",
+        "https://github.com/anno4j/ns#Resource"
+      ],
+      "format": "xsd:string",
+      "dc:identifier": "r2",
+      "dc:subject": "TextRegion",
+      "dc:title": "NumberHorizontalLines",
+      "creator": "urn:uuid:c4dbcb3f-f03f-3ff6-8c6d-c0cdb44a06ac",
+      "value": "15"
+    },
+    {
+      "id": "urn:anno4j:33667823-48c6-4694-9996-e5e65a9447d5",
+      "type": [
+        "oa:EmbeddedContent",
+        "TextualBody",
+        "https://github.com/anno4j/ns#CreationProvenance",
+        "https://github.com/anno4j/ns#ExternalWebResource",
+        "https://github.com/anno4j/ns#Resource"
+      ],
+      "format": "xsd:string",
+      "dc:identifier": "r2",
+      "dc:subject": "TextRegion",
+      "dc:title": "MeanDistanceHorizontalLines",
+      "creator": "urn:uuid:c4dbcb3f-f03f-3ff6-8c6d-c0cdb44a06ac",
+      "http://qudt.org/vocab/unit": "cm",
+      "value": "0.9849555492401123"
+    },
+    {
+      "id": "urn:anno4j:d80c0eef-8607-46aa-b7ab-912c78008f43",
+      "type": [
+        "oa:EmbeddedContent",
+        "TextualBody",
+        "https://github.com/anno4j/ns#CreationProvenance",
+        "https://github.com/anno4j/ns#ExternalWebResource",
+        "https://github.com/anno4j/ns#Resource"
+      ],
+      "format": "xsd:string",
+      "dc:identifier": "r2",
+      "dc:subject": "TextRegion",
+      "dc:title": "Area",
+      "creator": "urn:uuid:c4dbcb3f-f03f-3ff6-8c6d-c0cdb44a06ac",
+      "http://qudt.org/vocab/unit": "sq.cm",
+      "value": "179.50322"
+    },
+    {
+      "id": "urn:anno4j:5ee24073-44f1-479a-b425-a13a6c9a149d",
+      "type": [
+        "oa:EmbeddedContent",
+        "TextualBody",
+        "https://github.com/anno4j/ns#CreationProvenance",
+        "https://github.com/anno4j/ns#ExternalWebResource",
+        "https://github.com/anno4j/ns#Resource"
+      ],
+      "format": "xsd:string",
+      "dc:identifier": "r2",
+      "dc:subject": "TextRegion",
+      "dc:title": "MeanDistanceVerticalLines",
+      "creator": "urn:uuid:c4dbcb3f-f03f-3ff6-8c6d-c0cdb44a06ac",
+      "http://qudt.org/vocab/unit": "cm",
+      "value": "14.774333000183105"
+    },
+    {
+      "id": "urn:anno4j:690dcc3d-fd0d-49bd-8bfa-39331578a3f9",
+      "type": [
+        "oa:EmbeddedContent",
+        "TextualBody",
+        "https://github.com/anno4j/ns#CreationProvenance",
+        "https://github.com/anno4j/ns#ExternalWebResource",
+        "https://github.com/anno4j/ns#Resource"
+      ],
+      "format": "xsd:string",
+      "dc:identifier": "r2",
+      "dc:subject": "TextRegion",
+      "dc:title": "Height",
+      "creator": "urn:uuid:c4dbcb3f-f03f-3ff6-8c6d-c0cdb44a06ac",
+      "http://qudt.org/vocab/unit": "cm",
+      "value": "12.149667"
+    },
+    {
+      "id": "urn:anno4j:9edcee91-a928-4295-b41c-0dbb71b2f15c",
+      "type": [
+        "oa:EmbeddedContent",
+        "TextualBody",
+        "https://github.com/anno4j/ns#CreationProvenance",
+        "https://github.com/anno4j/ns#ExternalWebResource",
+        "https://github.com/anno4j/ns#Resource"
+      ],
+      "format": "xsd:string",
+      "dc:identifier": "r2",
+      "dc:subject": "TextRegion",
+      "dc:title": "Width",
+      "creator": "urn:uuid:c4dbcb3f-f03f-3ff6-8c6d-c0cdb44a06ac",
+      "http://qudt.org/vocab/unit": "cm",
+      "value": "14.774333"
+    },
+    {
+      "id": "urn:anno4j:5c7ddf88-1155-4541-a085-17a667d1dfab",
+      "type": [
+        "oa:EmbeddedContent",
+        "TextualBody",
+        "https://github.com/anno4j/ns#CreationProvenance",
+        "https://github.com/anno4j/ns#ExternalWebResource",
+        "https://github.com/anno4j/ns#Resource"
+      ],
+      "format": "xsd:string",
+      "dc:identifier": "r2",
+      "dc:subject": "TextRegion",
+      "dc:title": "RelativeVPOS",
+      "creator": {
+        "id": "urn:uuid:c4dbcb3f-f03f-3ff6-8c6d-c0cdb44a06ac",
+        "type": [
+          "http://www.w3.org/ns/prov/SoftwareAgent",
+          "https://github.com/anno4j/ns#Agent",
+          "https://github.com/anno4j/ns#Resource"
+        ],
+        "name": "SWATI Workflow-Version 1.4"
+      },
+      "http://qudt.org/vocab/unit": "pct",
+      "value": "10.133091"
+    }
+  ],
+  "target": {
+    "id": "urn:anno4j:d0a8e569-09e3-4ae5-b2c9-bc4b3f2bbf4c",
+    "type": [
+      "SpecificResource",
+      "https://github.com/anno4j/ns#CreationProvenance",
+      "https://github.com/anno4j/ns#ExternalWebResource",
+      "https://github.com/anno4j/ns#Resource"
+    ],
+    "selector": {
+      "id": "urn:anno4j:13b4c757-7284-4836-aff5-99117e496367",
+      "type": [
+        "SvgSelector",
+        "https://github.com/anno4j/ns#Resource",
+        "https://github.com/anno4j/ns#Selector"
+      ],
+      "dcterms:conformsTo": "http://www.w3.org/TR/SVG/",
+      "value": "<svg xmlns=\"http://www.w3.org/2000/svg\"><rect x=\"260\" y=\"335\" width=\"1745\" height=\"1435\"/></svg>"
+    },
+    "source": "http://host:port/pathToImage"
+  },
+  "motivation": "describing",
+  "via": "urn:anno4j:dd7d1066-d143-4db9-a506-6faacfd7d3a6"
+}
