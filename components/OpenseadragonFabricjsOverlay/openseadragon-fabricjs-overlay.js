@@ -202,18 +202,43 @@
     },
     remove: function () {
       const ao = this._fabricCanvas.getActiveObject()
-      const json = ao.toJSON(['id', 'data'])
       this._fabricCanvas.remove(ao);
       this._fabricCanvas.renderAll();
-      this._canvas.dispatchEvent(new CustomEvent('shape-deleted', {composed: true, bubbles: true, detail: {shape: json}}));
+      this._canvas.dispatchEvent(new CustomEvent('shape-deleted', {
+        composed: true, bubbles: true, 
+        detail: this.serializeObject(ao)}));
     },
     serialize: function () {
       console.log('all objects ', this._fabricCanvas.getObjects());
       console.log('_logShapes canvas ', this._fabricCanvas.toJSON('data'));
       return this._fabricCanvas.toJSON(['id','data'])
     },
+    serializeObject: function (object) {
+      console.log('serialize', object)
+      return {
+        shape: {
+          id: object.id,
+          svg: object.toSVG(d => d)
+        }
+      }
+    },
     load: function (json) {
       this._fabricCanvas.loadFromJSON(json)
+    },
+    addShapes: function (shapes) {
+      console.log('SHApes', shapes)
+      shapes.forEach(shape => {
+        console.log('shhh... APE!', shape)
+
+        fabric.loadSVGFromString(`<svg xmlns="http://www.w3.org/2000/svg">${shape}</svg>`, 
+          objects => {
+          console.log('loadedfromSVGString', objects)
+          objects.map(o => {
+            console.log('oo', o)
+            this._fabricCanvas.add(o)
+          })
+        })
+      })
     },
 
     _mouseDown: function(options) {
@@ -399,14 +424,14 @@
     },
 
     _notifyShapeCreated: function (object) {
-      const detail = {shape: object.toJSON(['id', 'data'])}
+      const detail = this.serializeObject(object)
       const event = new CustomEvent('shape-created', {composed:true, bubbles: true, detail: detail})
       this._canvas.dispatchEvent(event);
     },
 
     _notifyShapeChanged: function (object) {
       if (!object) { return }
-      const detail = {shape: object.toJSON(['id', 'data'])}
+      const detail = this.serializeObject(object)
       const event = new CustomEvent('shape-changed', {composed: true, bubbles: true, detail: detail})
       this._canvas.dispatchEvent(event);
     },

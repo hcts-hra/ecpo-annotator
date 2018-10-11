@@ -8,7 +8,9 @@
     <template>
         <app-drawer-layout>
             <app-drawer slot="drawer" opened>
-                <existdb-annotation-list id="thelist" class="alist" on-highlight-target="highlightTarget"></existdb-annotation-list>
+                <existdb-annotation-list id="annotationlist" source="{{document}}"
+                    on-annotations-loaded="drawLoadedAnnotations"
+                    on-highlight-target="highlightTarget"></existdb-annotation-list>
             </app-drawer>
 
             <existdb-image-annotator id="viewer" class="viewer" dzi="true"
@@ -18,7 +20,7 @@
                                         on-shape-created="handleShapeEvent" 
                                         on-shape-deleted="handleShapeEvent" 
                                         on-shape-changed="handleShapeEvent"
-                                        src="../../bower_components/img-pan-zoom/demo/images/output.dzi">
+                                        src="{{document}}">
             </existdb-image-annotator>
             <slot></slot>
         </app-drawer-layout>
@@ -40,8 +42,9 @@
 
             static get properties() {
                 return {
-                    prop1:{
-                        type: String
+                    document: {
+                        type: String,
+                        value: "../../bower_components/img-pan-zoom/demo/images/output.dzi"
                     }
                 };
             }
@@ -55,13 +58,25 @@
             }
 
             handleShapeEvent (e) {
-                this.$.thelist.handle(e)
+                this.$.annotationlist.handle(e)
             }
 
             highlightTarget (e) {
                 this.$.viewer.highlight(e.detail.id)
             }
+            
+            drawLoadedAnnotations (e) {
+                const annotations = e.detail
+                const shapes = annotations
+                    .map(annotation => annotation.target)
+                    .reduce((result, array) => result.concat(array))
+                    .map(target => target.selector.value)
 
+                setTimeout(() => {
+                    console.log('addshapes', this.$.viewer, shapes)
+                    this.$.viewer.addShapes(shapes)
+                }, 1000);
+            }
         }
 
         window.customElements.define(EcpoApp.is, EcpoApp);

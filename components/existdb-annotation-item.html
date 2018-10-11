@@ -72,26 +72,6 @@
                 return 'existdb-annotation-item';
             }
 
-            get toJSON() {
-                return {
-                    "@context": "http://www.w3.org/ns/anno.jsonld",
-                    "type": "Annotation",
-                    "id": this.id,
-                    "body": this.body,
-                    "target": this.target.map(target => {
-                        return {
-                            "id": target.id,
-                            "type": "SpecificResource",
-                            "selector": {
-                                "type": "FabricJSShape",
-                                "value": target
-                            },
-                            "source": "http://host:port/pathToImage"
-                        }
-                    }),
-                }
-            }
-
             static get properties() {
                 return {
                     id: {
@@ -120,9 +100,9 @@
             highlight() {
                 this.target
                     .map(target => {
-                        console.log("HIGHLIGHT", target.id)
-                        const data = { id: target.id }
-                        return new CustomEvent('highlight-target', { bubbles:true, composed:true, detail: data})
+                        const id = target.id
+                        console.log("HIGHLIGHT", id)
+                        return new CustomEvent('highlight-target', { bubbles:true, composed:true, detail: { id: id }})
                     })
                     .forEach(event => this.dispatchEvent(event))
             }

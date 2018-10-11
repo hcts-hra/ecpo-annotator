@@ -46,7 +46,6 @@ Custom property | Description | Default
                 position: relative;
                 width: 100%;
                 height: 100%;
-
             }
 
             #viewer {
@@ -533,6 +532,9 @@ Custom property | Description | Default
                 this.viewer.viewport.goHome();
             }
 
+            addShapes (shapes) {
+                this._fabricOverlay.addShapes(shapes)
+            }
         }
 
         window.customElements.define(ExistdbImageAnnotator.is, ExistdbImageAnnotator);
