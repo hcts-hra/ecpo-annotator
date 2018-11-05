@@ -4,6 +4,8 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../bower_components/iron-icons/device-icons.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/iron-icons/image-icons.html">
@@ -49,7 +51,6 @@ Custom property | Description | Default
             }
 
             #viewer {
-                /*position: relative;*/
                 height: 100%;
                 width: 100%;
                 position: absolute;
@@ -57,6 +58,11 @@ Custom property | Description | Default
                 top: 0;
                 bottom: 0;
                 right: 0;
+            }
+
+            #the_container {
+                position:relative;
+                height: calc(100% - 40px);
             }
 
             paper-spinner-lite {
@@ -105,9 +111,6 @@ Custom property | Description | Default
             }
 
             .buttonBar {
-                position: absolute;
-                top: 0;
-                left: 0;
                 width: 100%;
                 z-index: 50;
                 background: white;
@@ -125,26 +128,37 @@ Custom property | Description | Default
             <!-- Openseadragon controls -->
             <paper-icon-button id="zoomIn" icon="zoom-in" title="zoom in"></paper-icon-button>
             <paper-icon-button id="zoomOut" icon="zoom-out" title="zoom out"></paper-icon-button>
-            <paper-icon-button id="homeBtn" icon="home" title="home" on-click="_onHome"></paper-icon-button>
+            <paper-icon-button id="homeBtn" icon="open-with" title="home" on-click="_onHome"></paper-icon-button>
             <paper-icon-button id="fullScreen" icon="fullscreen" title="fullscreen" on-click="_onFullScreen"></paper-icon-button>
-
+            <paper-icon-button id="panzoom" icon="pan-tool" title="mouse pan and zoom" on-click="_panzoom"></paper-icon-button>
+            <paper-icon-button id="centerselection" icon="maps:my-location" title="center to selection" on-click="_centerselection"></paper-icon-button>
+            
             <div class="divider"></div>
 
             <!-- Overlay controls -->
-            <paper-icon-button icon="hardware:computer" on-click="_logShapes"></paper-icon-button>
+            <!-- <paper-icon-button icon="hardware:computer" on-click="_logShapes"></paper-icon-button> -->
+            <paper-icon-button id="select" icon="play-for-work" title="select" on-click="_select"></paper-icon-button>
+            <paper-icon-button id="fillmode" icon="image:compare" on-click="_fillmode"></paper-icon-button>
+            <paper-icon-button id="group" icon="group-work" title="group" on-click="_edit"></paper-icon-button>
 
+            <div class="divider"></div>
+            <!-- TODO: hide if active selection -->
             <paper-icon-button icon="image:crop-3-2" title="add rectangle" on-click="_createRect"></paper-icon-button>
             <paper-icon-button icon="image:panorama-fish-eye" title="add circle" on-click="_createCircle"></paper-icon-button>
             <paper-icon-button icon="device:signal-cellular-null" title="add polygon" on-click="_createPolygon"></paper-icon-button>
 
+            <div class="divider"></div>
             <!-- TODO: show if active selection -->
+            <paper-icon-button id="edit" icon="editor:format-shapes" title="edit" on-click="_edit"></paper-icon-button>
             <paper-icon-button icon="remove-circle-outline" title="remove shape" on-click="_removeShape"></paper-icon-button>
-            <!-- TODO: add group selection -->
+
             <span id="cursorWindowPosition"></span>
         </div>
 
         <!-- Openseadragon is attached to host -->
-        <slot></slot>
+        <div id="the_container">
+            <slot></slot>
+        </div>
 
     </template>
     <script>
@@ -299,37 +313,41 @@ Custom property | Description | Default
                         this._initOpenSeadragon();
                         this._initFabric();
 
-                        function onMouseTrackerMove(event) {
-                            function pointToString(point) {
-                                return point.x.toPrecision(4) + "," + point.y.toPrecision(4);
-                            }
-
-                            let viewerX = event.position.x;
-                            let viewerY = event.position.y;
-                            let windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
-                            this.$.cursorWindowPosition.innerHTML = pointToString(windowPoint);
-                            // let containerPoint = windowPoint.minus(
-                            //         OpenSeadragon.getElementPosition(viewer.element));
-                            //         this.$.cursorWindowPosition.text(pointToString(containerPoint));
-                            // let image1 = viewer.world.getItemAt(0);
-                            // let imagePoint = image1.windowToImageCoordinates(windowPoint);
-                            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
-                            // let image2 = viewer.world.getItemAt(1);
-                            // let imagePoint = image2.windowToImageCoordinates(windowPoint);
-                            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
-                            // let viewportPoint = viewer.viewport.windowToViewportCoordinates(windowPoint);
-                            // this.$.cursorWindowPosition.text(pointToString(viewportPoint));
-                        }
-                        const mouseTracker = new OpenSeadragon.MouseTracker({
-                            element: document,
-                            moveHandler: onMouseTrackerMove.bind(this)
-                        }).setTracking(true);
                     }
+
+                    const mouseTrackerMoveHandler = this.onMouseTrackerMove.bind(this)
+                    const mouseTracker = new OpenSeadragon.MouseTracker({
+                        element: document,
+                        moveHandler: mouseTrackerMoveHandler
+                    }).setTracking(true);
 
                 }.bind(this));
                 // document.addEventListener('shape-created', this._newShapeHandler.bind(this))
                 // document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
                 // document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
+            }
+            
+            pointToString(type, point) {
+                return `${type}: ${point.x.toPrecision(4)} / ${point.y.toPrecision(4)}`;
+            }
+
+            onMouseTrackerMove(event) {
+                const viewerX = event.position.x;
+                const viewerY = event.position.y;
+                const windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
+
+                const containerPoint = windowPoint.minus(OpenSeadragon.getElementPosition(this.viewer.element));
+
+                const image1 = this.viewer.world.getItemAt(0);
+                const imagePoint = image1.windowToImageCoordinates(windowPoint);
+
+                const viewportPoint = this.viewer.viewport.windowToViewportCoordinates(windowPoint);
+                this.$.cursorWindowPosition.innerHTML = [
+                    this.pointToString('w', windowPoint),
+                    this.pointToString('c', containerPoint),
+                    this.pointToString('i', imagePoint),
+                    this.pointToString('v', viewportPoint)
+                ].join(',')
             }
 
             _initFabric() {
@@ -498,6 +516,12 @@ Custom property | Description | Default
             _createCircle() { this.mode = 'circle' }
             _createPolygon() { this.mode = 'polygon' }
 
+            _edit() {
+                if (!this._fabricOverlay.activeShape) { return } 
+                this._fabricOverlay.markPoints(this._fabricOverlay.activeShape)
+                this.mode = "edit"
+            }
+
             /*
             code stolen from osd and routed to this.viewer.
              */
@@ -523,13 +547,24 @@ Custom property | Description | Default
                     this._fabricOverlay.deselect();
                     this._fabricOverlay.reset();
                 }
+                if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon' || mode === 'select' || mode === 'edit' || mode === 'move' || mode === 'group') {
+                    return this.viewer.setMouseNavEnabled(false);
+                }
             }
 
-            _onHome(e){
-                this.mode = 'osd'
+            _onHome(e) {
                 this._fabricOverlay.reset();
                 this._fabricOverlay.deselect();
                 this.viewer.viewport.goHome();
+            }
+
+            _panzoom(e) {
+                this.mode = 'osd'
+                this.viewer.setMouseNavEnabled(true);
+            }
+
+            _select(e) {
+                this.mode = 'select'
             }
 
             addShapes (shapes) {
