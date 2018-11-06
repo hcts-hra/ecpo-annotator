@@ -64,6 +64,7 @@
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
     this._fabricCanvas.on('mouse:move', this._mouseMove.bind(this))
+    this._fabricCanvas.on('object:moving', this._objectMove.bind(this))
 
   };
 
@@ -170,7 +171,7 @@
       console.log('highlight', object)
       this.activeShape = object
       this._fabricCanvas.setActiveObject(object)
-      // object.bringToFront()
+      if (object.type === 'polygon') { object.hasControls = false }
 
       this._fabricCanvas.renderAll()
     },
@@ -224,6 +225,7 @@
       this.pointArray = ps.map((point,index) => {
           console.log('new point', point);
           return this._addPoint(point, {
+            selectable: true,
             data: { type: 'pointHandle', index: index }
           })
         });
@@ -233,12 +235,14 @@
       })
       this._fabricCanvas.renderAll()
 
-      // object.sendBackwards()
+      object.sendBackwards()
 
       this.pointArray.forEach(c => {
-        console.log('ktfkytf', c)
         c.bringToFront()
+        c.on('mousedown', options => this._setState(options))
+        c.on('moving', options => this._objectMove.bind(options))
       })
+ 
       this._fabricCanvas.renderAll()
 
       console.log('pointArray', this.pointArray);
@@ -322,7 +326,6 @@
       const mode = this._annotator.mode
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
-
       switch (mode) {
         case 'edit':
           // pointhandle selection
@@ -377,7 +380,7 @@
             this._highlight(polygon);
             this._notifyShapeCreated(polygon)
             // this.activeShape = polygon;
-            this._fabricCanvas.selection = true;
+            this._fabricCanvas.selection = false;
             this._annotator.mode = 'osd'
             break;
           }
@@ -390,29 +393,59 @@
       return options
     },
 
+    _setState(options) {
+      const t = this.activeShape.calcTransformMatrix() 
+      this._state = this.activeShape
+        .get('points')
+        // .map(point => fabric.util.transformPoint(point, t, false))
+      console.log('_state', this._state)
+    },
+    _objectMove: function(options) {
+      if (options.target.data && options.target.data.type === 'pointHandle') {
+        const dx = options.target.left - options.transform.original.left
+        const dy = options.target.top - options.transform.original.top
+        console.log('moving point handle', dx, dy)
+        const i = options.target.data.index
+        const points = this._state.concat([])
+        const point = points[i]
+        const newPoint = {
+          x: point.x + dx,
+          y: point.y + dy
+        }
+        console.log('old coords', point)
+        console.log('new coords', newPoint)
+        console.log('old points', points)
+        points.splice(i, 1, newPoint)
+        console.log('new points', points)
+        this.activeShape.set({ points: points });
+        this.activeShape.setCoords()
+        // this.activeShape.render(this._canvas)
+        this._fabricCanvas.renderAll()
+      }
+    },
     _mouseMove: function(options) {
       const mode = this._annotator.mode
 
-      if (options.transform) {
-          console.log('TRANSFORM')
-          // console.log(dx, dy)
-          const dx = options.e.movementX / this.getZoom()
-          const dy = options.e.movementY / this.getZoom()
-          console.log(this.pointArray)
-          this.pointArray.forEach(point => {
-            const l = point.left
-            const t = point.top
-            console.log(l)
-            console.log(t)
-            point.set({ left: l + dx })
-            point.set({ top: t + dy })
-            console.log(point.left)
-            console.log(point.top)
-          })
-          this._fabricCanvas.renderAll();
-          // console.log('END TRANSFORM')
-          return 
-      }
+      // if (options.transform) {
+      //     console.log('TRANSFORM')
+      //     // console.log(dx, dy)
+      //     const dx = options.e.movementX / this.getZoom()
+      //     const dy = options.e.movementY / this.getZoom()
+      //     console.log(this.pointArray)
+      //     this.pointArray.forEach(point => {
+      //       const l = point.left
+      //       const t = point.top
+      //       // console.log(l)
+      //       // console.log(t)
+      //       point.set({ left: l + dx })
+      //       point.set({ top: t + dy })
+      //       // console.log(point.left)
+      //       // console.log(point.top)
+      //     })
+      //     this._fabricCanvas.renderAll();
+      //     // console.log('END TRANSFORM')
+      //     return 
+      // }
 
       if (!(this.activeShape || this.activeLine)) { return }
 
@@ -547,7 +580,6 @@
       this.pointArray.forEach(point => this._fabricCanvas.remove(point));
       this.lineArray.forEach(line => this._fabricCanvas.remove(line));
       this._fabricCanvas.remove(this.activeShape).remove(this.activeLine);
-
 
       // reset
       this.line = null;
