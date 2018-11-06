@@ -5,9 +5,28 @@
 <link rel="import" href="existdb-annotation-list.html">
 
 <dom-module id="ecpo-app">
+    <style>
+        :host {
+            @apply(--paper-font-common-base);
+            --app-drawer-width: 256px;
+
+        }
+
+        /*
+        app-drawer-layout:not([narrow]) [drawer-toggle] {
+        display: none;
+        }
+        */
+
+        app-drawer {
+            text-align: left;
+            border-left: thin solid var(--paper-grey-300);
+            padding: 10px;
+        }
+    </style>
     <template>
         <app-drawer-layout>
-            <app-drawer slot="drawer" opened>
+            <app-drawer id="drawer" slot="drawer" opened align="end">
                 <existdb-annotation-list id="annotationlist" source="{{document}}"
                     on-annotations-loaded="drawLoadedAnnotations"
                     on-highlight-target="highlightTarget"></existdb-annotation-list>
@@ -17,6 +36,7 @@
                                         show-zoom-control="show-zoom-control"
                                         show-home-control="false"
                                         show-full-page-control="true"
+                                        show-navigator="true"
                                         on-shape-created="handleShapeEvent" 
                                         on-shape-deleted="handleShapeEvent" 
                                         on-shape-changed="handleShapeEvent"
@@ -64,7 +84,7 @@
             highlightTarget (e) {
                 this.$.viewer.highlight(e.detail.id)
             }
-            
+
             drawLoadedAnnotations (e) {
                 const annotations = e.detail
                 const shapes = annotations
@@ -72,11 +92,14 @@
                     .reduce((result, array) => result.concat(array))
                     .map(target => target.selector.value)
 
+
+
                 setTimeout(() => {
                     console.log('addshapes', this.$.viewer, shapes)
                     this.$.viewer.addShapes(shapes)
                 }, 1000);
             }
+
         }
 
         window.customElements.define(EcpoApp.is, EcpoApp);

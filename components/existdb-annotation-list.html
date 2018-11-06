@@ -1,5 +1,8 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="existdb-annotation-item.html">
@@ -9,14 +12,40 @@
         <style>
             :host {
                 display: block;
+                @apply(--paper-font-common-base);
+                /*border-left:1px solid var(--paper-blue-700);*/
+
+                box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+                0 1px 10px 0 rgba(0, 0, 0, 0.12),
+                0 2px 4px -1px rgba(0, 0, 0, 0.4);
+
+                height: 100%;
+
+            }
+            h2{
+                padding:10px;
+                font-weight: 300;
+                margin:0;
+                font-size:20px;
+                background: var(--paper-grey-100);
+            }
+            .wrapper{
+                padding: 10px;
+            }
+            app-toolbar{
+                background: var(--paper-blue-700);
+                color:white;
             }
         </style>
-        <h2>Annotations
+        <app-toolbar>
+            <span>Annotations</span>
+            <span main-title></span>
             <paper-icon-button icon='save' on-click='save'>save</paper-icon-button></h2>
+        </app-toolbar>
         <template is="dom-repeat" items="{{annotations}}" as="annotation">
             <existdb-annotation-item id="{{annotation.id}}" body="{{annotation.body}}" target="{{annotation.target}}"></existdb-annotation-item>
         </template>
-      
+
     </template>
 
     <script>
@@ -131,7 +160,7 @@
                 }
                 return Object.assign({}, annotation, annotationDefaults)
             }
-            
+
             addAnnotation(annotation) {
                 this.push('annotations', annotation)
                 annotation.target.map(target => this.targetToAnnotationMap[target.id] = annotation.id)

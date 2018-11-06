@@ -10,7 +10,10 @@
     "app-layout": "PolymerElements/app-layout#^2.0.0",
     "paper-spinner": "^2.0.0",
     "img-pan-zoom": "^2.0.0",
-    "openseadragon": "^2.4.0"
+    "openseadragon": "^2.4.0",
+    "paper-item": "PolymerElements/paper-item#^2.0.0",
+    "paper-input": "PolymerElements/paper-input#^2.0.0",
+    "paper-chip": "https://github.com/fabbricadigitale/paper-chip.git#^1.1.0"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
