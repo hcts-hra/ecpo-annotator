@@ -152,7 +152,11 @@ Custom property | Description | Default
             <paper-icon-button id="edit" icon="editor:format-shapes" title="edit" on-click="_edit"></paper-icon-button>
             <paper-icon-button icon="remove-circle-outline" title="remove shape" on-click="_removeShape"></paper-icon-button>
 
-            <span id="cursorWindowPosition"></span>
+            <div class="divider"></div>
+            <span class="cursorposition" id="cursorWindowPosition"></span>
+            <span class="cursorposition" id="cursorContainerPosition"></span>
+            <span class="cursorposition" id="cursorImagePosition"></span>
+            <span class="cursorposition" id="cursorViewportPosition"></span>
         </div>
 
         <!-- Openseadragon is attached to host -->
@@ -342,12 +346,10 @@ Custom property | Description | Default
                 const imagePoint = image1.windowToImageCoordinates(windowPoint);
 
                 const viewportPoint = this.viewer.viewport.windowToViewportCoordinates(windowPoint);
-                this.$.cursorWindowPosition.innerHTML = [
-                    this.pointToString('w', windowPoint),
-                    this.pointToString('c', containerPoint),
-                    this.pointToString('i', imagePoint),
-                    this.pointToString('v', viewportPoint)
-                ].join(',')
+                this.$.cursorWindowPosition.innerHTML = this.pointToString('w', windowPoint)
+                this.$.cursorContainerPosition.innerHTML = this.pointToString('c', containerPoint)
+                this.$.cursorImagePosition.innerHTML = this.pointToString('i', imagePoint)
+                this.$.cursorViewportPosition.innerHTML = this.pointToString('v', viewportPoint)
             }
 
             _initFabric() {
@@ -355,7 +357,6 @@ Custom property | Description | Default
                 const options = { annotator: this };
                 this._fabricOverlay = this.viewer.fabricjsOverlay(options);
             }
-
 
             // Init openseadragon
             _initOpenSeadragon() {
