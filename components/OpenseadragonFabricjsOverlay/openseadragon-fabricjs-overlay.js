@@ -22,6 +22,8 @@
 
   // ----------
   const Overlay = function(viewer) {
+    fabric.Object.prototype.objectCaching = false;
+
     this._viewer = viewer;
 
     this._containerWidth = 0;
