@@ -44,7 +44,7 @@ gulp.task('deploy:styles', function () {
 var components = [
     'components/*.html',
     'components/**/*.js',
-    // 'bower_components/**/*'
+    'bower_components/**/*'
 ];
 
 gulp.task('deploy:components', function () {

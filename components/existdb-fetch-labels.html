@@ -1,0 +1,62 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+
+<dom-module id="existdb-fetch-labels">
+    <template>
+        <style>
+            :host {
+                display: none;
+            }
+        </style>
+        <iron-ajax id="loadLabels"
+                   verbose with-credentials
+                   method="get"
+                   handle-as="json"
+                   on-response="_handleResponse"
+                   url="/exist/apps/ecpo/modules/get-labels.xql"
+                   on-error="_handleError"
+                   auto></iron-ajax>
+        <slot></slot>
+    </template>
+
+    <script>
+        /**
+         * `seed-element`
+         *
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class ExistdbFetchLabels extends Polymer.Element {
+            static get is() {
+                return 'existdb-fetch-labels';
+            }
+
+            static get properties() {
+                return {
+                    labels:{
+                        type: Array,
+                        value: _ => []
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+            _handleResponse(){
+                this.labels = this.$.loadLabels.lastResponse;
+                console.log('labels loaded ', this.labels);
+            }
+
+            _handleError(){
+                alert("Couldn't load labels " + this.$.loadLabels.lastError);
+            }
+
+        }
+
+        window.customElements.define(ExistdbFetchLabels.is, ExistdbFetchLabels);
+    </script>
+</dom-module>

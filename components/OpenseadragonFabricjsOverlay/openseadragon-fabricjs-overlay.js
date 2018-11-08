@@ -312,6 +312,14 @@
       })
     },
 
+    switchFillMode: function(shapes){
+        shapes.forEach(shape => {
+            console.log('shhh... APE!', shape)
+            shape.fill = 'blue';
+            shape.opacity = 0.4;
+        });
+    },
+
     foooo: function (svg) {
       let newObject
       fabric.loadSVGFromString(
