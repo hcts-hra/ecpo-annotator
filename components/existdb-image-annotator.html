@@ -122,6 +122,10 @@ Custom property | Description | Default
                 margin: 0 8px;
                 border-right: thin solid var(--paper-grey-500);
             }
+            .cursorposition {
+                font-size: 0.8rem;
+                font-family: monospace;
+            }
         </style>
         <div class="buttonBar">
             <!-- Openseadragon controls -->
@@ -152,12 +156,16 @@ Custom property | Description | Default
             <paper-icon-button icon="litter" title="remove shape" on-click="_removeShape"></paper-icon-button>
 
             <div class="divider"></div>
-            <span class="cursorposition" id="cursorWindowPosition"></span>
-            <span class="cursorposition" id="cursorContainerPosition"></span>
-            <span class="cursorposition" id="cursorImagePosition"></span>
-            <span class="cursorposition" id="cursorViewportPosition"></span>
-        </div>
 
+            <span class="cursorposition" id="cursorWindowPosition"></span>
+            <div class="divider"></div>
+            <span class="cursorposition" id="cursorContainerPosition"></span>
+            <div class="divider"></div>
+            <span class="cursorposition" id="cursorImagePosition"></span>
+            <div class="divider"></div>
+            <span class="cursorposition" id="cursorViewportPosition"></span>
+    
+        </div>
         <!-- Openseadragon is attached to host -->
         <div id="the_container">
             <slot></slot>
@@ -331,7 +339,7 @@ Custom property | Description | Default
             }
             
             pointToString(type, point) {
-                return `${type}: ${point.x.toPrecision(4)} / ${point.y.toPrecision(4)}`;
+                return `${type}: ${point.x.toPrecision(4)}, ${point.y.toPrecision(4)}`;
             }
 
             onMouseTrackerMove(event) {
@@ -393,9 +401,6 @@ Custom property | Description | Default
                     zoomInButton: this.$.zoomIn,
                     zoomOutButton: this.$.zoomOut
                 });
-
-                // prevent capturing mouse events (specifically mouse down) of OSD
-                this.viewer.setMouseNavEnabled(false);
 
                 this.init = true;
             }
@@ -517,8 +522,8 @@ Custom property | Description | Default
             _createPolygon() { this.mode = 'polygon' }
 
             _edit() {
-                if (!this._fabricOverlay.activeShape) { return } 
-                this._fabricOverlay.markPoints(this._fabricOverlay.activeShape)
+                if (!this._fabricOverlay.activeShape) { return }
+                this._fabricOverlay.editActiveShape()
                 this.mode = "edit"
             }
 
@@ -543,19 +548,23 @@ Custom property | Description | Default
             }
 
             _modeChange(mode) {
-                if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon') {
+                if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon' || mode === 'select') {
                     this._fabricOverlay.deselect();
-                    this._fabricOverlay.reset();
                 }
-                if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon' || mode === 'select' || mode === 'edit' || mode === 'move' || mode === 'group') {
+                if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon' || mode === 'select' || mode === 'edit' || mode === 'group') {
                     return this.viewer.setMouseNavEnabled(false);
                 }
+                if (this.init && mode === 'osd') {
+                    return this.viewer.setMouseNavEnabled(true);
+                }
+
             }
 
             _onHome(e) {
-                this._fabricOverlay.reset();
                 this._fabricOverlay.deselect();
                 this.viewer.viewport.goHome();
+                this.viewer.setMouseNavEnabled(true);
+                this.mode = 'osd'
             }
 
             _panzoom(e) {
@@ -573,9 +582,7 @@ Custom property | Description | Default
 
 
             _fillMode(){
-                console.log('parent ', this.parentNode);
                 this._fabricOverlay.switchFillMode();
-//                document.getElementById('annotationlist').switchColorMode();
             }
         }
 

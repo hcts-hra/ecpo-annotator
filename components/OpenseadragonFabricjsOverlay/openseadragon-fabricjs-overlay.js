@@ -22,8 +22,7 @@
 
   // ----------
   const Overlay = function(viewer) {
-    fabric.Object.prototype.objectCaching = false;
-
+    this.fillmode = false
     this._viewer = viewer;
 
     this._containerWidth = 0;
@@ -38,13 +37,29 @@
     this._viewer.canvas.appendChild(this._canvasdiv);
 
     this._canvas = document.createElement("canvas");
-
+  
     // this._id='osd-overlaycanvas-'+counter();
     this._id = "fabric";
     this._canvas.setAttribute("id", this._id);
     this._canvasdiv.appendChild(this._canvas);
     // this.resize();
     this._fabricCanvas = new fabric.Canvas(this._canvas);
+    // this._fabricCanvas.on('after:render', function() {
+    //   this._fabricCanvas.contextContainer.strokeStyle = '#555';
+  
+    //   this._fabricCanvas.forEachObject(function(obj) {
+    //     if (obj.data && obj.data.type === 'pointHandle') { return }
+    //     var bound = obj.getBoundingRect();
+  
+    //     this._fabricCanvas.contextContainer.strokeRect(
+    //       bound.left + 0.5,
+    //       bound.top + 0.5,
+    //       bound.width,
+    //       bound.height
+    //     );
+    //   }.bind(this))
+    // }.bind(this));
+
     // disable fabric selection because default click is tracked by OSD
     this._fabricCanvas.selection = false;
 
@@ -66,7 +81,7 @@
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
     this._fabricCanvas.on('mouse:move', this._mouseMove.bind(this))
-    this._fabricCanvas.on('object:moving', this._objectMove.bind(this))
+    // this._fabricCanvas.on('object:selected', this._objectMove.bind(this))
 
   };
 
@@ -74,12 +89,19 @@
   Overlay.prototype = {
     modes: ['rectangle', 'circle', 'polygon', 'remove', 'select'],
     defaultStyle: {
-      stroke:'blue',
+      stroke: 'blue',
       strokeWidth: 2,
       fill: 'transparent',
-      opacity: 0.5,
+      opacity: 0.4,
       hasBorders: true,
-      hasControls: true
+      hasControls: false,
+      lockScalingX: true,
+      lockScalingY: true,
+      lockUniScaling: true,
+      lockSkewingX: true,
+      lockSkewingY: true,
+      lockRotation: true,
+      hasControls: false
     },
     pointStyle: {
       radius: 5,
@@ -173,59 +195,34 @@
       console.log('highlight', object)
       this.activeShape = object
       this._fabricCanvas.setActiveObject(object)
-      if (object.type === 'polygon') { object.hasControls = false }
-
+      // if (object.type === 'polygon') { object.hasControls = false }
+      this._notifyShapeSelected(object)
       this._fabricCanvas.renderAll()
     },
     markPoints: function (object) {
       this._fabricCanvas.calcOffset()
       if (object.type !== 'polygon') { return }
-      object.setCoords()
+
       const center = object.getCenterPoint();
+      const ps = object.get('points')
+      // const t = object.calcTransformMatrix() 
       // const centerPoint = this._addPoint(center, {
       //   data: { type: 'pointHandle'},
       //   fill: 'pink'
       // })
       // this._fabricCanvas.add(centerPoint);
-      // const tlPoint = this._addPoint({x:object.left, y:object.top}, {
-      //   data: { type: 'pointHandle' },
-      //   fill: 'yellow'
-      // })
-      // this._fabricCanvas.add(tlPoint);
 
-      object.hasControls = false
-
-      const t = object.calcTransformMatrix() 
-      // sometimes points are relative to center and sometimes not
+ 
       console.log('center', center);
-      console.log('object', object);
-      console.log('transform', t);
-      console.log('getCoords', object.getCoords());
+      console.log('offset', object.pathOffset)
 
-      // object.getCoords()
-      // // .map(point => fabric.util.transformPoint(point, t, false))
-      // .map((point,index) => {
-      //   console.log('new point', point);
-
-      //   return this._addPoint(point, {
-      //     data: { type: 'pointHandle', index: index },
-      //     fill: 'green'
-      //   })
-      // })
-      // .forEach(c => this._fabricCanvas.add(c));
-
-      let ps = object.get('points')
-
-      console.log(object.pathOffset)
-      if (object.pathOffset.x > 0) {
-      }
-      else {
-        // ps = ps.map(point => ({x: center.x + point.x, y: center.y + point.y}))
-        ps = ps.map(point => fabric.util.transformPoint(point, t, false))
-      }
-
-      this.pointArray = ps.map((point,index) => {
-          console.log('new point', point);
+      // sometimes points are relative to center and sometimes not
+      this.pointArray = ps
+        // .map(point => fabric.util.transformPoint(point, t, false))
+        // .map(point => { console.log('1', point); return point})
+        .map(point => ({ x: center.x + point.x, y: center.y + point.y }))
+        // .map(point => { console.log('2', point); return point})
+        .map((point,index) => {
           return this._addPoint(point, {
             selectable: true,
             data: { type: 'pointHandle', index: index }
@@ -242,7 +239,8 @@
       this.pointArray.forEach(c => {
         c.bringToFront()
         c.on('mousedown', options => this._setState(options))
-        c.on('moving', options => this._objectMove.bind(options))
+        c.on('moving', options => this._objectMove(options))
+        c.on('mouseup', options => this._resetState(options))
       })
  
       this._fabricCanvas.renderAll()
@@ -252,7 +250,13 @@
     deselect: function () {
       console.log('DESELECT')
       if (this.activeShape) { 
-        this.activeShape.set({stroke: 'blue'})
+        this.activeShape.set({
+          stroke: this.defaultStyle.stroke,
+          selectable: true,
+          evented: true,
+          lockMovementX: false,
+          lockMovementY: false
+        })        
       }
       this.reset()
     },
@@ -264,12 +268,12 @@
     },
     reset: function () {
       console.log('RESET')
+      this.activeShape = null;
+      this.activeLine = null;
       this.pointArray.forEach(point => this._fabricCanvas.remove(point))
       this.pointArray = [];
       this.lineArray.forEach(line => this._fabricCanvas.remove(line));
       this.lineArray = [];
-      this.activeShape = null;
-      this.activeLine = null;
       this._fabricCanvas.discardActiveObject();
       this._fabricCanvas.renderAll();
     },
@@ -306,27 +310,57 @@
           `<svg xmlns="http://www.w3.org/2000/svg">${shape}</svg>`, 
           objects => {
             console.log('loadedfromSVGString', objects)
-            objects.map(o => this._fabricCanvas.add(o))
+            
+            objects.map(o => {
+              o.set(Object.assign({}, this.defaultStyle))
+              this._fabricCanvas.add(o)
+            })
           }
         )
       })
     },
 
-    switchFillMode: function(shapes){
-        shapes.forEach(shape => {
-            console.log('shhh... APE!', shape)
-            shape.fill = 'blue';
-            shape.opacity = 0.4;
-        });
+    switchFillMode: function() {
+      this.fillmode = !this.fillmode
+      const color = this.fillmode ? 'blue' : 'transparent'
+      this._fabricCanvas.forEachObject(object => {
+        if (this._isPointHandle(object)) { return }
+        object.set({
+          opacity: 0.4,
+          fill: color
+        })
+      });
+      this._fabricCanvas.renderAll()
     },
+    //TODO
+    _isPointHandle (object) {
+      return (object && object.data && object.data.type === 'pointHandle')
+    },
+    editActiveShape: function () {
+      if (!this.activeShape) { return console.warn('Switch to edit mode without active object') }
+      // extra caution not to have a mixup with canvas.activeObject
+      this._fabricCanvas.discardActiveObject()
+      this.markPoints(this.activeShape)
+      this.activeShape.set({
+        lockMovementX: true,
+        lockMovementY: true, 
+        objectCaching: false,
+        selectable: false,
+        hasBorders: false,
+        hasControls: false,
+        evented: false
+      })
 
-    foooo: function (svg) {
+    },
+    reimport: function (object) {
       let newObject
       fabric.loadSVGFromString(
-        `<svg xmlns="http://www.w3.org/2000/svg">${svg}</svg>`, 
+        `<svg xmlns="http://www.w3.org/2000/svg">${object.toSVG(d => d)}</svg>`, 
         objects => {
           newObject = objects[0]
-          this._fabricCanvas.add(newObject)
+          newObject.set(Object.assign({}, this.defaultStyle, {
+            fill: this.fillmode ? 'blue': 'transparent'
+          }))
         }
       )
       return newObject
@@ -338,8 +372,8 @@
 
       switch (mode) {
         case 'edit':
-          // pointhandle selection
-          if (options.target && options.target.data && options.target.data.type === 'pointHandle') { 
+          // pointhandle selection    
+          if (this._isPointHandle(options.target)) { 
             console.log('point', options.target)
             this.currentPointHandle = options.target
             this.pointArray.forEach(point => point.set({ fill: 'white' }))
@@ -347,17 +381,16 @@
             this._fabricCanvas.renderAll()
             break
           }
-        case 'osd':
+          // clicking anywhere but on a point handle will end the edit mode
+          // this.deselect()
+          this._annotator.mode = 'select'
+          break
+        case 'select':
           if (options.target) {
-            // if (this._fabricCanvas.getActiveObject() === options.target) {
-            //   return
-            // }
-            this._highlight(options.target);
-            break
+            this._highlight(options.target); break 
           }
-          console.log('i have no other option')
           this.deselect()
-        break
+          break
         case "rectangle":
           const rect = new fabric.Rect(Object.assign({}, this.defaultStyle, {
             left: pointer.x,
@@ -389,12 +422,9 @@
             this._fabricCanvas.add(polygon);
             this._highlight(polygon);
             this._notifyShapeCreated(polygon)
-            // this.activeShape = polygon;
-            this._fabricCanvas.selection = false;
-            this._annotator.mode = 'osd'
+            this._annotator.mode = 'select'
             break;
           }
-          this._fabricCanvas.selection = false;
           this.addPointFromEvent(options);
           break
         // default:
@@ -404,58 +434,46 @@
     },
 
     _setState(options) {
-      const t = this.activeShape.calcTransformMatrix() 
-      this._state = this.activeShape
-        .get('points')
-        // .map(point => fabric.util.transformPoint(point, t, false))
+      console.log('_setState', options.pointer)
+      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      this._clickOrigin = pointer
+      this._state = this.activeShape.get('points')
       console.log('_state', this._state)
     },
     _objectMove: function(options) {
-      if (options.target.data && options.target.data.type === 'pointHandle') {
-        const dx = options.target.left - options.transform.original.left
-        const dy = options.target.top - options.transform.original.top
-        console.log('moving point handle', dx, dy)
-        const i = options.target.data.index
-        const points = this._state.concat([])
-        const point = points[i]
-        const newPoint = {
-          x: point.x + dx,
-          y: point.y + dy
-        }
-        console.log('old coords', point)
-        console.log('new coords', newPoint)
-        console.log('old points', points)
-        points.splice(i, 1, newPoint)
-        console.log('new points', points)
-        this.activeShape.set({ points: points });
-        this.activeShape.setCoords()
-        // this.activeShape.render(this._canvas)
-        this._fabricCanvas.renderAll()
+      if (!this._isPointHandle(options.target)) { return }
+      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+
+      const dx = pointer.x - this._clickOrigin.x
+      const dy = pointer.y - this._clickOrigin.y
+      console.log('moving point handle', dx, dy)
+      const i = options.target.data.index
+      const points = this._state.concat([])
+      const point = points[i]
+      const newPoint = {
+        x: point.x + dx,
+        y: point.y + dy
       }
+      console.log('old coords', point)
+      console.log('new coords', newPoint)
+      console.log('old points', points)
+      points.splice(i, 1, newPoint)
+      console.log('new points', points)
+      this.activeShape.set({ points: points });
+      this.activeShape.setCoords();
+      this._fabricCanvas.renderAll()
+    },
+    _resetState: function (options) {
+      const clone = this.reimport(this.activeShape)
+      this._fabricCanvas.remove(this.activeShape)
+      this.activeShape = clone
+      console.log('_nextState', this.activeShape)
+      this._fabricCanvas.renderAll()
+      this._fabricCanvas.add(clone)
+      this._fabricCanvas.renderAll()
     },
     _mouseMove: function(options) {
       const mode = this._annotator.mode
-
-      // if (options.transform) {
-      //     console.log('TRANSFORM')
-      //     // console.log(dx, dy)
-      //     const dx = options.e.movementX / this.getZoom()
-      //     const dy = options.e.movementY / this.getZoom()
-      //     console.log(this.pointArray)
-      //     this.pointArray.forEach(point => {
-      //       const l = point.left
-      //       const t = point.top
-      //       // console.log(l)
-      //       // console.log(t)
-      //       point.set({ left: l + dx })
-      //       point.set({ top: t + dy })
-      //       // console.log(point.left)
-      //       // console.log(point.top)
-      //     })
-      //     this._fabricCanvas.renderAll();
-      //     // console.log('END TRANSFORM')
-      //     return 
-      // }
 
       if (!(this.activeShape || this.activeLine)) { return }
 
@@ -465,9 +483,11 @@
           this.activeShape.set("width", pointer.x - this.activeShape.get("left"));
           this.activeShape.set("height", pointer.y - this.activeShape.get("top"));
           this.activeShape.setCoords()
+          this._fabricCanvas.renderAll();
           break
         case "circle":
           this.activeShape.set("radius", Math.abs(pointer.x - this.activeShape.get("left")));
+          this._fabricCanvas.renderAll();
           break
         case "polygon":
           if (!this.activeLine || this.activeLine.class != "line") { break }
@@ -478,35 +498,42 @@
           points[this.pointArray.length] = { x: pointer.x, y: pointer.y };
           this.activeShape.set({ points: points });
           this.activeShape.setCoords()
+          this._fabricCanvas.renderAll();
           break
         //   console.warn('_mouseMove called with unknown mode', options);
       }
-      this._fabricCanvas.renderAll();
     },
 
     _mouseUp: function(options) {
       const mode = this._annotator.mode;
 
       switch(mode) {
+        case 'edit':
+          console.warn('_mouseUp do nottin ');
+          break
         case 'rectangle':
-          // this._fabricCanvas.discardActiveObject()
-          this.activeShape.setCoords();
           const rect = this.activeShape
+          const center = this.activeShape.getCenterPoint()
           const points = [
-            {x:rect.left, y: rect.top },
-            {x:rect.left + rect.width, y: rect.top },
-            {x:rect.left + rect.width, y: rect.top  + rect.height },
-            {x:rect.left, y: rect.top  + rect.height }
+            { x: rect.left, y: rect.top },
+            { x: rect.left + rect.width, y: rect.top },
+            { x: rect.left + rect.width, y: rect.top + rect.height },
+            { x: rect.left, y: rect.top + rect.height }
           ]
-          this._fabricCanvas.remove(rect)
-          const poly = new fabric.Polygon(points, this.defaultStyle)
-          poly.id = this._getShapeId()
-          const reimport = this.foooo(poly.toSVG())
+                   
+          this._fabricCanvas.discardActiveObject()
+          this._fabricCanvas.remove(this.activeShape)
+          this._fabricCanvas.renderAll()
+
+          const poly = new fabric.Polygon(points, Object.assign({}, this.defaultStyle))
+          const reimport = this.reimport(poly)
+          reimport.id = this._getShapeId()
           this._fabricCanvas.add(reimport)
+          // poly.setCoords()
+          // this.activeShape = reimport
+          this._annotator.mode = 'select'
           this._highlight(reimport)
           this._notifyShapeCreated(reimport)
-          this.activeShape = reimport
-          this._annotator.mode = 'osd'
           break
         case 'circle':
           // circle is special
@@ -516,13 +543,18 @@
           this.activeShape.id = this._getShapeId()
           this._highlight(this.activeShape)
           this._notifyShapeCreated(this.activeShape)
-          this._annotator.mode = 'osd'
+          this._annotator.mode = 'select'
         break;
-        case 'osd': this._notifyShapeChanged(options.target)
-        break
+        case 'select':
+          // no activeShape on mouse up means nothing was or is selected
+          if (!this.activeShape) { break }
+          this._notifyShapeChanged(this.activeShape)
+          break
         default:
-          console.warn('_mouseUp called with unknown mode', options);
+          // console.warn('_mouseUp called with unknown mode', options);
       }
+      if (!this.activeShape) { return }
+      this.activeShape.set({ fill: this.fillmode ? 'blue' : 'transparent' })
     },
     addPointFromEvent: function (options) {
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
@@ -558,14 +590,16 @@
 
       // render changes to fabric canvas
       if (activeShape) {
+        this._fabricCanvas.discardActiveObject()
         this._fabricCanvas.remove(activeShape);
       }
+      this._fabricCanvas.renderAll()
+
       this._fabricCanvas.add(polygon);
       polygon.setCoords()
       this._fabricCanvas.add(this.line);
       this._fabricCanvas.add(circle);
       this._fabricCanvas.setActiveObject(polygon);
-      console.log('addPointFromEvent CENTER', polygon.getCenterPoint())
 
       // set inner overlay state
       this.activeShape = polygon;
@@ -583,21 +617,25 @@
 
     _generatePolygon: function () {
       const points = this.activeShape.get('points')
-      const polygon = new fabric.Polygon(points, this.defaultStyle);
-      polygon.id = this._getShapeId()
-      const reimport = this.foooo(polygon.toSVG())
+      // the last point that was needs to be removed
+      const pointsMinusLast = points.slice(0, points.length-1)
 
-      this.pointArray.forEach(point => this._fabricCanvas.remove(point));
-      this.lineArray.forEach(line => this._fabricCanvas.remove(line));
+      //cleanup
       this._fabricCanvas.remove(this.activeShape).remove(this.activeLine);
-
+      this._fabricCanvas.renderAll()
+      debugger;
       // reset
+      this.pointArray.forEach(point => this._fabricCanvas.remove(point));
+      this.pointArray = [];
+      this.lineArray.forEach(line => this._fabricCanvas.remove(line));
+      this.lineArray = [];
       this.line = null;
       this.activeLine = null;
 
-      this.pointArray = [];
-      this.lineArray = [];
-      return reimport
+      console.log('numer of points', pointsMinusLast.length)
+      const polygon = new fabric.Polygon(pointsMinusLast, this.defaultStyle);
+      polygon.id = this._getShapeId()
+      return this.reimport(polygon)
     },
 
     _notifyShapeCreated: function (object) {
@@ -611,6 +649,13 @@
       const detail = this.serializeObject(object)
       const event = new CustomEvent('shape-changed', {composed: true, bubbles: true, detail: detail})
       this._canvas.dispatchEvent(event);
+    },
+
+    _notifyShapeSelected: function (object) {
+      if (!object) { return }
+      const detail = this.serializeObject(object)
+      // const event = new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: detail})
+      // this._canvas.dispatchEvent(event);
     },
 
     _getShapeId () {
