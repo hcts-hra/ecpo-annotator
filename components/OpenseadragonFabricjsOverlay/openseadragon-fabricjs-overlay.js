@@ -203,6 +203,7 @@
       this._fabricCanvas.calcOffset()
       if (object.type !== 'polygon') { return }
 
+      const offset = object.pathOffset
       const center = object.getCenterPoint();
       const ps = object.get('points')
       // const t = object.calcTransformMatrix() 
@@ -213,14 +214,16 @@
       // this._fabricCanvas.add(centerPoint);
 
  
-      console.log('center', center);
-      console.log('offset', object.pathOffset)
-
+      console.log('center', center)
+      console.log('offset', offset)
+      const newCenter = { x: center.x - offset.x, y: center.y - offset.y }
+      console.log('newCenter', newCenter)
+      
       // sometimes points are relative to center and sometimes not
       this.pointArray = ps
         // .map(point => fabric.util.transformPoint(point, t, false))
         // .map(point => { console.log('1', point); return point})
-        .map(point => ({ x: center.x + point.x, y: center.y + point.y }))
+        .map(point => ({ x: newCenter.x + point.x, y: newCenter.y + point.y }))
         // .map(point => { console.log('2', point); return point})
         .map((point,index) => {
           return this._addPoint(point, {
