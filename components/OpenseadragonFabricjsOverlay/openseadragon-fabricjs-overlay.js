@@ -623,7 +623,7 @@
       //cleanup
       this._fabricCanvas.remove(this.activeShape).remove(this.activeLine);
       this._fabricCanvas.renderAll()
-      debugger;
+
       // reset
       this.pointArray.forEach(point => this._fabricCanvas.remove(point));
       this.pointArray = [];
