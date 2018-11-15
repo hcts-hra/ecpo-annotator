@@ -38,27 +38,10 @@
 
     this._canvas = document.createElement("canvas");
   
-    // this._id='osd-overlaycanvas-'+counter();
     this._id = "fabric";
     this._canvas.setAttribute("id", this._id);
     this._canvasdiv.appendChild(this._canvas);
-    // this.resize();
     this._fabricCanvas = new fabric.Canvas(this._canvas);
-    // this._fabricCanvas.on('after:render', function() {
-    //   this._fabricCanvas.contextContainer.strokeStyle = '#555';
-  
-    //   this._fabricCanvas.forEachObject(function(obj) {
-    //     if (obj.data && obj.data.type === 'pointHandle') { return }
-    //     var bound = obj.getBoundingRect();
-  
-    //     this._fabricCanvas.contextContainer.strokeRect(
-    //       bound.left + 0.5,
-    //       bound.top + 0.5,
-    //       bound.width,
-    //       bound.height
-    //     );
-    //   }.bind(this))
-    // }.bind(this));
 
     // disable fabric selection because default click is tracked by OSD
     this._fabricCanvas.selection = false;
@@ -81,7 +64,6 @@
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
     this._fabricCanvas.on('mouse:move', this._mouseMove.bind(this))
-    // this._fabricCanvas.on('object:selected', this._objectMove.bind(this))
 
   };
 
@@ -195,7 +177,6 @@
       console.log('highlight', object)
       this.activeShape = object
       this._fabricCanvas.setActiveObject(object)
-      // if (object.type === 'polygon') { object.hasControls = false }
       this._notifyShapeSelected(object)
       this._fabricCanvas.renderAll()
     },
@@ -206,13 +187,6 @@
       const offset = object.pathOffset
       const center = object.getCenterPoint();
       const ps = object.get('points')
-      // const t = object.calcTransformMatrix() 
-      // const centerPoint = this._addPoint(center, {
-      //   data: { type: 'pointHandle'},
-      //   fill: 'pink'
-      // })
-      // this._fabricCanvas.add(centerPoint);
-
  
       console.log('center', center)
       console.log('offset', offset)
@@ -221,10 +195,7 @@
       
       // sometimes points are relative to center and sometimes not
       this.pointArray = ps
-        // .map(point => fabric.util.transformPoint(point, t, false))
-        // .map(point => { console.log('1', point); return point})
         .map(point => ({ x: newCenter.x + point.x, y: newCenter.y + point.y }))
-        // .map(point => { console.log('2', point); return point})
         .map((point,index) => {
           return this._addPoint(point, {
             selectable: true,
@@ -385,7 +356,6 @@
             break
           }
           // clicking anywhere but on a point handle will end the edit mode
-          // this.deselect()
           this._annotator.mode = 'select'
           break
         case 'select':
@@ -497,13 +467,12 @@
 
           this.activeLine.set({ x2: pointer.x, y2: pointer.y });
           let points = this.activeShape.get("points");
-          // set last point of shape to current position
+          // add current position to polygon points
           points[this.pointArray.length] = { x: pointer.x, y: pointer.y };
           this.activeShape.set({ points: points });
           this.activeShape.setCoords()
           this._fabricCanvas.renderAll();
           break
-        //   console.warn('_mouseMove called with unknown mode', options);
       }
     },
 
@@ -532,8 +501,6 @@
           const reimport = this.reimport(poly)
           reimport.id = this._getShapeId()
           this._fabricCanvas.add(reimport)
-          // poly.setCoords()
-          // this.activeShape = reimport
           this._annotator.mode = 'select'
           this._highlight(reimport)
           this._notifyShapeCreated(reimport)
@@ -553,8 +520,6 @@
           if (!this.activeShape) { break }
           this._notifyShapeChanged(this.activeShape)
           break
-        default:
-          // console.warn('_mouseUp called with unknown mode', options);
       }
       if (!this.activeShape) { return }
       this.activeShape.set({ fill: this.fillmode ? 'blue' : 'transparent' })
