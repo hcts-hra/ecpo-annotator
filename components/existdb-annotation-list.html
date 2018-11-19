@@ -53,11 +53,13 @@
 -->
         <paper-button raised on-click="save">submit</paper-button>
 
+<!--
         <template is="dom-repeat" items="{{annotations}}" as="annotation">
             <existdb-annotation-item id="{{annotation.id}}" body="{{annotation.body}}" target="{{annotation.target}}"></existdb-annotation-item>
         </template>
+-->
 
-
+        <existdb-annotation-item id="{{current.id}}" body="{{current.body}}" target="{{current.target}}"></existdb-annotation-item>
 
     </template>
 
@@ -88,6 +90,10 @@
                     targetToAnnotationMap: {
                         type: Object,
                         value: {}
+                    },
+                    current:{
+                        type: Object,
+                        value: _ => {}
                     }
                 };
             }
@@ -120,6 +126,7 @@
             }
 
             handle (e) {
+                console.log('annotation-list handle e ',e);
                 if (!e.detail.shape || !e.detail.shape.id) {
                     return console.warn('list handler called without a shape')
                 }

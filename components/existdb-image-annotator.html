@@ -127,6 +127,8 @@ Custom property | Description | Default
                 font-family: monospace;
             }
         </style>
+
+
         <div class="buttonBar">
             <!-- Openseadragon controls -->
             <paper-icon-button id="zoomIn" icon="zoom-in" title="zoom in"></paper-icon-button>
@@ -164,7 +166,7 @@ Custom property | Description | Default
             <span class="cursorposition" id="cursorImagePosition"></span>
             <div class="divider"></div>
             <span class="cursorposition" id="cursorViewportPosition"></span>
-    
+            <div style="width:0;height:0;border:0;" tabindex="0" id="focusDummy"></div>
         </div>
         <!-- Openseadragon is attached to host -->
         <div id="the_container">
@@ -336,8 +338,16 @@ Custom property | Description | Default
                 // document.addEventListener('shape-created', this._newShapeHandler.bind(this))
                 // document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
                 // document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
+                this.addEventListener('keypress',this._keyHandler);
+                this.$.focusDummy.focus();
             }
-            
+
+            disconnectedCallback() {
+                super.disconnectedCallback();
+                this.removeEventListener('keypress', this._keyHandler);
+            }
+
+
             pointToString(type, point) {
                 return `${type}: ${point.x.toPrecision(4)}, ${point.y.toPrecision(4)}`;
             }
@@ -584,6 +594,39 @@ Custom property | Description | Default
             _fillMode(){
                 this._fabricOverlay.switchFillMode();
             }
+
+            _group(e){
+                console.log('group keyboard action ',e);
+            }
+
+            _keyHandler(e){
+                console.log('_keyHandler', e.key);
+
+                const key = e.key;
+
+                switch (key){
+                    case 'g':
+                        console.log('grouping mode triggered');
+                        break;
+                    case 'e':
+                        console.log('edit mode');
+                        this._edit();
+                        break;
+                    case 'd':
+                        console.log('draw mode');
+                        break;
+                    case 'u':
+                        console.log('union mode');
+                        break;
+                    case 'm':
+                        console.log('merge mode');
+                        break;
+                    default:
+                        console.log('undefined key ',key);
+
+                }
+            }
+
         }
 
         window.customElements.define(ExistdbImageAnnotator.is, ExistdbImageAnnotator);

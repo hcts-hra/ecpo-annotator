@@ -48,7 +48,7 @@
 
             paper-item {
                 /*padding: 0 4px;*/
-                margin:4px;
+                margin: 4px;
                 background: white;
             }
 
@@ -65,28 +65,31 @@
                 background: var(--paper-grey-300);
                 font-size: 16px;
             }
-            .type{
+
+            .type {
                 font-weight: 500;
-                padding:12px;
-                background-color:var(--paper-blue-500);
-                color:white;
-                font-size:16px;
+                padding: 12px;
+                background-color: var(--paper-blue-500);
+                color: white;
+                font-size: 16px;
             }
-            .item-body{
+
+            .item-body {
                 padding: 10px;
                 background: var(--paper-blue-300);
             }
-            [hidden]{
-                display:none;
+
+            [hidden] {
+                display: none;
             }
         </style>
 
-        <existdb-fetch-labels id="labels" labels="{{labels}}"></existdb-fetch-labels>
 
         <div class="item">
             <div class="type">Type</div>
 
             <div class="item-body">
+<!--
                 <template is="dom-repeat" items="{{body}}">
                     <dl>
                         <dt>type</dt>
@@ -95,15 +98,19 @@
                         <dd>{{item.content}}</dd>
                     </dl>
                 </template>
+-->
 
+                <existdb-fetch-labels id="labels" labels="{{labels}}"></existdb-fetch-labels>
 
+<!--
                 <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label">
-                    <!--<paper-item name="[[label.name]]">[[label.label]]</paper-item>-->
+                    <paper-item name="[[label.name]]">[[label.label]]</paper-item>
                     <paper-item>Image or Drawing</paper-item>
                     <paper-item>Article</paper-item>
                     <paper-item>Advertisement</paper-item>
                     <paper-item>Addtional information</paper-item>
                 </paper-listbox>
+-->
 
                 <!--
                             <template is="dom-repeat" items="{{target}}">
@@ -139,24 +146,31 @@
                         type: String,
                         value: ''
                     },
-                    selected:{
+                    selected: {
                         type: String,
                         value: ''
                     },
                     body: {
                         type: Array,
                         value: _ => []
-                },
-                target:{
-                    type: Array,
-                    value: _ => []
+                    },
+                    target: {
+                        type: Array,
+                        value: _ => []
+                    },
+                    labels: {
+                        type: Array,
+                        value: _ => [],
+                        reflectToAttribute: true,
+                        notify: true
+                    }
                 }
-            }
             }
 
             connectedCallback() {
                 super.connectedCallback();
                 console.log('targets ', this.target);
+                console.log('connected labels ', this.labels);
             }
 
             ready() {
