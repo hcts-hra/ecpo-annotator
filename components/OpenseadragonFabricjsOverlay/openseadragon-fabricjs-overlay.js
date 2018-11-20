@@ -64,6 +64,7 @@
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
     this._fabricCanvas.on('mouse:move', this._mouseMove.bind(this))
+    this._fabricCanvas.on('object:selected', this._select.bind(this))
 
   };
 
@@ -187,12 +188,12 @@
       const offset = object.pathOffset
       const center = object.getCenterPoint();
       const ps = object.get('points')
- 
+
       console.log('center', center)
       console.log('offset', offset)
       const newCenter = { x: center.x - offset.x, y: center.y - offset.y }
       console.log('newCenter', newCenter)
-      
+
       // sometimes points are relative to center and sometimes not
       this.pointArray = ps
         .map(point => ({ x: newCenter.x + point.x, y: newCenter.y + point.y }))
@@ -202,7 +203,7 @@
             data: { type: 'pointHandle', index: index }
           })
         });
-      
+
       this.pointArray.forEach(c => {
         this._fabricCanvas.add(c)
       })
@@ -216,21 +217,21 @@
         c.on('moving', options => this._objectMove(options))
         c.on('mouseup', options => this._resetState(options))
       })
- 
+
       this._fabricCanvas.renderAll()
 
       console.log('pointArray', this.pointArray);
     },
     deselect: function () {
       console.log('DESELECT')
-      if (this.activeShape) { 
+      if (this.activeShape) {
         this.activeShape.set({
           stroke: this.defaultStyle.stroke,
           selectable: true,
           evented: true,
           lockMovementX: false,
           lockMovementY: false
-        })        
+        })
       }
       this.reset()
     },
@@ -252,11 +253,13 @@
       this._fabricCanvas.renderAll();
     },
     remove: function () {
-      const ao = this._fabricCanvas.getActiveObject()
+      const ao = this._fabricCanvas.getActiveObject();
+      if(!ao) return;
+
       this._fabricCanvas.remove(ao);
       this._fabricCanvas.renderAll();
       this._canvas.dispatchEvent(new CustomEvent('shape-deleted', {
-        composed: true, bubbles: true, 
+        composed: true, bubbles: true,
         detail: this.serializeObject(ao)}));
     },
     serialize: function () {
@@ -265,7 +268,8 @@
       return this._fabricCanvas.toJSON(['id','data'])
     },
     serializeObject: function (object) {
-      console.log('serialize', object)
+      console.log('serialize', object);
+      if(!object) return;
       return {
         shape: {
           id: object.id,
@@ -281,10 +285,10 @@
         console.log('shhh... APE!', shape)
 
         fabric.loadSVGFromString(
-          `<svg xmlns="http://www.w3.org/2000/svg">${shape}</svg>`, 
+          `<svg xmlns="http://www.w3.org/2000/svg">${shape}</svg>`,
           objects => {
             console.log('loadedfromSVGString', objects)
-            
+
             objects.map(o => {
               o.set(Object.assign({}, this.defaultStyle))
               this._fabricCanvas.add(o)
@@ -317,7 +321,7 @@
       this.markPoints(this.activeShape)
       this.activeShape.set({
         lockMovementX: true,
-        lockMovementY: true, 
+        lockMovementY: true,
         objectCaching: false,
         selectable: false,
         hasBorders: false,
@@ -329,7 +333,7 @@
     reimport: function (object) {
       let newObject
       fabric.loadSVGFromString(
-        `<svg xmlns="http://www.w3.org/2000/svg">${object.toSVG(d => d)}</svg>`, 
+        `<svg xmlns="http://www.w3.org/2000/svg">${object.toSVG(d => d)}</svg>`,
         objects => {
           newObject = objects[0]
           newObject.set(Object.assign({}, this.defaultStyle, {
@@ -346,8 +350,8 @@
 
       switch (mode) {
         case 'edit':
-          // pointhandle selection    
-          if (this._isPointHandle(options.target)) { 
+          // pointhandle selection
+          if (this._isPointHandle(options.target)) {
             console.log('point', options.target)
             this.currentPointHandle = options.target
             this.pointArray.forEach(point => point.set({ fill: 'white' }))
@@ -360,7 +364,7 @@
           break
         case 'select':
           if (options.target) {
-            this._highlight(options.target); break 
+            this._highlight(options.target); break
           }
           this.deselect()
           break
@@ -492,7 +496,7 @@
             { x: rect.left + rect.width, y: rect.top + rect.height },
             { x: rect.left, y: rect.top + rect.height }
           ]
-                   
+
           this._fabricCanvas.discardActiveObject()
           this._fabricCanvas.remove(this.activeShape)
           this._fabricCanvas.renderAll()
@@ -622,12 +626,18 @@
     _notifyShapeSelected: function (object) {
       if (!object) { return }
       const detail = this.serializeObject(object)
-      // const event = new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: detail})
-      // this._canvas.dispatchEvent(event);
+      const event = new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: detail})
+      this._canvas.dispatchEvent(event);
     },
 
-    _getShapeId () {
+    _getShapeId: function () {
       return 's-' + Date.now() + Math.floor(Math.random() * 11)
+    },
+
+    _select:function(options){
+      console.log('select event');
     }
+
+
   };
 })();

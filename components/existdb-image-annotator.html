@@ -1,7 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
-<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
+
+<!--<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">-->
+<link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/editor-icons.html">
@@ -9,7 +11,8 @@
 <link rel="import" href="../bower_components/iron-icons/device-icons.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/iron-icons/image-icons.html">
-<link rel="import" href="../bower_components/paper-styles/color.html">
+<!--<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">-->
+<link rel="import" href="../bower_components/toggle-icon/toggle-icon.html">
 
 <!--<link rel="import" href="bower_components/web-animations-js/web-animations.html">-->
 <!--<link rel="import" href="image-loader.html">-->
@@ -48,6 +51,32 @@ Custom property | Description | Default
                 position: relative;
                 width: 100%;
                 height: 100%;
+                --toggle-icon-buttons: {
+                    padding: 8px;
+                    width: 40px;
+                    height: 40px;
+                };
+
+            }
+
+            toggle-icon {
+                --toggle-icon: {
+                    color: var(--paper-grey-700);
+                };
+            }
+
+            .checked-blue {
+                --toggle-icon-checked: {
+                    color: var(--paper-blue-500);
+                };
+            }
+
+            #panzoom{
+                padding:11px;
+            }
+
+            paper-icon-button{
+                color: var(--paper-grey-700);
             }
 
             #viewer {
@@ -61,7 +90,7 @@ Custom property | Description | Default
             }
 
             #the_container {
-                position:relative;
+                position: relative;
                 height: calc(100% - 40px);
             }
 
@@ -122,10 +151,19 @@ Custom property | Description | Default
                 margin: 0 8px;
                 border-right: thin solid var(--paper-grey-500);
             }
+
             .cursorposition {
                 font-size: 0.8rem;
                 font-family: monospace;
             }
+
+/*
+            paper-icon-button {
+                color: var(--paper-grey-700);
+            }
+*/
+
+
         </style>
 
 
@@ -134,28 +172,47 @@ Custom property | Description | Default
             <paper-icon-button id="zoomIn" icon="zoom-in" title="zoom in"></paper-icon-button>
             <paper-icon-button id="zoomOut" icon="zoom-out" title="zoom out"></paper-icon-button>
             <paper-icon-button id="homeBtn" icon="home" title="home" on-click="_onHome"></paper-icon-button>
-            <paper-icon-button id="fullScreen" icon="fullscreen" title="fullscreen" on-click="_onFullScreen"></paper-icon-button>
-            <paper-icon-button id="panzoom" icon="pan-tool" title="mouse pan and zoom" on-click="_panzoom"></paper-icon-button>
-            <!--<paper-icon-button id="centerselection" icon="maps:my-location" title="center to selection" on-click="_centerselection"></paper-icon-button>-->
-            
+            <paper-icon-button id="fullScreen" icon="fullscreen" title="fullscreen"
+                               on-click="_onFullScreen"></paper-icon-button>
+            <paper-icon-button id="panzoom" icon="pan-tool" title="mouse pan and zoom"
+                               on-click="_panzoom"></paper-icon-button>
+
             <div class="divider"></div>
 
-            <!-- Overlay controls -->
-            <!-- <paper-icon-button icon="hardware:computer" on-click="_logShapes"></paper-icon-button> -->
             <paper-icon-button id="select" icon="tap" title="select" on-click="_select"></paper-icon-button>
-            <paper-icon-button id="fillmode" icon="invert-colors" on-click="_fillMode"></paper-icon-button>
-            <paper-icon-button id="group" icon="view-quilt" title="group" on-click="_edit"></paper-icon-button>
+            <!--
+                        <toggle-icon icon="tap"
+                                     animation="flip-horizontal"
+                                     class="checked-blue"></toggle-icon>
+            -->
+
+
+            <toggle-icon id="fillmode"
+                         icon="invert-colors"
+                         animation="flip-horizontal"
+                         on-click="_fillMode"
+                         class="checked-blue"></toggle-icon>
+            <!--<paper-icon-button id="group" icon="group" title="group" on-click="_edit"></paper-icon-button>-->
+            <toggle-icon icon="groupmode"
+                         animation="flip-horizontal"
+                         class="checked-blue"></toggle-icon>
 
             <div class="divider"></div>
             <!-- TODO: hide if active selection -->
             <paper-icon-button icon="image:crop-3-2" title="add rectangle" on-click="_createRect"></paper-icon-button>
-            <paper-icon-button icon="image:panorama-fish-eye" title="add circle" on-click="_createCircle"></paper-icon-button>
-            <paper-icon-button icon="device:signal-cellular-null" title="add polygon" on-click="_createPolygon"></paper-icon-button>
+            <paper-icon-button icon="image:panorama-fish-eye" title="add circle"
+                               on-click="_createCircle"></paper-icon-button>
+            <paper-icon-button icon="device:signal-cellular-null" title="add polygon"
+                               on-click="_createPolygon"></paper-icon-button>
 
             <div class="divider"></div>
             <!-- TODO: show if active selection -->
-            <paper-icon-button id="edit" icon="editor:format-shapes" title="edit" on-click="_edit"></paper-icon-button>
-            <paper-icon-button icon="litter" title="remove shape" on-click="_removeShape"></paper-icon-button>
+            <toggle-icon id="edit"
+                         icon="editnodes"
+                         title="edit"
+                         on-click="_edit"
+                         class="checked-blue"></toggle-icon>
+            <paper-icon-button icon="remove-circle" title="remove shape" on-click="_removeShape"></paper-icon-button>
 
             <div class="divider"></div>
 
@@ -166,6 +223,7 @@ Custom property | Description | Default
             <span class="cursorposition" id="cursorImagePosition"></span>
             <div class="divider"></div>
             <span class="cursorposition" id="cursorViewportPosition"></span>
+
             <div style="width:0;height:0;border:0;" tabindex="0" id="focusDummy"></div>
         </div>
         <!-- Openseadragon is attached to host -->
@@ -296,14 +354,18 @@ Custom property | Description | Default
                     },
                     viewer: {
                         type: Object,
-                        value: () => { return {} }
+                        value: () => {
+                            return {}
+                        }
                     },
                     zoom: {
                         type: Number
                     },
                     selectedShape: {
                         type: Object,
-                        value: () => { return {} }
+                        value: () => {
+                            return {}
+                        }
                     },
                     mode: {
                         type: String,
@@ -338,7 +400,7 @@ Custom property | Description | Default
                 // document.addEventListener('shape-created', this._newShapeHandler.bind(this))
                 // document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
                 // document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
-                this.addEventListener('keypress',this._keyHandler);
+                this.addEventListener('keypress', this._keyHandler);
                 this.$.focusDummy.focus();
             }
 
@@ -371,7 +433,7 @@ Custom property | Description | Default
 
             _initFabric() {
                 const self = this;
-                const options = { annotator: this };
+                const options = {annotator: this};
                 this._fabricOverlay = this.viewer.fabricjsOverlay(options);
             }
 
@@ -404,7 +466,7 @@ Custom property | Description | Default
                     showHomeControl: false,
                     showFullPageControl: false,
                     sequenceMode: true,
-                    tileSources: [ tileSource ],
+                    tileSources: [tileSource],
                     gestureSettingsMouse: {
                         clickToZoom: false
                     },
@@ -415,14 +477,15 @@ Custom property | Description | Default
                 this.init = true;
             }
 
-            _newShapeHandler (e) {
+            _newShapeHandler(e) {
                 console.log('NEW SHAPE', e.detail.shape)
             }
 
-            _changedShapeHandler (e) {
+            _changedShapeHandler(e) {
                 console.log('CHANGED SHAPE', e.detail.shape)
             }
-            _deletedShapeHandler (e) {
+
+            _deletedShapeHandler(e) {
                 console.log('DELETED SHAPE', e.detail.shape)
             }
 
@@ -503,12 +566,12 @@ Custom property | Description | Default
             }
 
             _addImage() {
-                this.viewer.addSimpleImage({ url: this.src, index: 0, replace: true });
+                this.viewer.addSimpleImage({url: this.src, index: 0, replace: true});
             }
 
             _addTiledImage() {
                 console.log('_addTiledImage ', this.viewer);
-                this.viewer.addTiledImage({ tileSource: this.src, index: 0, replace: true });
+                this.viewer.addTiledImage({tileSource: this.src, index: 0, replace: true});
             }
 
             _removeShape(e) {
@@ -527,12 +590,22 @@ Custom property | Description | Default
                 this._fabricOverlay.clear();
             }
 
-            _createRect() { this.mode = "rectangle" }
-            _createCircle() { this.mode = 'circle' }
-            _createPolygon() { this.mode = 'polygon' }
+            _createRect() {
+                this.mode = "rectangle"
+            }
+
+            _createCircle() {
+                this.mode = 'circle'
+            }
+
+            _createPolygon() {
+                this.mode = 'polygon'
+            }
 
             _edit() {
-                if (!this._fabricOverlay.activeShape) { return }
+                if (!this._fabricOverlay.activeShape) {
+                    return
+                }
                 this._fabricOverlay.editActiveShape()
                 this.mode = "edit"
             }
@@ -541,18 +614,18 @@ Custom property | Description | Default
             code stolen from osd and routed to this.viewer.
              */
             _onFullScreen(e) {
-                if ( this.viewer.isFullPage() && !this.viewer.isFullScreen() ) {
+                if (this.viewer.isFullPage() && !this.viewer.isFullScreen()) {
                     // Is fullPage but not fullScreen
-                    this.viewer.setFullPage( false );
+                    this.viewer.setFullPage(false);
                 } else {
-                    this.viewer.setFullScreen( !this.viewer.isFullPage() );
+                    this.viewer.setFullScreen(!this.viewer.isFullPage());
                 }
                 // correct for no mouseout event on change
-                if ( this.viewer.buttons ) {
+                if (this.viewer.buttons) {
                     this.viewer.buttons.emulateExit();
                 }
                 this.viewer.fullPageButton.element.focus();
-                if ( this.viewer.viewport ) {
+                if (this.viewer.viewport) {
                     this.viewer.viewport.applyConstraints();
                 }
             }
@@ -586,25 +659,25 @@ Custom property | Description | Default
                 this.mode = 'select'
             }
 
-            addShapes (shapes) {
+            addShapes(shapes) {
                 this._fabricOverlay.addShapes(shapes)
             }
 
 
-            _fillMode(){
+            _fillMode() {
                 this._fabricOverlay.switchFillMode();
             }
 
-            _group(e){
-                console.log('group keyboard action ',e);
+            _group(e) {
+                console.log('group keyboard action ', e);
             }
 
-            _keyHandler(e){
+            _keyHandler(e) {
                 console.log('_keyHandler', e.key);
 
                 const key = e.key;
 
-                switch (key){
+                switch (key) {
                     case 'g':
                         console.log('grouping mode triggered');
                         break;
@@ -622,7 +695,7 @@ Custom property | Description | Default
                         console.log('merge mode');
                         break;
                     default:
-                        console.log('undefined key ',key);
+                        console.log('undefined key ', key);
 
                 }
             }

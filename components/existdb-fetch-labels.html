@@ -53,6 +53,11 @@
                     labels:{
                         type: Array,
                         value: _ => []
+                    },
+                    selected:{
+                        type: String,
+                        reflectToAttribute:true,
+                        observer:'_selectedChanged'
                     }
                 };
             }
@@ -70,6 +75,11 @@
                 alert("Couldn't load labels " + this.$.loadLabels.lastError);
             }
 
+            _selectedChanged(newVal, oldVal){
+                console.log('selected changed ', newVal);
+                console.log('selected value changed ', this.labels[newVal].label);
+                this.dispatchEvent(new CustomEvent('label-selected', {bubbles: true, composed: true, detail: {label:this.labels[newVal].label}}));
+            }
         }
 
         window.customElements.define(ExistdbFetchLabels.is, ExistdbFetchLabels);
