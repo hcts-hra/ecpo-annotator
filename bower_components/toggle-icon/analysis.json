@@ -1,0 +1,558 @@
+{
+  "schema_version": "1.0.0",
+  "elements": [
+    {
+      "description": "An extremly powerful and customizable switch that looks like a paper-icon-button. Use `toggleIcon.checked` to get the toggle-icon's status in JavaScript.\n\nThe very basic usage without user feedback to show whether the switch is checked or not only needs the `icon` (or `icon-src`) property:\n\n    <toggle-icon icon=\"thumb-up\"></toggle-icon>\n\nSet `animation` to a space-seperated list of supported animations, which currently are `flip-vertical`, `flip-horizontal` and `rotate` (default rotation angle is 180deg, use `rotation` for other values).\n\n    <toggle-icon icon=\"thumb-up\" animation=\"flip-vertical\"></toggle-icon>\n    <toggle-icon icon=\"arrow-forward\" animation=\"rotate\" rotation=\"90\"></toggle-icon>\n\nUse `icon-checked` (or `icon-src-checked`) to change the icon while switching (there will be a smooth fading animation).\n\n    <toggle-icon icon=\"favorite-border\" icon-checked=\"favorite\"></toggle-icon>\n\n\n### Styling\n\nYou can style the paper-icon-buttons like usual by adding (custom) properties or mixins to the following mixins:\n\nCustom property | Description | Default\n----------------|-------------|----------\n`--toggle-icon` | Mixin for the toggle | `{}`\n`--toggle-icon-checked` | Mixin for the toggle when checked | `{}`\n`--toggle-icon-active` | _Used for backwards compatibility._ Same as --toggle-icon-checked | `{}`\n`--toggle-icon-buttons` | Mixin for the used paper-icon-buttons | `{}`\n\nCustom colors and backgrounds do animate if they change in checked state by using the CSS transition attribute.\n\n**Example:** This will add a green phone that rotates and turns red on click.\n\n    <style is=\"custom-style\">\n      .green-red {\n        --toggle-icon: {\n          color: var(--paper-green-500);\n        };\n        --toggle-icon-checked: {\n          color: var(--paper-red-500);\n        };\n      }\n    </style>\n\n    <toggle-icon\n      icon=\"communication:call\"\n      animation=\"rotate\"\n      rotation=\"135\"\n      class=\"green-red\">\n    </toggle-icon>",
+      "summary": "",
+      "path": "toggle-icon.html",
+      "properties": [
+        {
+          "name": "active",
+          "type": "boolean",
+          "description": "_Used for backwards compatibility._\nAlias for `checked`",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 129,
+              "column": 10
+            },
+            "end": {
+              "line": 132,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {
+              "observer": "\"_activeChanged\""
+            }
+          }
+        },
+        {
+          "name": "animation",
+          "type": "string",
+          "description": "Specifies how to transform the content.\nAllowed modes: `flip-vertical`, `flip-horizontal`, `rotate`",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 138,
+              "column": 10
+            },
+            "end": {
+              "line": 140,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "rotation",
+          "type": "number",
+          "description": "Specifies the degrees when `animation` contains `rotate`.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 145,
+              "column": 10
+            },
+            "end": {
+              "line": 148,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "180"
+        },
+        {
+          "name": "icon",
+          "type": "string",
+          "description": "The name of the icon to use. The name should be of the form: `iconset_name:icon_name` (omit the iconset name when using the default set). See [iron-icon](https://elements.polymer-project.org/elements/iron-icon).",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 153,
+              "column": 10
+            },
+            "end": {
+              "line": 155,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "iconChecked",
+          "type": "string",
+          "description": "Like `icon`, but only used when checked.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 160,
+              "column": 10
+            },
+            "end": {
+              "line": 163,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "iconActive",
+          "type": "string",
+          "description": "_Used for backwards compatibility._\nAlias for `iconChecked`",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 169,
+              "column": 10
+            },
+            "end": {
+              "line": 172,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "null"
+        },
+        {
+          "name": "iconSrc",
+          "type": "string",
+          "description": "If using iron-icon without an iconset, you can set the src to be the URL of an individual icon image file. Note that this will take precedence over a given icon attribute. See [iron-icon](https://elements.polymer-project.org/elements/iron-icon).",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 177,
+              "column": 10
+            },
+            "end": {
+              "line": 179,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          }
+        },
+        {
+          "name": "iconSrcChecked",
+          "type": "string",
+          "description": "Like `iconSrc`, but only used when checked.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 184,
+              "column": 10
+            },
+            "end": {
+              "line": 187,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "\"\""
+        },
+        {
+          "name": "iconSrcActive",
+          "type": "string",
+          "description": "_Used for backwards compatibility._\nAlias for `iconSrcChecked`",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 193,
+              "column": 10
+            },
+            "end": {
+              "line": 196,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "null"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "description": "Set to `true` to disable the toggle.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 201,
+              "column": 10
+            },
+            "end": {
+              "line": 204,
+              "column": 11
+            }
+          },
+          "metadata": {
+            "polymer": {}
+          },
+          "defaultValue": "false"
+        }
+      ],
+      "methods": [
+        {
+          "name": "ready",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 208,
+              "column": 6
+            },
+            "end": {
+              "line": 211,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_addListeners",
+          "description": "",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 213,
+              "column": 6
+            },
+            "end": {
+              "line": 216,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "toggleChecked",
+          "description": "Toggles `checked` if the element is not disabled. Usually called when clicked.",
+          "privacy": "public",
+          "sourceRange": {
+            "start": {
+              "line": 221,
+              "column": 6
+            },
+            "end": {
+              "line": 225,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_computeIconChecked",
+          "description": "Compute and return the checked paper-icon-button's `icon` property.\nUse `iconChecked` if present, else `iconActive` if present (_used for backwards compatibility_), else `icon`.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 231,
+              "column": 6
+            },
+            "end": {
+              "line": 233,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "icon"
+            },
+            {
+              "name": "iconChecked"
+            },
+            {
+              "name": "iconActive"
+            }
+          ]
+        },
+        {
+          "name": "_computeIconSrcChecked",
+          "description": "Compute and return the checked paper-icon-button's `src` property.\nUse `iconSrcChecked` if present, else `iconSrcActive` if present (_used for backwards compatibility_), else `iconSrc`.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 239,
+              "column": 6
+            },
+            "end": {
+              "line": 241,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": [
+            {
+              "name": "iconSrc"
+            },
+            {
+              "name": "iconSrcChecked"
+            },
+            {
+              "name": "iconSrcActive"
+            }
+          ]
+        },
+        {
+          "name": "_computeTransform",
+          "description": "Compute the transform property depending on the specified animations in `animation`.",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 246,
+              "column": 6
+            },
+            "end": {
+              "line": 264,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_updateTransform",
+          "description": "If element is checked, apply CSS transforms (specified in `animation`).",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 269,
+              "column": 6
+            },
+            "end": {
+              "line": 271,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        },
+        {
+          "name": "_activeChanged",
+          "description": "_Used for backwards compatibility._\nWhen `active` changes, set `checked` to this value",
+          "privacy": "protected",
+          "sourceRange": {
+            "start": {
+              "line": 277,
+              "column": 6
+            },
+            "end": {
+              "line": 279,
+              "column": 7
+            }
+          },
+          "metadata": {},
+          "params": []
+        }
+      ],
+      "staticMethods": [],
+      "demos": [
+        {
+          "url": "demo/index.html",
+          "description": ""
+        }
+      ],
+      "metadata": {},
+      "sourceRange": {
+        "start": {
+          "line": 118,
+          "column": 4
+        },
+        "end": {
+          "line": 280,
+          "column": 5
+        }
+      },
+      "privacy": "public",
+      "superclass": "HTMLElement",
+      "name": "ToggleIcon",
+      "attributes": [
+        {
+          "name": "active",
+          "description": "_Used for backwards compatibility._\nAlias for `checked`",
+          "sourceRange": {
+            "start": {
+              "line": 129,
+              "column": 10
+            },
+            "end": {
+              "line": 132,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        },
+        {
+          "name": "animation",
+          "description": "Specifies how to transform the content.\nAllowed modes: `flip-vertical`, `flip-horizontal`, `rotate`",
+          "sourceRange": {
+            "start": {
+              "line": 138,
+              "column": 10
+            },
+            "end": {
+              "line": 140,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "rotation",
+          "description": "Specifies the degrees when `animation` contains `rotate`.",
+          "sourceRange": {
+            "start": {
+              "line": 145,
+              "column": 10
+            },
+            "end": {
+              "line": 148,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "number"
+        },
+        {
+          "name": "icon",
+          "description": "The name of the icon to use. The name should be of the form: `iconset_name:icon_name` (omit the iconset name when using the default set). See [iron-icon](https://elements.polymer-project.org/elements/iron-icon).",
+          "sourceRange": {
+            "start": {
+              "line": 153,
+              "column": 10
+            },
+            "end": {
+              "line": 155,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "icon-checked",
+          "description": "Like `icon`, but only used when checked.",
+          "sourceRange": {
+            "start": {
+              "line": 160,
+              "column": 10
+            },
+            "end": {
+              "line": 163,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "icon-active",
+          "description": "_Used for backwards compatibility._\nAlias for `iconChecked`",
+          "sourceRange": {
+            "start": {
+              "line": 169,
+              "column": 10
+            },
+            "end": {
+              "line": 172,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "icon-src",
+          "description": "If using iron-icon without an iconset, you can set the src to be the URL of an individual icon image file. Note that this will take precedence over a given icon attribute. See [iron-icon](https://elements.polymer-project.org/elements/iron-icon).",
+          "sourceRange": {
+            "start": {
+              "line": 177,
+              "column": 10
+            },
+            "end": {
+              "line": 179,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "icon-src-checked",
+          "description": "Like `iconSrc`, but only used when checked.",
+          "sourceRange": {
+            "start": {
+              "line": 184,
+              "column": 10
+            },
+            "end": {
+              "line": 187,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "icon-src-active",
+          "description": "_Used for backwards compatibility._\nAlias for `iconSrcChecked`",
+          "sourceRange": {
+            "start": {
+              "line": 193,
+              "column": 10
+            },
+            "end": {
+              "line": 196,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Set to `true` to disable the toggle.",
+          "sourceRange": {
+            "start": {
+              "line": 201,
+              "column": 10
+            },
+            "end": {
+              "line": 204,
+              "column": 11
+            }
+          },
+          "metadata": {},
+          "type": "boolean"
+        }
+      ],
+      "events": [],
+      "styling": {
+        "cssVariables": [],
+        "selectors": []
+      },
+      "slots": [],
+      "tagname": "toggle-icon"
+    }
+  ]
+}
