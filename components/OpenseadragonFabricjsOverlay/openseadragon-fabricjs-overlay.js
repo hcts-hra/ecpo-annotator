@@ -64,7 +64,7 @@
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
     this._fabricCanvas.on('mouse:move', this._mouseMove.bind(this))
-    this._fabricCanvas.on('object:selected', this._select.bind(this))
+    this._fabricCanvas.on('object:selected', this._notifyShapeSelected.bind(this))
 
   };
 
@@ -77,14 +77,13 @@
       fill: 'transparent',
       opacity: 0.4,
       hasBorders: true,
-      hasControls: false,
-      lockScalingX: true,
-      lockScalingY: true,
-      lockUniScaling: true,
-      lockSkewingX: true,
-      lockSkewingY: true,
-      lockRotation: true,
-      hasControls: false
+      hasControls: true,
+      lockScalingX: false,
+      lockScalingY: false,
+      lockUniScaling: false,
+      lockSkewingX: false,
+      lockSkewingY: false,
+      lockRotation: false
     },
     pointStyle: {
       radius: 5,
@@ -174,7 +173,7 @@
     _highlight: function (object) {
       if (object === this.activeShape) { return console.log('same same but different') }
       this.deselect()
-      object.set({stroke: 'tomato'})
+      // object.set({stroke: 'tomato'})
       console.log('highlight', object)
       this.activeShape = object
       this._fabricCanvas.setActiveObject(object)
@@ -623,9 +622,9 @@
       this._canvas.dispatchEvent(event);
     },
 
-    _notifyShapeSelected: function (object) {
-      if (!object) { return }
-      const detail = this.serializeObject(object)
+    _notifyShapeSelected: function (options) {
+      if (!options.target) { return }
+      const detail = this.serializeObject(options.target);
       const event = new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: detail})
       this._canvas.dispatchEvent(event);
     },
@@ -634,9 +633,6 @@
       return 's-' + Date.now() + Math.floor(Math.random() * 11)
     },
 
-    _select:function(options){
-      console.log('select event');
-    }
 
 
   };

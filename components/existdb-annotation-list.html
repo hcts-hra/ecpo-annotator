@@ -59,7 +59,7 @@
         </template>
 -->
 
-        <existdb-annotation-item id="{{current.id}}" body="{{current.body}}" target="{{current.target}}"></existdb-annotation-item>
+        <existdb-annotation-item id="{{current.id}}" body="{{current.body}}" target="{{current.target}}" on-annotation-changed="_handleAnnotationChange"></existdb-annotation-item>
 
     </template>
 
@@ -93,7 +93,8 @@
                     },
                     current:{
                         type: Object,
-                        value: _ => {}
+                        value: _ => {},
+                        notify: true
                     }
                 };
             }
@@ -105,12 +106,20 @@
                     .indexOf(annotationId)
             }
 
-            itemByShapeId (id) {
-                const annotationId = this.targetToAnnotationMap[id]
+            itemByShapeId (shapeId) {
+                const annotationId = this.targetToAnnotationMap[shapeId]
+                console.log('ANNOTATION', annotationId)
                 const index = this.annotations
                     .map(annotation => annotation.id)
                     .indexOf(annotationId)
-                return this.get(["annotation", index])
+
+                return this.get(["annotations", index])
+            }
+
+            itemIndexById (annotationId) {
+                return this.annotations
+                    .map(annotation => annotation.id)
+                    .indexOf(annotationId)
             }
 
             connectedCallback() {
@@ -127,6 +136,7 @@
 
             handle (e) {
                 console.log('annotation-list handle e ',e);
+                console.log('annotation-list.annotations ', this.annotations);
                 if (!e.detail.shape || !e.detail.shape.id) {
                     return console.warn('list handler called without a shape')
                 }
@@ -135,11 +145,12 @@
                 if (e.type === 'shape-created') {
                     const newAnnotation = this.createAnnotation({
                         id: 's-' + Date.now(),
-                        body: [],
+                        body: '',
                         target: [this.createAnnotationTarget(e.detail.shape)]
                     });
 
                     this.targetToAnnotationMap[shapeId] = newAnnotation.id;
+                    this.setCurrent(newAnnotation)
                     return this.push('annotations', newAnnotation)
                 }
                 const index = this.itemIndexByShapeId(shapeId);
@@ -160,11 +171,22 @@
                 }
 
                 if (e.type === 'shape-selected') {
-                    const shapeId = this.targetToAnnotationMap.indexOf(shapeId);
-                    console.log('changed: shapeId ', shapeId);
+//                    const shapeId = this.targetToAnnotationMap.indexOf(e.detail.shape.id);
+                    console.log('selected: shapeId ', e.detail.shape.id);
+                    const anno = this.itemByShapeId(e.detail.shape.id);
+                    console.log('set current to', anno);
+                    this.setCurrent(anno)
+                    return;
                 }
 
                     console.log('annotation-list', 'unhandled', e)
+            }
+
+            setCurrent (annotation) {
+                this.set('current', annotation)
+                this.notifyPath('current.id');
+                this.notifyPath('current.target');
+                this.notifyPath('current.body');
             }
 
             createAnnotationTarget (shape) {
@@ -182,9 +204,14 @@
             createAnnotation(annotation) {
                 const annotationDefaults = {
                     "@context": "http://www.w3.org/ns/anno.jsonld",
-                    "type": "Annotation"
+                    "type": "Annotation",
+                    "body": annotation.body
                 }
                 return Object.assign({}, annotation, annotationDefaults)
+            }
+
+            setAnnotationBody(annotationId, body){
+
             }
 
             addAnnotation(annotation) {
@@ -214,6 +241,19 @@
                 this.dispatchEvent(new CustomEvent('annotations-loaded', {
                    detail: this.get(['annotations'])
                 }))
+            }
+
+            _handleAnnotationChange(e){
+                console.log('_handleAnnotationChange', e)
+                const annotationId = e.detail.id;
+                const index = this.itemIndexById(annotationId);
+                console.log('asdfasdadsfasdfas', annotationId, index)
+                const anno = this.get(['annotations', index])
+                anno.body = e.detail.body;
+                anno.target = e.detail.target;
+
+                this.splice('annotations', index, 1, anno);
+                console.log('annotation-list.annotations ', this.annotations);
             }
         }
 

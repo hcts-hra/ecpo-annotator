@@ -86,7 +86,7 @@
 
 
         <div class="item">
-            <div class="type">Type</div>
+            <div class="type">[[id]]</div>
 
             <div class="item-body">
 <!--
@@ -100,7 +100,7 @@
                 </template>
 -->
 
-                <existdb-fetch-labels id="labels" labels="{{labels}}"></existdb-fetch-labels>
+                <existdb-fetch-labels selected="{{body}}" id="labels" labels="{{labels}}" on-label-selected="_setLabel"></existdb-fetch-labels>
 
 <!--
                 <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label">
@@ -151,8 +151,8 @@
                         value: ''
                     },
                     body: {
-                        type: Array,
-                        value: _ => []
+                        type: String,
+                        value: ""
                     },
                     target: {
                         type: Array,
@@ -187,6 +187,12 @@
                     console.log("HIGHLIGHT", id)
                     return new CustomEvent('highlight-target', {bubbles: true, composed: true, detail: {id: id}})
                 }).forEach(event => this.dispatchEvent(event));
+            }
+
+            _setLabel(e){
+                console.log('_setLabel e ', e);
+                this.body = e.detail.label.name;
+                this.dispatchEvent(new CustomEvent('annotation-changed', {bubbles: true, composed: true, detail: {id: this.id, body:this.body, target:this.target}}))
             }
         }
 

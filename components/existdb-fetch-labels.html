@@ -12,8 +12,15 @@
             paper-item{
                 --paper-item-selected:{
                     background: var(--paper-blue-500);
-                    color:white;
+                    color:var(--paper-blue-500);
+                    font-weight:900;
+                    font-style: italic;
+                    font-size:1.2em;
                 };
+                color:white;
+            }
+            paper-listbox{
+                padding: 0;
             }
         </style>
         <iron-ajax id="loadLabels"
@@ -26,9 +33,9 @@
                    auto></iron-ajax>
         <!--<slot></slot>-->
 
-        <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label">
+        <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label" attr-for-selected="name">
             <template id="labelList" is="dom-repeat" items="[[labels]]" as="label">
-                <paper-item name="[[label.name]]">[[label.label]]</paper-item>
+                <paper-item name="[[label.name]]" style="color:[[label.color]];">[[label.label]]</paper-item>
             </template>
         </paper-listbox>
 
@@ -50,7 +57,7 @@
 
             static get properties() {
                 return {
-                    labels:{
+                    labels: {
                         type: Array,
                         value: _ => []
                     },
@@ -66,19 +73,21 @@
                 super.connectedCallback();
             }
 
-            _handleResponse(){
-                this.labels = this.$.loadLabels.lastResponse;
-                console.log('labels loaded ', this.labels);
-            }
-
             _handleError(){
                 alert("Couldn't load labels " + this.$.loadLabels.lastError);
             }
 
-            _selectedChanged(newVal, oldVal){
+            getLabelByName (name) {
+                return this.labels.filter(label => label.name === name)[0]
+            }
+
+            _selectedChanged(newVal, oldVal) {
+                console.log('labels loaded ', this.labels);
                 console.log('selected changed ', newVal);
-                console.log('selected value changed ', this.labels[newVal].label);
-                this.dispatchEvent(new CustomEvent('label-selected', {bubbles: true, composed: true, detail: {label:this.labels[newVal].label}}));
+                const label = this.getLabelByName(newVal)
+                console.log('selected value changed ', label);
+                if (!newVal || !label) return;
+                this.dispatchEvent(new CustomEvent('label-selected', {bubbles: true, composed: true, detail: {label:label}}));
             }
         }
 

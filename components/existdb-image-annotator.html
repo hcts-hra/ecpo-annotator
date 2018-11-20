@@ -184,7 +184,11 @@ Custom property | Description | Default
 
             <div class="divider"></div>
 
-            <paper-icon-button id="select" icon="tap" title="select" on-click="_select"></paper-icon-button>
+            <toggle-icon id="select"
+                         icon="tap"
+                         title="select"
+                         on-click="_select"
+                         class="checked-blue"></toggle-icon>
             <!--
                         <toggle-icon icon="tap"
                                      animation="flip-horizontal"
@@ -386,7 +390,7 @@ Custom property | Description | Default
 
             connectedCallback() {
                 super.connectedCallback();
-                // this.mode = 'osd';
+//                 this.mode = 'select';
 
                 document.addEventListener('WebComponentsReady', function () {
                     console.log('webcomponentsready');
@@ -483,6 +487,7 @@ Custom property | Description | Default
                 });
 
                 this.init = true;
+                this.mode="select";
             }
 
             _newShapeHandler(e) {
@@ -640,10 +645,14 @@ Custom property | Description | Default
 
             _modeChange(mode) {
                 if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon' || mode === 'select') {
-                    this._fabricOverlay.deselect();
+                    if(this._fabricOverlay){
+                        this._fabricOverlay.deselect();
+                    }
                 }
                 if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon' || mode === 'select' || mode === 'edit' || mode === 'group') {
-                    return this.viewer.setMouseNavEnabled(false);
+                    if(this.init){
+                        return this.viewer.setMouseNavEnabled(false);
+                    }
                 }
                 if (this.init && mode === 'osd') {
                     return this.viewer.setMouseNavEnabled(true);
@@ -706,6 +715,12 @@ Custom property | Description | Default
                         console.log('undefined key ', key);
 
                 }
+            }
+
+            changeSelectedShapes(label) {
+                console.log('changeSelectedShapes.label',label)
+                this._fabricOverlay._fabricCanvas.getActiveObject().set({fill:label.color})
+                this._fabricOverlay._fabricCanvas.renderAll()
             }
 
         }

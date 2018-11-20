@@ -33,7 +33,8 @@
             <app-drawer id="drawer" slot="drawer" opened align="end">
                 <existdb-annotation-list id="annotationlist" source="{{document}}"
                     on-annotations-loaded="drawLoadedAnnotations"
-                    on-highlight-target="highlightTarget"></existdb-annotation-list>
+                    on-highlight-target="highlightTarget"
+                    on-label-selected="handleLabelSelected"></existdb-annotation-list>
             </app-drawer>
 
             <existdb-image-annotator id="viewer" class="viewer" dzi="true"
@@ -105,7 +106,11 @@
                 setTimeout(() => {
                     console.log('addshapes', this.$.viewer, shapes)
                     this.$.viewer.addShapes(shapes)
-                }, 1000);
+                }, 500);
+            }
+
+            handleLabelSelected (e) {
+                this.$.viewer.changeSelectedShapes(e.detail.label)
             }
 
         }
