@@ -1,0 +1,112 @@
+<html>
+<head>
+    <title>Login</title>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport"/>
+    <style>
+        body {
+            font-family: sans-serif;
+            color:white;
+            overflow:hidden;
+        }
+        .login-box{
+            height: 250px;
+            width: 320px;
+            padding: 10px;
+            margin: 80px auto;
+
+        }
+        .form-group {
+            margin: 2em 1em;
+        }
+
+        .login-box-body{
+            /*border: 1px inset white;*/
+            padding: 30px;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
+            0 1px 10px 0 rgba(0, 0, 0, 0.12),
+            0 2px 4px -1px rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top:25%;
+            background:white;
+            opacity:0.7;
+
+        }
+        .form-group{
+            padding: 0;
+            margin:0;
+        }
+
+        label,
+        input,
+        button {
+            font-size: 1.2em;
+            line-height: 1.6667em;
+            width: 100%;
+            color:#1976d2;
+            font-weight: 300;
+
+        }
+        input{
+            border:thin solid;
+            padding:4px 6px;
+        }
+
+        [type="submit"]{
+            margin-top:30px;
+        }
+        label{
+            color:white;
+        }
+        button{
+            /*margin-top:1.6667em;*/
+            padding: 8px 0;
+
+        }
+        .login-box-body input[type='text']{
+            background: white;
+        }
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px white inset;
+            -webkit-text-fill-color: #1976d2 !important;
+        }
+        .logo{
+            position:absolute;
+            z-index:-1;
+            opacity:0.5;
+            left:-70%;
+            top:-50%;
+            width:250%;
+            height:262%;
+        }
+        .header{
+            font-size:30px;
+            color:#1976d2;
+            font-family: Arial;
+        }
+    </style>
+    <script src="resources/app.js"></script>
+</head>
+<body class="login-page">
+    <!--<div class="logo"></div>-->
+    <div class="login-box well">
+        <div class="login-box-body">
+            <div class="header">Sign in</div>
+            <form action="index.html" method="post">
+                <input type="hidden" name="duration" value="P7D"/>
+                <div class="form-group">
+                    <label for="user">Username</label>
+                    <input type="text" id="user" name="user" class="form-control" placeholder="User ID" autofocus="autofocus"/>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control" placeholder="Password"/>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="button">Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -162,6 +162,11 @@ Custom property | Description | Default
                 color: var(--paper-grey-700);
             }
 */
+            :host ::slotted(.logout){
+                float:right;
+                paddding:0;
+                margin-top:-40px;
+            }
 
 
         </style>
@@ -211,6 +216,7 @@ Custom property | Description | Default
                          icon="editnodes"
                          title="edit"
                          on-click="_edit"
+                         animation="flip-horizontal"
                          class="checked-blue"></toggle-icon>
             <paper-icon-button icon="remove-circle" title="remove shape" on-click="_removeShape"></paper-icon-button>
 
@@ -225,6 +231,8 @@ Custom property | Description | Default
             <span class="cursorposition" id="cursorViewportPosition"></span>
 
             <div style="width:0;height:0;border:0;" tabindex="0" id="focusDummy"></div>
+
+            <slot name="logout"></slot>
         </div>
         <!-- Openseadragon is attached to host -->
         <div id="the_container">
