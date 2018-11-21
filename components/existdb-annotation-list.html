@@ -137,6 +137,14 @@
             handle (e) {
                 console.log('annotation-list handle e ',e);
                 console.log('annotation-list.annotations ', this.annotations);
+
+                if (e.type === 'shape-selected' && e.detail.shape == null) {
+                    // nothing selected
+                    console.log('no shape selected');
+                    this.setCurrent(e.detail)
+                    return
+                }
+
                 if (!e.detail.shape || !e.detail.shape.id) {
                     return console.warn('list handler called without a shape')
                 }
@@ -171,7 +179,6 @@
                 }
 
                 if (e.type === 'shape-selected') {
-//                    const shapeId = this.targetToAnnotationMap.indexOf(e.detail.shape.id);
                     console.log('selected: shapeId ', e.detail.shape.id);
                     const anno = this.itemByShapeId(e.detail.shape.id);
                     console.log('set current to', anno);

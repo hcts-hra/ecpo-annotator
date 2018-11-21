@@ -13,37 +13,9 @@
     <template>
         <style>
             :host {
-                /*display: block;*/
                 font-family: sans-serif;
                 font-size: 0.8rem;
                 text-align: left;
-            }
-
-            /*
-                        div {
-                            border-top: thin solid darkslategrey;
-                        }
-            */
-            dt, dd {
-                margin: 0.125rem 0.25rem;
-                display: block;
-                float: left;
-            }
-
-            dd {
-                min-width: 40%;
-            }
-
-            dl:after {
-                content: '';
-                display: block;
-                clear: both;
-            }
-
-            dt {
-                font-weight: bold;
-                min-width: 20%;
-                clear: left;
             }
 
             paper-item {
@@ -87,41 +59,8 @@
 
         <div class="item">
             <div class="type">[[id]]</div>
-
             <div class="item-body">
-<!--
-                <template is="dom-repeat" items="{{body}}">
-                    <dl>
-                        <dt>type</dt>
-                        <dd>{{item.type}}</dd>
-                        <dt>content</dt>
-                        <dd>{{item.content}}</dd>
-                    </dl>
-                </template>
--->
-
                 <existdb-fetch-labels selected="{{body}}" id="labels" labels="{{labels}}" on-label-selected="_setLabel"></existdb-fetch-labels>
-
-<!--
-                <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label">
-                    <paper-item name="[[label.name]]">[[label.label]]</paper-item>
-                    <paper-item>Image or Drawing</paper-item>
-                    <paper-item>Article</paper-item>
-                    <paper-item>Advertisement</paper-item>
-                    <paper-item>Addtional information</paper-item>
-                </paper-listbox>
--->
-
-                <!--
-                            <template is="dom-repeat" items="{{target}}">
-                                <dl>
-                                    <dt>type</dt><dd>{{item.type}}</dd>
-                                    <dt>top</dt><dd>{{item.top}}</dd>
-                                    <dt>left</dt><dd>{{item.left}}</dd>
-                                    <dt>radius</dt><dd>{{item.radius}}</dd>
-                                </dl>
-                            </template>
-                -->
             </div>
         </div>
     </template>
@@ -129,7 +68,6 @@
     <script>
         /**
          * `existdb-annotation-item`
-         *
          *
          * @customElement
          * @polymer

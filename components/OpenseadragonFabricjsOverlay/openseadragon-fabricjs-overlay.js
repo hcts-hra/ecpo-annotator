@@ -178,7 +178,7 @@
       console.log('highlight', object)
       this.activeShape = object
       this._fabricCanvas.setActiveObject(object)
-      this._notifyShapeSelected(object)
+      // this._notifyShapeSelected(object)
       this._fabricCanvas.renderAll()
     },
 
@@ -231,7 +231,7 @@
           lockMovementY: false
         })
       }
-      // this._fabricCanvas.renderAll()
+      this._notifyShapeSelected()
       this.reset()
     },
 
@@ -655,10 +655,14 @@
     },
 
     _notifyShapeSelected: function (options) {
-      if (!options.target) { return }
+      if (!options) { return this._notifyEmptySelection(); }
       const detail = this.serializeObject(options.target);
       const event = new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: detail})
       this._canvas.dispatchEvent(event);
+    },
+
+    _notifyEmptySelection: function (options) {
+      this._canvas.dispatchEvent(new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: {shape: null}}));
     },
 
     _getShapeId: function () {
