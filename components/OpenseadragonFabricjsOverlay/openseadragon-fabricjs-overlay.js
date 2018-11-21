@@ -22,7 +22,7 @@
 
   // ----------
   const Overlay = function(viewer) {
-    this.fillmode = false
+    this.fillMode = false
     this._viewer = viewer;
 
     this._containerWidth = 0;
@@ -71,10 +71,9 @@
   // ----------
   Overlay.prototype = {
     // modes: ['rectangle', 'circle', 'polygon', 'remove', 'select'],
+    unassignedColor: 'grey',
     defaultStyle: {
-      stroke: 'blue',
       strokeWidth: 2,
-      fill: 'transparent',
       opacity: 0.4,
       hasBorders: true,
       hasControls: false,
@@ -222,7 +221,6 @@
       console.log('DESELECT activeShape?', this.activeShape)
       if (this.activeShape) {
         this.activeShape.set({
-          stroke: this.defaultStyle.stroke,
           selectable: true,
           hasBorders: true,
           objectCaching: true,
@@ -276,42 +274,31 @@
       }
     },
 
-    load: function (json) {
-      this._fabricCanvas.loadFromJSON(json)
-    },
-
-    addShapes: function (shapes) {
-      shapes.forEach(shape => {
-        console.log('shhh... APE!', shape)
-
-        fabric.loadSVGFromString(
-          `<svg xmlns="http://www.w3.org/2000/svg">${shape}</svg>`,
-          objects => {
-            console.log('loadedfromSVGString', objects)
-
-            objects.map(o => {
-              o.set(Object.assign({}, this.defaultStyle))
-              this._fabricCanvas.add(o)
-            })
-          }
-        )
-      })
+    importSVG: function (svg, attributes) {
+      console.log('attributes', attributes)
+      console.log('fill and stroke from attributes', this.getFillAndStroke(attributes))
+      fabric.loadSVGFromString(
+        `<svg xmlns="http://www.w3.org/2000/svg">${svg}</svg>`,
+        objects => {
+          console.log('loadedfromSVGString', objects)
+          objects.map(object => {
+            const props = Object.assign({}, this.defaultStyle, attributes, this.getFillAndStroke(attributes))
+            object.set(props)
+            this._fabricCanvas.add(object)
+          })
+        }
+      )
     },
 
     switchFillMode: function() {
-      this.fillmode = !this.fillmode
+      this.fillMode = !this.fillMode
+      console.log('switchFillMode to', this.fillMode)
       this._fabricCanvas.forEachObject(object => {
         if (this._isPointHandle(object)) { return }
-        object.set({
-          opacity: 0.4,
-          fill: this.getFill(object)
-        })
+        console.log('fill and stroke', this.getFillAndStroke(object))
+        object.set(this.getFillAndStroke(object))
       });
       this._fabricCanvas.renderAll()
-    },
-
-    _isPointHandle (object) {
-      return (object && object.data && object.data.type === 'pointHandle')
     },
 
     editActiveShape: function () {
@@ -341,23 +328,28 @@
         `<svg xmlns="http://www.w3.org/2000/svg">${object.toSVG(d => d)}</svg>`,
         objects => {
           newObject = objects[0]
-          newObject.set(Object.assign({}, this.defaultStyle, {
-            fill: this.getFill(object),
-            data: Object.assign({}, object.data)
-          }))
+          const props = Object.assign({}, this.defaultStyle, 
+            { data: Object.assign({}, object.data) },
+            this.getFillAndStroke(object)
+          )
+          newObject.set(props)
         }
       )
       return newObject
     },
 
-    getFill: function(object) {
-      if (!this.fillmode) {
-        return 'transparent'
+    getFillAndStroke: function(object) {
+      const color = object.data && object.data.label ? object.data.label.color : this.unassignedColor
+      if (this.fillMode) {
+        return {
+          stroke: 'transparent',
+          fill: color
+        }  
       }
-      if (object.data && object.data.label) {
-        return object.data.label.color
+      return {
+        stroke: color,
+        fill: 'transparent'
       }
-      return this.defaultStyle.fill
     },
 
     changeSelectedShapes: function (newData) {
@@ -367,7 +359,7 @@
       const mergedData = Object.assign({}, currentData, newData)
       console.log('mergedData', mergedData)
       object.set(mergedData)
-      object.set({fill: this.getFill(object)})
+      object.set(this.getFillAndStroke(object))
       this._fabricCanvas.renderAll()
     },
 
@@ -442,7 +434,7 @@
             left: pointer.x,
             top: pointer.y
           }));
-
+          rect.set(this.getFillAndStroke(rect))
           this._fabricCanvas.add(rect);
           this.activeShape = rect;
           this._fabricCanvas.setActiveObject(rect);
@@ -455,6 +447,7 @@
             top: pointer.y,
             selectionBackgroundColor: "transparent"
           }));
+          circle.set(this.getFillAndStroke(circle))
 
           this._fabricCanvas.add(circle);
           this.activeShape = circle;
@@ -465,6 +458,7 @@
           // if the target id is the same as the first one created
           if (options.target && this.pointArray.length && options.target.id === this.pointArray[0].id) {
             const polygon = this._generatePolygon();
+            polygon.set(this.getFillAndStroke(polygon))
             this._fabricCanvas.add(polygon);
             this._highlight(polygon);
             this._notifyShapeCreated(polygon)
@@ -519,7 +513,6 @@
           break
         case 'rectangle':
           const rect = this.activeShape
-          const center = this.activeShape.getCenterPoint()
           const points = [
             { x: rect.left, y: rect.top },
             { x: rect.left + rect.width, y: rect.top },
@@ -548,14 +541,10 @@
           this._highlight(this.activeShape)
           this._notifyShapeCreated(this.activeShape)
           this._annotator.mode = 'selectMode'
-        break;
-          // no activeShape on mouse up means nothing was or is selected
-          if (!this.activeShape) { break }
-          this._notifyShapeChanged(this.activeShape)
-          break
+          break;
       }
       if (!this.activeShape) { return }
-      this.activeShape.set({ fill: this.getFill(this.activeShape)})
+      this.activeShape.set(this.getFillAndStroke(this.activeShape))
     },
 
     addPointFromEvent: function (options) {
@@ -615,6 +604,10 @@
           top: pointer.y,
           id: 'p-' + Date.now() + Math.floor(Math.random() * 11)
       }, attributes));
+    },
+
+    _isPointHandle (object) {
+      return (object && object.data && object.data.type === 'pointHandle')
     },
 
     _generatePolygon: function () {

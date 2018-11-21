@@ -255,13 +255,10 @@
                 console.log('_handleAnnotationChange', e)
                 const annotationId = e.detail.id;
                 const index = this.itemIndexById(annotationId);
-                console.log('asdfasdadsfasdfas', annotationId, index)
                 const anno = this.get(['annotations', index])
                 anno.body = e.detail.body;
                 anno.target = e.detail.target;
-
                 this.splice('annotations', index, 1, anno);
-                console.log('annotation-list.annotations ', this.annotations);
             }
         }
 

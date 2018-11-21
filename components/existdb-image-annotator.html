@@ -640,10 +640,6 @@ Custom property | Description | Default
             }
 
             _edit() {
-//                if (!this._fabricOverlay.activeShape) {
-//                    return
-//                }
-//                this._fabricOverlay.editActiveShape()
                 this.mode = "editMode";
             }
 
@@ -692,7 +688,8 @@ Custom property | Description | Default
                     case 'editMode':
                         console.log('activeShape ', this._fabricOverlay.activeShape);
                         if (!this._fabricOverlay.activeShape) {
-                            this.mode = oldVal
+                            // this.mode = oldVal
+                            return oldVal
                             break
                         }
                         this._unCheckModes();
@@ -708,24 +705,6 @@ Custom property | Description | Default
                     default:
                         console.log('mode ', mode, ' is not known');
                 }
-
-/*
-                if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon' || mode === 'select') {
-                    if(this._fabricOverlay){
-                        this._fabricOverlay.deselect();
-                    }
-                }
-*/
-/*
-                if (mode === 'rectangle' || mode === 'circle' || mode === 'polygon' || mode === 'select' || mode === 'edit' || mode === 'group') {
-                    if(this.init){
-                        return this.viewer.setMouseNavEnabled(false);
-                    }
-                }
-                if (this.init && mode === 'osd') {
-                    return this.viewer.setMouseNavEnabled(true);
-                }
-*/
 
             }
 
@@ -755,12 +734,18 @@ Custom property | Description | Default
                 this.mode = 'selectMode'
             }
 
-            addShapes(shapes) {
-                this._fabricOverlay.addShapes(shapes)
+            addShapesFromAnnotations(annotations) {
+                annotations.forEach(annotation => {
+                    const attributes = {data: {label: annotation.body}}
+                    annotation.target.forEach(target => {
+                        this._fabricOverlay.importSVG(target.selector.value, attributes)
+                    })
+                })
             }
 
 
             _fillMode() {
+                console.log('toggle FillMode')
                 this._fabricOverlay.switchFillMode();
             }
 
@@ -779,7 +764,7 @@ Custom property | Description | Default
                         break;
                     case 'e':
                         console.log('edit mode');
-                        this._edit();
+                        this.mode = 'editMode'
                         break;
                     case 'd':
                         console.log('draw mode');

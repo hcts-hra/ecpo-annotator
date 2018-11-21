@@ -96,15 +96,8 @@
 
             drawLoadedAnnotations (e) {
                 const annotations = e.detail
-                const shapes = annotations
-                    .map(annotation => annotation.target)
-                    .reduce((result, array) => result.concat(array))
-                    .map(target => target.selector.value)
-
-                setTimeout(() => {
-//                    console.log('addshapes', this.$.viewer, shapes)
-                    this.$.viewer.addShapes(shapes)
-                }, 500);
+                // TODO listen for init event
+                setTimeout(() => { this.$.viewer.addShapesFromAnnotations(annotations) }, 500);
             }
 
             handleLabelSelected (e) {
