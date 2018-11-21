@@ -511,6 +511,9 @@
         case 'editMode':
           console.warn('_mouseUp do nottin ');
           break
+        case 'selectMode':
+          this._notifyShapeChanged(this.activeShape)
+          break
         case 'rectangle':
           const rect = this.activeShape
           const points = [
