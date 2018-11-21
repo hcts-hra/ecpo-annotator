@@ -12,19 +12,19 @@ exist.defineMimeTypes({
     'application/xml': ['odd']
 })
 
-var exClient = exist.createClient({
+const exClient = exist.createClient({
     host: 'localhost',
     port: '8080',
     path: '/exist/xmlrpc',
     basic_auth: {user: 'admin', pass: ''}
 })
 
-var html5TargetConfiguration = {
+const html5TargetConfiguration = {
     target: '/db/apps/ecpo',
     html5AsBinary: true
 }
 
-var targetConfiguration = {
+const targetConfiguration = {
     target: '/db/apps/ecpo/',
     html5AsBinary: false
 }
@@ -41,10 +41,9 @@ gulp.task('deploy:styles', function () {
 
 // files in project root //
 
-var components = [
+const components = [
     'components/*.html',
-    'components/**/*.js',
-    'bower_components/**/*'
+    'components/**/*.js'
 ];
 
 gulp.task('deploy:components', function () {
@@ -53,7 +52,17 @@ gulp.task('deploy:components', function () {
         .pipe(exClient.dest(html5TargetConfiguration))
 })
 
-var otherPaths = [
+// extracted for speed of normal development workflow
+
+const bower = 'bower_components/**/*'
+
+gulp.task('deploy:bower', function () {
+    return gulp.src(bower, {base: './'})
+        .pipe(exClient.newer(html5TargetConfiguration))
+        .pipe(exClient.dest(html5TargetConfiguration))
+})
+
+const otherPaths = [
     '*.html',
     '*.xql',
     'templates/**/*',
@@ -70,12 +79,21 @@ gulp.task('deploy:other', function () {
         .pipe(exClient.dest(targetConfiguration))
 })
 
-gulp.task('deploy', ['deploy:other', 'deploy:components', 'deploy:styles'])
+gulp.task('deploy', ['deploy:other', 'deploy:components', 'deploy:styles', 'deploy:bower'])
 
+// it is way faster not to watch bower dependencies due to massive amount of files to watch
 gulp.task('watch', ['deploy'], function () {
     gulp.watch('resources/css/!*', ['deploy:styles'])
     gulp.watch(otherPaths, ['deploy:other'])
     gulp.watch(components, ['deploy:components'])
 })
 
-gulp.task('default', ['watch'])
+// this will wath bower dependencies also
+gulp.task('watch:all', ['deploy'], function () {
+    gulp.watch('resources/css/!*', ['deploy:styles'])
+    gulp.watch(otherPaths, ['deploy:other'])
+    gulp.watch(components, ['deploy:components'])
+    gulp.watch(bower, ['deploy:bower'])
+})
+
+gulp.task('default', ['watch:all'])
