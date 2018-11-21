@@ -101,8 +101,6 @@
                     .reduce((result, array) => result.concat(array))
                     .map(target => target.selector.value)
 
-
-
                 setTimeout(() => {
                     console.log('addshapes', this.$.viewer, shapes)
                     this.$.viewer.addShapes(shapes)
@@ -110,7 +108,7 @@
             }
 
             handleLabelSelected (e) {
-                this.$.viewer.changeSelectedShapes(e.detail.label)
+                this.$.viewer.changeSelectedShapes({data: e.detail})
             }
 
         }

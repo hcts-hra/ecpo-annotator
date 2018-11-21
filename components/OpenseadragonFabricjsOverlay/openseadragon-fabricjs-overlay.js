@@ -77,13 +77,13 @@
       fill: 'transparent',
       opacity: 0.4,
       hasBorders: true,
-      hasControls: true,
-      lockScalingX: false,
-      lockScalingY: false,
-      lockUniScaling: false,
-      lockSkewingX: false,
-      lockSkewingY: false,
-      lockRotation: false
+      hasControls: false,
+      lockScalingX: true,
+      lockScalingY: true,
+      lockUniScaling: true,
+      lockSkewingX: true,
+      lockSkewingY: true,
+      lockRotation: true
     },
     pointStyle: {
       radius: 5,
@@ -133,10 +133,12 @@
         this._canvas.setAttribute("height", this._containerHeight);
       }
     },
+
     getZoom: function () {
       const viewportZoom = this._viewer.viewport.getZoom(true);
       return (this._viewer.viewport._containerInnerSize.x * viewportZoom) / this._scale;
     },
+
     resizecanvas: function() {
       const origin = new OpenSeadragon.Point(0, 0);
       this._fabricCanvas.setWidth(this._containerWidth);
@@ -160,9 +162,7 @@
         )
       );
     },
-    captureEvent: function (options) {
-      return (options.target || this.modes.indexOf(this._annotator.mode) >= 0)
-    },
+
     highlight: function (idOrElement) {
       let object = (typeof idOrElement === 'string') ? this.getObjectById(idOrElement) : idOrElement
       if (!object) {
@@ -170,6 +170,7 @@
       }
       this._highlight(object)
     },
+
     _highlight: function (object) {
       if (object === this.activeShape) { return console.log('same same but different') }
       this.deselect()
@@ -180,6 +181,7 @@
       this._notifyShapeSelected(object)
       this._fabricCanvas.renderAll()
     },
+
     markPoints: function (object) {
       this._fabricCanvas.calcOffset()
       if (object.type !== 'polygon') { return }
@@ -203,43 +205,43 @@
           })
         });
 
-      this.pointArray.forEach(c => {
-        this._fabricCanvas.add(c)
-      })
-      this._fabricCanvas.renderAll()
-
-      object.sendBackwards()
-
-      this.pointArray.forEach(c => {
-        c.bringToFront()
-        c.on('mousedown', options => this._setState(options))
-        c.on('moving', options => this._objectMove(options))
-        c.on('mouseup', options => this._resetState(options))
+      this.pointArray.forEach(pointHandle => {
+        this._fabricCanvas.add(pointHandle)
+        pointHandle.bringToFront()
+        pointHandle.on('mousedown', options => this._setState(options))
+        pointHandle.on('moving', options => this._objectMove(options))
+        pointHandle.on('mouseup', options => this._nextState(options))
       })
 
       this._fabricCanvas.renderAll()
 
       console.log('pointArray', this.pointArray);
     },
+
     deselect: function () {
-      console.log('DESELECT')
+      console.log('DESELECT activeShape?', this.activeShape)
       if (this.activeShape) {
         this.activeShape.set({
           stroke: this.defaultStyle.stroke,
           selectable: true,
+          hasBorders: true,
+          objectCaching: true,
           evented: true,
           lockMovementX: false,
           lockMovementY: false
         })
       }
+      // this._fabricCanvas.renderAll()
       this.reset()
     },
+
     getObjectById: function (id) {
       const result = this._fabricCanvas.getObjects().filter(function (o) {
         return o.id && o.id === id
       })
       return result[0];
     },
+
     reset: function () {
       console.log('RESET')
       this.activeShape = null;
@@ -251,6 +253,7 @@
       this._fabricCanvas.discardActiveObject();
       this._fabricCanvas.renderAll();
     },
+
     remove: function () {
       const ao = this._fabricCanvas.getActiveObject();
       if(!ao) return;
@@ -261,11 +264,7 @@
         composed: true, bubbles: true,
         detail: this.serializeObject(ao)}));
     },
-    serialize: function () {
-      console.log('all objects ', this._fabricCanvas.getObjects());
-      console.log('_logShapes canvas ', this._fabricCanvas.toJSON('data'));
-      return this._fabricCanvas.toJSON(['id','data'])
-    },
+
     serializeObject: function (object) {
       console.log('serialize', object);
       if(!object) return;
@@ -276,9 +275,11 @@
         }
       }
     },
+
     load: function (json) {
       this._fabricCanvas.loadFromJSON(json)
     },
+
     addShapes: function (shapes) {
       shapes.forEach(shape => {
         console.log('shhh... APE!', shape)
@@ -299,26 +300,31 @@
 
     switchFillMode: function() {
       this.fillmode = !this.fillmode
-      const color = this.fillmode ? 'blue' : 'transparent'
       this._fabricCanvas.forEachObject(object => {
         if (this._isPointHandle(object)) { return }
         object.set({
           opacity: 0.4,
-          fill: color
+          fill: this.getFill(object)
         })
       });
       this._fabricCanvas.renderAll()
     },
-    //TODO
+
     _isPointHandle (object) {
       return (object && object.data && object.data.type === 'pointHandle')
     },
+
     editActiveShape: function () {
       if (!this.activeShape) { return console.warn('Switch to edit mode without active object') }
       // extra caution not to have a mixup with canvas.activeObject
       this._fabricCanvas.discardActiveObject()
       this.markPoints(this.activeShape)
-      this.activeShape.set({
+      this._putObjectInEditMode(this.activeShape)
+    },
+
+    _putObjectInEditMode(object) {
+      object.sendBackwards()
+      object.set({
         lockMovementX: true,
         lockMovementY: true,
         objectCaching: false,
@@ -327,8 +333,8 @@
         hasControls: false,
         evented: false
       })
-
     },
+
     reimport: function (object) {
       let newObject
       fabric.loadSVGFromString(
@@ -336,11 +342,75 @@
         objects => {
           newObject = objects[0]
           newObject.set(Object.assign({}, this.defaultStyle, {
-            fill: this.fillmode ? 'blue': 'transparent'
+            fill: this.getFill(object),
+            data: Object.assign({}, object.data)
           }))
         }
       )
       return newObject
+    },
+
+    getFill: function(object) {
+      if (!this.fillmode) {
+        return 'transparent'
+      }
+      if (object.data && object.data.label) {
+        return object.data.label.color
+      }
+      return this.defaultStyle.fill
+    },
+
+    changeSelectedShapes: function (newData) {
+      const object = this._fabricCanvas.getActiveObject()
+      const currentData = object.data
+      console.log('currentData', currentData)
+      const mergedData = Object.assign({}, currentData, newData)
+      console.log('mergedData', mergedData)
+      object.set(mergedData)
+      object.set({fill: this.getFill(object)})
+      this._fabricCanvas.renderAll()
+    },
+
+    _setState(options) {
+      console.log('_setState', options.pointer)
+      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      this._clickOrigin = pointer
+      this._state = this.activeShape.get('points')
+      console.log('_state', this._state)
+    },
+
+    _objectMove: function(options) {
+      if (!this._isPointHandle(options.target)) { return }
+      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+
+      const dx = pointer.x - this._clickOrigin.x
+      const dy = pointer.y - this._clickOrigin.y
+      console.log('moving point handle', dx, dy)
+      const i = options.target.data.index
+      const points = this._state.concat([])
+      const point = points[i]
+      const newPoint = {
+        x: point.x + dx,
+        y: point.y + dy
+      }
+      console.log('old coords', point)
+      console.log('new coords', newPoint)
+      console.log('old points', points)
+      points.splice(i, 1, newPoint)
+      console.log('new points', points)
+      this.activeShape.set({ points: points });
+      this.activeShape.setCoords();
+      this._fabricCanvas.renderAll()
+    },
+
+    _nextState: function (options) {
+      const clone = this.reimport(this.activeShape)
+      this._fabricCanvas.remove(this.activeShape)
+      this.activeShape = clone
+      console.log('_nextState', this.activeShape)
+      this._fabricCanvas.add(clone)
+      this._putObjectInEditMode(this.activeShape)
+      this._fabricCanvas.renderAll()
     },
 
     _mouseDown: function(options) {
@@ -408,46 +478,7 @@
       }
       return options
     },
-
-    _setState(options) {
-      console.log('_setState', options.pointer)
-      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
-      this._clickOrigin = pointer
-      this._state = this.activeShape.get('points')
-      console.log('_state', this._state)
-    },
-    _objectMove: function(options) {
-      if (!this._isPointHandle(options.target)) { return }
-      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
-
-      const dx = pointer.x - this._clickOrigin.x
-      const dy = pointer.y - this._clickOrigin.y
-      console.log('moving point handle', dx, dy)
-      const i = options.target.data.index
-      const points = this._state.concat([])
-      const point = points[i]
-      const newPoint = {
-        x: point.x + dx,
-        y: point.y + dy
-      }
-      console.log('old coords', point)
-      console.log('new coords', newPoint)
-      console.log('old points', points)
-      points.splice(i, 1, newPoint)
-      console.log('new points', points)
-      this.activeShape.set({ points: points });
-      this.activeShape.setCoords();
-      this._fabricCanvas.renderAll()
-    },
-    _resetState: function (options) {
-      const clone = this.reimport(this.activeShape)
-      this._fabricCanvas.remove(this.activeShape)
-      this.activeShape = clone
-      console.log('_nextState', this.activeShape)
-      this._fabricCanvas.renderAll()
-      this._fabricCanvas.add(clone)
-      this._fabricCanvas.renderAll()
-    },
+    
     _mouseMove: function(options) {
       const mode = this._annotator.mode
 
@@ -525,8 +556,9 @@
           break
       }
       if (!this.activeShape) { return }
-      this.activeShape.set({ fill: this.fillmode ? 'blue' : 'transparent' })
+      this.activeShape.set({ fill: this.getFill(this.activeShape)})
     },
+
     addPointFromEvent: function (options) {
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
       // first point marker is special
@@ -631,9 +663,6 @@
 
     _getShapeId: function () {
       return 's-' + Date.now() + Math.floor(Math.random() * 11)
-    },
-
-
-
+    }
   };
 })();

@@ -717,10 +717,9 @@ Custom property | Description | Default
                 }
             }
 
-            changeSelectedShapes(label) {
-                console.log('changeSelectedShapes.label',label)
-                this._fabricOverlay._fabricCanvas.getActiveObject().set({fill:label.color})
-                this._fabricOverlay._fabricCanvas.renderAll()
+            changeSelectedShapes(attributes) {
+                console.log('changeSelectedShapes.label', attributes)
+                this._fabricOverlay.changeSelectedShapes(attributes)
             }
 
         }
