@@ -179,6 +179,7 @@
                 }
 
                 if (e.type === 'shape-selected') {
+//                    const shapeId = this.targetToAnnotationMap.indexOf(e.detail.shape.id);
                     console.log('selected: shapeId ', e.detail.shape.id);
                     const anno = this.itemByShapeId(e.detail.shape.id);
                     console.log('set current to', anno);

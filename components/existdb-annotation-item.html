@@ -107,8 +107,8 @@
 
             connectedCallback() {
                 super.connectedCallback();
-                console.log('targets ', this.target);
-                console.log('connected labels ', this.labels);
+//                console.log('targets ', this.target);
+//                console.log('connected labels ', this.labels);
             }
 
             ready() {
@@ -122,13 +122,13 @@
             highlight() {
                 this.target.map(target => {
                     const id = target.id;
-                    console.log("HIGHLIGHT", id)
+//                    console.log("HIGHLIGHT", id)
                     return new CustomEvent('highlight-target', {bubbles: true, composed: true, detail: {id: id}})
                 }).forEach(event => this.dispatchEvent(event));
             }
 
             _setLabel(e){
-                console.log('_setLabel e ', e);
+//                console.log('_setLabel e ', e);
                 this.body = e.detail.label.name;
                 this.dispatchEvent(new CustomEvent('annotation-changed', {bubbles: true, composed: true, detail: {id: this.id, body:this.body, target:this.target}}))
             }

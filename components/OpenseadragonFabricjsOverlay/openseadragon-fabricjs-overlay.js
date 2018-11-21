@@ -70,7 +70,7 @@
 
   // ----------
   Overlay.prototype = {
-    modes: ['rectangle', 'circle', 'polygon', 'remove', 'select'],
+    // modes: ['rectangle', 'circle', 'polygon', 'remove', 'select'],
     defaultStyle: {
       stroke: 'blue',
       strokeWidth: 2,
@@ -418,7 +418,7 @@
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
       switch (mode) {
-        case 'edit':
+        case 'editMode':
           // pointhandle selection
           if (this._isPointHandle(options.target)) {
             console.log('point', options.target)
@@ -429,9 +429,9 @@
             break
           }
           // clicking anywhere but on a point handle will end the edit mode
-          this._annotator.mode = 'select'
+          this._annotator.mode = 'selectMode'
           break
-        case 'select':
+        case 'selectMode':
           if (options.target) {
             this._highlight(options.target); break
           }
@@ -468,7 +468,7 @@
             this._fabricCanvas.add(polygon);
             this._highlight(polygon);
             this._notifyShapeCreated(polygon)
-            this._annotator.mode = 'select'
+            this._annotator.mode = 'selectMode'
             break;
           }
           this.addPointFromEvent(options);
@@ -478,7 +478,7 @@
       }
       return options
     },
-    
+
     _mouseMove: function(options) {
       const mode = this._annotator.mode
 
@@ -514,7 +514,7 @@
       const mode = this._annotator.mode;
 
       switch(mode) {
-        case 'edit':
+        case 'editMode':
           console.warn('_mouseUp do nottin ');
           break
         case 'rectangle':
@@ -535,7 +535,7 @@
           const reimport = this.reimport(poly)
           reimport.id = this._getShapeId()
           this._fabricCanvas.add(reimport)
-          this._annotator.mode = 'select'
+          this._annotator.mode = 'selectMode'
           this._highlight(reimport)
           this._notifyShapeCreated(reimport)
           break
@@ -547,9 +547,8 @@
           this.activeShape.id = this._getShapeId()
           this._highlight(this.activeShape)
           this._notifyShapeCreated(this.activeShape)
-          this._annotator.mode = 'select'
+          this._annotator.mode = 'selectMode'
         break;
-        case 'select':
           // no activeShape on mouse up means nothing was or is selected
           if (!this.activeShape) { break }
           this._notifyShapeChanged(this.activeShape)

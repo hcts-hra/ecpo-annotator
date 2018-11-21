@@ -82,10 +82,10 @@
             }
 
             _selectedChanged(newVal, oldVal) {
-                console.log('labels loaded ', this.labels);
-                console.log('selected changed ', newVal);
+//                console.log('labels loaded ', this.labels);
+//                console.log('selected changed ', newVal);
                 const label = this.getLabelByName(newVal)
-                console.log('selected value changed ', label);
+//                console.log('selected value changed ', label);
                 if (!newVal || !label) return;
                 this.dispatchEvent(new CustomEvent('label-selected', {bubbles: true, composed: true, detail: {label:label}}));
             }
