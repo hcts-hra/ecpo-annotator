@@ -109,6 +109,17 @@
       evented: false,
       objectCaching:false
     },
+    polyPointStyle: {
+      stroke:'#336',
+      strokeWidth: 2,
+      fill: '#aaf',
+      opacity: 0.3,
+      selectable: false,
+      hasBorders: false,
+      hasControls: false,
+      evented: false,
+      objectCaching: false
+    },
     // ----------
     canvas: function() {
       return this._canvas;
@@ -173,11 +184,9 @@
     _highlight: function (object) {
       if (object === this.activeShape) { return console.log('same same but different') }
       this.deselect()
-      // object.set({stroke: 'tomato'})
       console.log('highlight', object)
       this.activeShape = object
       this._fabricCanvas.setActiveObject(object)
-      // this._notifyShapeSelected(object)
       this._fabricCanvas.renderAll()
     },
 
@@ -187,16 +196,11 @@
 
       const offset = object.pathOffset
       const center = object.getCenterPoint();
+      const offsetCenter = { x: center.x - offset.x, y: center.y - offset.y }
       const ps = object.get('points')
 
-      console.log('center', center)
-      console.log('offset', offset)
-      const newCenter = { x: center.x - offset.x, y: center.y - offset.y }
-      console.log('newCenter', newCenter)
-
-      // sometimes points are relative to center and sometimes not
       this.pointArray = ps
-        .map(point => ({ x: newCenter.x + point.x, y: newCenter.y + point.y }))
+        .map(point => ({ x: offsetCenter.x + point.x, y: offsetCenter.y + point.y }))
         .map((point,index) => {
           return this._addPoint(point, {
             selectable: true,
@@ -213,8 +217,6 @@
       })
 
       this._fabricCanvas.renderAll()
-
-      console.log('pointArray', this.pointArray);
     },
 
     deselect: function () {
@@ -264,8 +266,7 @@
     },
 
     serializeObject: function (object) {
-      console.log('serialize', object);
-      if(!object) return;
+      if (!object) { return; }
       return {
         shape: {
           id: object.id,
@@ -275,12 +276,9 @@
     },
 
     importSVG: function (svg, attributes) {
-      console.log('attributes', attributes)
-      console.log('fill and stroke from attributes', this.getFillAndStroke(attributes))
       fabric.loadSVGFromString(
         `<svg xmlns="http://www.w3.org/2000/svg">${svg}</svg>`,
         objects => {
-          console.log('loadedfromSVGString', objects)
           objects.map(object => {
             const props = Object.assign({}, this.defaultStyle, attributes, this.getFillAndStroke(attributes))
             object.set(props)
@@ -377,7 +375,6 @@
 
       const dx = pointer.x - this._clickOrigin.x
       const dy = pointer.y - this._clickOrigin.y
-      console.log('moving point handle', dx, dy)
       const i = options.target.data.index
       const points = this._state.concat([])
       const point = points[i]
@@ -385,11 +382,7 @@
         x: point.x + dx,
         y: point.y + dy
       }
-      console.log('old coords', point)
-      console.log('new coords', newPoint)
-      console.log('old points', points)
       points.splice(i, 1, newPoint)
-      console.log('new points', points)
       this.activeShape.set({ points: points });
       this.activeShape.setCoords();
       this._fabricCanvas.renderAll()
@@ -399,8 +392,8 @@
       const clone = this.reimport(this.activeShape)
       this._fabricCanvas.remove(this.activeShape)
       this.activeShape = clone
-      console.log('_nextState', this.activeShape)
       this._fabricCanvas.add(clone)
+      this._notifyShapeChanged(this.activeShape)
       this._putObjectInEditMode(this.activeShape)
       this._fabricCanvas.renderAll()
     },
@@ -410,7 +403,7 @@
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
       switch (mode) {
-        case 'editMode':
+        case this._annotator.modes.EDIT:
           // pointhandle selection
           if (this._isPointHandle(options.target)) {
             console.log('point', options.target)
@@ -421,15 +414,15 @@
             break
           }
           // clicking anywhere but on a point handle will end the edit mode
-          this._annotator.mode = 'selectMode'
+          this._annotator.mode = this._annotator.modes.SELECT
           break
-        case 'selectMode':
+        case this._annotator.modes.SELECT:
           if (options.target) {
             this._highlight(options.target); break
           }
           this.deselect()
           break
-        case "rectangle":
+        case this._annotator.modes.RECTANGLE:
           const rect = new fabric.Rect(Object.assign({}, this.defaultStyle, {
             left: pointer.x,
             top: pointer.y
@@ -440,7 +433,7 @@
           this._fabricCanvas.setActiveObject(rect);
           this._fabricCanvas.renderAll();
           break
-        case "circle":
+        case this._annotator.modes.CIRCLE:
           // TODO improve circle painting
           const circle = new fabric.Circle(Object.assign({}, this.defaultStyle, {
             left: pointer.x,
@@ -454,21 +447,23 @@
           this._fabricCanvas.setActiveObject(circle);
           this._fabricCanvas.renderAll();
           break
-        case "polygon":
-          // if the target id is the same as the first one created
-          if (options.target && this.pointArray.length && options.target.id === this.pointArray[0].id) {
-            const polygon = this._generatePolygon();
-            polygon.set(this.getFillAndStroke(polygon))
-            this._fabricCanvas.add(polygon);
-            this._highlight(polygon);
-            this._notifyShapeCreated(polygon)
-            this._annotator.mode = 'selectMode'
+        case this._annotator.modes.POLYGON:
+          if (
+            !options.target || 
+            this.pointArray.length === 0 ||
+            options.target.id !== this.pointArray[0].id
+          ) {
+            this.addPointFromEvent(options);
             break;
           }
-          this.addPointFromEvent(options);
-          break
-        // default:
-        //   console.warn('_mouseUp called with unknown mode', options);
+          // if the target id is the same as the first one created
+          const polygon = this._generatePolygon();
+          polygon.set(this.getFillAndStroke(polygon))
+          this._fabricCanvas.add(polygon);
+          this._highlight(polygon);
+          this._notifyShapeCreated(polygon)
+          this._annotator.mode = this._annotator.modes.SELECT
+          break;
       }
       return options
     },
@@ -480,17 +475,17 @@
 
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
       switch (mode) {
-        case "rectangle":
+        case this._annotator.modes.RECTANGLE:
           this.activeShape.set("width", pointer.x - this.activeShape.get("left"));
           this.activeShape.set("height", pointer.y - this.activeShape.get("top"));
           this.activeShape.setCoords()
           this._fabricCanvas.renderAll();
           break
-        case "circle":
+        case this._annotator.modes.CIRCLE:
           this.activeShape.set("radius", Math.abs(pointer.x - this.activeShape.get("left")));
           this._fabricCanvas.renderAll();
           break
-        case "polygon":
+        case this._annotator.modes.POLYGON:
           if (!this.activeLine || this.activeLine.class != "line") { break }
 
           this.activeLine.set({ x2: pointer.x, y2: pointer.y });
@@ -508,13 +503,11 @@
       const mode = this._annotator.mode;
 
       switch(mode) {
-        case 'editMode':
-          console.warn('_mouseUp do nottin ');
-          break
-        case 'selectMode':
+        case this._annotator.modes.EDIT: /* all handled in _nextstate */ break
+        case this._annotator.modes.SELECT:
           this._notifyShapeChanged(this.activeShape)
           break
-        case 'rectangle':
+        case this._annotator.modes.RECTANGLE:
           const rect = this.activeShape
           const points = [
             { x: rect.left, y: rect.top },
@@ -531,23 +524,24 @@
           const reimport = this.reimport(poly)
           reimport.id = this._getShapeId()
           this._fabricCanvas.add(reimport)
-          this._annotator.mode = 'selectMode'
           this._highlight(reimport)
+          this.activeShape.set(this.getFillAndStroke(this.activeShape))
           this._notifyShapeCreated(reimport)
+          this._annotator.mode = this._annotator.modes.SELECT
           break
-        case 'circle':
+        case this._annotator.modes.CIRCLE:
           // circle is special
           this.activeShape.set("hasBorders", true);
           this.activeShape.set("hasControls", true);
           this.activeShape.setCoords();
           this.activeShape.id = this._getShapeId()
           this._highlight(this.activeShape)
+          this.activeShape.set(this.getFillAndStroke(this.activeShape))
           this._notifyShapeCreated(this.activeShape)
-          this._annotator.mode = 'selectMode'
+          this._annotator.mode = this._annotator.modes.SELECT
           break;
       }
       if (!this.activeShape) { return }
-      this.activeShape.set(this.getFillAndStroke(this.activeShape))
     },
 
     addPointFromEvent: function (options) {
@@ -570,17 +564,7 @@
       const polyPoints = activeShape ? activeShape.get('points') : []
 
       polyPoints.push({ x: pointer.x, y: pointer.y })
-      const polygon = new fabric.Polygon(polyPoints, {
-        stroke:'#336',
-        strokeWidth: 2,
-        fill: '#aaf',
-        opacity: 0.3,
-        selectable: false,
-        hasBorders: false,
-        hasControls: false,
-        evented: false,
-        objectCaching: false
-      });
+      const polygon = new fabric.Polygon(polyPoints, this.polyPointStyle);
 
       // render changes to fabric canvas
       if (activeShape) {

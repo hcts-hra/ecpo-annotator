@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
 
@@ -69,10 +70,6 @@ Custom property | Description | Default
                 --toggle-icon-checked: {
                     color: var(--paper-blue-500);
                 };
-            }
-
-            #panzoom{
-                /*padding:11px;*/
             }
 
             paper-icon-button{
@@ -157,14 +154,9 @@ Custom property | Description | Default
                 font-family: monospace;
             }
 
-/*
-            paper-icon-button {
-                color: var(--paper-grey-700);
-            }
-*/
             :host ::slotted(.logout){
                 float:right;
-                paddding:0;
+                padding:0;
                 margin-top:-40px;
             }
 
@@ -183,7 +175,7 @@ Custom property | Description | Default
                          icon="pan-tool"
                          title="mouse pan and zoom"
                          on-click="_panzoom"
-                         class="checked-blue"></toggle-icon>
+                         class="checked-blue mode-selector"></toggle-icon>
 
             <div class="divider"></div>
 
@@ -192,23 +184,17 @@ Custom property | Description | Default
                          title="select"
                          animation="flip-horizontal"
                          on-click="_select"
-                         class="checked-blue"></toggle-icon>
-            <!--
-                        <toggle-icon icon="tap"
-                                     animation="flip-horizontal"
-                                     class="checked-blue"></toggle-icon>
-            -->
-
+                         class="checked-blue mode-selector"></toggle-icon>
 
             <toggle-icon id="fillmode"
                          icon="invert-colors"
                          animation="flip-horizontal"
                          on-click="_fillMode"
                          class="checked-blue"></toggle-icon>
-            <!--<paper-icon-button id="group" icon="group" title="group" on-click="_edit"></paper-icon-button>-->
+
             <toggle-icon icon="groupmode"
                          animation="flip-horizontal"
-                         class="checked-blue"></toggle-icon>
+                         class="checked-blue mode-selector" disabled></toggle-icon>
 
             <div class="divider"></div>
             <!-- TODO: hide if active selection -->
@@ -216,18 +202,19 @@ Custom property | Description | Default
                          icon="image:crop-3-2"
                          title="add rectangle"
                          on-click="_createRect"
-                         class="checked-blue"></toggle-icon>
+                         class="checked-blue mode-selector"></toggle-icon>
+
             <toggle-icon id="circleMode"
                          icon="image:panorama-fish-eye"
                          title="add circle"
                          on-click="_createCircle"
-                         class="checked-blue"></toggle-icon>
+                         class="checked-blue mode-selector"></toggle-icon>
 
             <toggle-icon id="polyMode"
                           icon="device:signal-cellular-null"
                           title="add polygon"
                           on-click="_createPolygon"
-                          class="checked-blue"></toggle-icon>
+                          class="checked-blue mode-selector"></toggle-icon>
 
             <div class="divider"></div>
             <!-- TODO: show if active selection -->
@@ -236,10 +223,14 @@ Custom property | Description | Default
                          title="edit"
                          on-click="_edit"
                          animation="flip-horizontal"
-                         class="checked-blue"></toggle-icon>
+                         class="checked-blue mode-selector"
+                         disabled="[[_noShapeSelected(selectedShape)]]"></toggle-icon>
+
             <paper-icon-button icon="remove-circle" title="remove shape" on-click="_removeShape"></paper-icon-button>
 
             <div class="divider"></div>
+
+            <!--
 
             <span class="cursorposition" id="cursorWindowPosition"></span>
             <div class="divider"></div>
@@ -248,9 +239,10 @@ Custom property | Description | Default
             <span class="cursorposition" id="cursorImagePosition"></span>
             <div class="divider"></div>
             <span class="cursorposition" id="cursorViewportPosition"></span>
+            -->
+            <!--[[mode]]-->
 
             <div style="width:0;height:0;border:0;" tabindex="0" id="focusDummy"></div>
-            <!--[[mode]]-->
             <slot name="logout"></slot>
         </div>
         <!-- Openseadragon is attached to host -->
@@ -390,29 +382,45 @@ Custom property | Description | Default
                     },
                     selectedShape: {
                         type: Object,
-                        value: () => {
-                            return {}
-                        }
+                        value: _ => null
                     },
                     mode: {
                         type: String,
                         observer: '_modeChange',
                         notify:true,
                         value: 'osd' // open seadragon mode
+                    },
+                    modes: {
+                        type: Object,
+                        value: {
+                            NAVIGATE: 'navigate',
+                            SELECT: 'select',
+                            GROUP: 'group',
+                            CIRCLE: 'circle',
+                            RECTANGLE: 'rectangle',
+                            POLYGON: 'polygon',
+                            EDIT: 'edit'
+                        }
                     }
-
                 };
             }
 
             connectedCallback() {
                 super.connectedCallback();
-//                 this.mode = 'select';
 
-                this.addEventListener('inited', function(){
+                // const mouseTrackerMoveHandler = this.onMouseTrackerMove.bind(this)
+                // const mouseTracker = new OpenSeadragon.MouseTracker({
+                //     element: document,
+                //     moveHandler: mouseTrackerMoveHandler
+                // });
+                // this.modeSwitchButtons = this.shadowRoot.querySelectorAll('.mode-selector')
+
+                this.addEventListener('annotator-initialized', function(){
                     console.log('Annotator init');
                     this.init = true;
-                    this.mode = 'selectMode';
-                    this.$.selectMode.checked=true;
+                    this.mode = this.modes.SELECT;
+                    this.$.selectMode.checked = true;
+                    // mouseTracker.setTracking(true)
                 });
 
                 document.addEventListener('WebComponentsReady', function () {
@@ -422,19 +430,13 @@ Custom property | Description | Default
                         // Add src changed observer
                         this._initOpenSeadragon();
                         this._initFabric();
-                        this.dispatchEvent(new CustomEvent('inited', {}));
+                        this.dispatchEvent(new CustomEvent('annotator-initialized', {}));
                     }
-
-                    const mouseTrackerMoveHandler = this.onMouseTrackerMove.bind(this)
-                    const mouseTracker = new OpenSeadragon.MouseTracker({
-                        element: document,
-                        moveHandler: mouseTrackerMoveHandler
-                    }).setTracking(true);
-
                 }.bind(this));
                 // document.addEventListener('shape-created', this._newShapeHandler.bind(this))
                 // document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
                 // document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
+                document.addEventListener('shape-selected', this._selectedShapeHandler.bind(this))
                 this.addEventListener('keypress', this._keyHandler);
                 this.$.focusDummy.focus();
             }
@@ -482,8 +484,6 @@ Custom property | Description | Default
                     buildPyramid: false
                 };
 
-//                console.log('showZoomControl ', this.showZoomControl);
-
                 this.viewer = OpenSeadragon({
                     element: this,
                     prefixUrl: "/exist/apps/ecpo/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
@@ -509,9 +509,6 @@ Custom property | Description | Default
                     zoomInButton: this.$.zoomIn,
                     zoomOutButton: this.$.zoomOut
                 });
-
-//                this.init = true;
-//                this.mode="select";
             }
 
             _newShapeHandler(e) {
@@ -524,6 +521,11 @@ Custom property | Description | Default
 
             _deletedShapeHandler(e) {
 //                console.log('DELETED SHAPE', e.detail.shape)
+            }
+
+            _selectedShapeHandler(e) {
+                console.log('SELECTED SHAPE', e.detail.shape)
+                this.set('selectedShape', e.detail.shape)
             }
 
             highlight(shapeId) {
@@ -593,13 +595,13 @@ Custom property | Description | Default
 
             // Add loaded images to viewer
             _loadedChanged() {
-                if (this.loaded) {
-                    if (!this.init) {
-                        this._initOpenSeadragon();
-                    } else {
-                        this._addImage();
-                    }
+                if (!this.loaded) { return }
+                if (!this.init) {
+                    console.log('AAAAAAA')
+                    return this._initOpenSeadragon();
                 }
+                console.log('BBBBBBBB')
+                this._addImage();
             }
 
             _addImage() {
@@ -607,7 +609,6 @@ Custom property | Description | Default
             }
 
             _addTiledImage() {
-//                console.log('_addTiledImage ', this.viewer);
                 this.viewer.addTiledImage({tileSource: this.src, index: 0, replace: true});
             }
 
@@ -628,19 +629,20 @@ Custom property | Description | Default
             }
 
             _createRect() {
-                this.mode = "rectangle"
+                this._preventToggle(this.modes.RECTANGLE, this.$.rectMode)
             }
 
             _createCircle() {
-                this.mode = 'circle'
+                this._preventToggle(this.modes.CIRCLE, this.$.circleMode)
             }
 
             _createPolygon() {
-                this.mode = 'polygon'
+                this._preventToggle(this.modes.POLYGON, this.$.polyMode)
             }
 
             _edit() {
-                this.mode = "editMode";
+                if (this._noShapeSelected(this.selectedShape)) { return }
+                this.mode = this.modes.EDIT
             }
 
             /*
@@ -666,41 +668,28 @@ Custom property | Description | Default
             _modeChange(newVal, oldVal) {
                 console.log('_modeChanged ', newVal, oldVal);
 
-                if (this.init){
-                    this.viewer.setMouseNavEnabled(false);
-                }
+                if (!this.init) { return }
+                if (newVal === oldVal) { return }
 
                 const mode = newVal;
                 switch (mode) {
-                    case 'fillMode':
-                        break;
-                    case 'rectangle':
-                    case 'circle':
-                    case 'polygon':
+                    case this.modes.RECTANGLE:
+                    case this.modes.CIRCLE:
+                    case this.modes.POLYGON:
+                    case this.modes.SELECT:
+                        this.viewer.setMouseNavEnabled(false);
                         this._unCheckModes();
                         this._fabricOverlay.deselect();
                         break;
-                    case 'selectMode':
-                        this._unCheckModes();
-                        this._fabricOverlay.deselect()
-                        console.log('toggle icon select ', this.$.selectMode);
-                        break;
-                    case 'editMode':
-                        console.log('activeShape ', this._fabricOverlay.activeShape);
-                        if (!this._fabricOverlay.activeShape) {
-                            // this.mode = oldVal
-                            return oldVal
-                            break
-                        }
+                    case this.modes.EDIT:
                         this._unCheckModes();
                         this._fabricOverlay.editActiveShape();
                         break
-                    case 'group':
-                    case 'osd':
+                    case this.modes.GROUP:
+                    case this.modes.NAVIGATE:
                         this._unCheckModes();
-                        if(this.init){
-                            this.viewer.setMouseNavEnabled(true);
-                        }
+                        this._fabricOverlay.deselect();
+                        this.viewer.setMouseNavEnabled(true);
                         break;
                     default:
                         console.log('mode ', mode, ' is not known');
@@ -708,30 +697,35 @@ Custom property | Description | Default
 
             }
 
-            _unCheckModes(){
-                this.$.selectMode.checked=false;
-                this.$.editMode.checked=false;
-                this.$.rectMode.checked=false;
-                this.$.circleMode.checked=false;
-                this.$.polyMode.checked=false;
-                this.$.panzoom.checked=false;
-
+            _unCheckModes() {
+                console.log('UNCHECK this out');
+                [...this.shadowRoot.querySelectorAll('.mode-selector')]
+                    .forEach(e => e.checked = false);
             }
 
             _onHome(e) {
                 this._fabricOverlay.deselect();
                 this.viewer.viewport.goHome();
                 this.viewer.setMouseNavEnabled(true);
-                this.mode = 'osd'
+                this.mode = this.modes.NAVIGATE
             }
 
             _panzoom(e) {
-                this.mode = 'osd'
-                this.viewer.setMouseNavEnabled(true);
+                this._preventToggle(this.modes.NAVIGATE, this.$.panzoom)
             }
 
             _select(e) {
-                this.mode = 'selectMode'
+                this._preventToggle(this.modes.SELECT, this.$.selectMode)
+            }
+
+            // disable toggling if mode did not change
+            _preventToggle(mode, element) {
+                if (this.mode === mode) {
+                    console.debug('toggle prevented')
+                    element.checked = false
+                    return
+                }
+                this.mode = mode
             }
 
             addShapesFromAnnotations(annotations) {
@@ -743,14 +737,16 @@ Custom property | Description | Default
                 })
             }
 
-
             _fillMode() {
-                console.log('toggle FillMode')
                 this._fabricOverlay.switchFillMode();
             }
 
             _group(e) {
 //                console.log('group keyboard action ', e);
+            }
+
+            _noShapeSelected(selectedShape) {
+                return selectedShape === null
             }
 
             _keyHandler(e) {
@@ -761,19 +757,38 @@ Custom property | Description | Default
                 switch (key) {
                     case 'g':
                         console.log('grouping mode triggered');
+                        this.mode = this.modes.GROUP
                         break;
                     case 'e':
                         console.log('edit mode');
-                        this.mode = 'editMode'
+                        if (this._noShapeSelected(this.selectedShape)) { return }
+                        this.mode = this.modes.EDIT
+                        this.$.editMode.checked = true
                         break;
-                    case 'd':
-                        console.log('draw mode');
+                    case 'r':
+                        console.log('add rectangle');
+                        this.mode = this.modes.RECTANGLE
+                        this.$.rectangle.checked = true
                         break;
-                    case 'u':
-                        console.log('union mode');
+                    case 'c':
+                        console.log('add circle');
+                        this.mode = this.modes.CIRCLE
+                        this.$.circle.checked = true
                         break;
-                    case 'm':
-                        console.log('merge mode');
+                    case 'p':
+                        console.log('add polygon');
+                        this.mode = this.modes.POLYGON
+                        this.$.polygon.checked = true
+                        break;
+                    case 's':
+                        console.log('select');
+                        this.mode = this.modes.SELECT
+                        this.$.selectMode.checked = true
+                        break;
+                    case 'n':
+                        console.log('navigate');
+                        this.mode = this.modes.NAVIGATE
+                        this.$.panzoom.checked = true
                         break;
                     default:
                         console.log('undefined key ', key);
