@@ -1,16 +1,12 @@
 'use strict';
 
 var gulp = require('gulp'),
-    exist = require('gulp-exist'),
+    exist = require('@existdb/gulp-exist'),
     del = require('del')
 
 var PRODUCTION = (!!process.env.NODE_ENV || process.env.NODE_ENV === 'production')
 
 console.log('Production? %s', PRODUCTION)
-
-exist.defineMimeTypes({
-    'application/xml': ['odd']
-})
 
 const exClient = exist.createClient({
     host: 'localhost',
