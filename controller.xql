@@ -77,13 +77,10 @@ else if ($exist:path = "/index.html") then (
        return
 :)
 
+   <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+       <cache-control cache="no"/>
+   </dispatch>
 
-       <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-           <forward url="index.html">
-               <cache-control cache="no"/>
-               <set-header name="Cache-Control" value="no-cache"/>
-           </forward>
-       </dispatch>
    )
    else(
 (:

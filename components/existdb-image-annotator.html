@@ -5,6 +5,7 @@
 
 <!--<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">-->
 <link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/iron-icons/editor-icons.html">
@@ -57,6 +58,8 @@ Custom property | Description | Default
                     width: 40px;
                     height: 40px;
                 };
+                @apply(--paper-font-common-base);
+
 
             }
 
@@ -156,11 +159,24 @@ Custom property | Description | Default
 
             :host ::slotted(.logout){
                 float:right;
+            }
+
+/*
+            :host slot[name="logout"]{
+                position: absolute;
+                right: 266px;
                 padding:0;
                 margin-top:-40px;
             }
+*/
 
-
+            .displayMode{
+                position: absolute;
+                top:13px;
+                right:60px;
+                font-size:14px;
+                color:var(--paper-blue-500);
+            }
         </style>
 
 
@@ -174,8 +190,7 @@ Custom property | Description | Default
             <toggle-icon id="panzoom"
                          icon="pan-tool"
                          title="mouse pan and zoom"
-                         on-click="_panzoom"
-                         class="checked-blue mode-selector"></toggle-icon>
+                         class="checked-blue mode-selector" on-click="_panzoom"></toggle-icon>
 
             <div class="divider"></div>
 
@@ -183,18 +198,19 @@ Custom property | Description | Default
                          icon="tap"
                          title="select"
                          animation="flip-horizontal"
-                         on-click="_select"
-                         class="checked-blue mode-selector"></toggle-icon>
+                         class="checked-blue mode-selector" on-click="_select"></toggle-icon>
 
-            <toggle-icon id="fillmode"
+            <toggle-icon id="fillMode"
                          icon="invert-colors"
                          animation="flip-horizontal"
                          on-click="_fillMode"
                          class="checked-blue"></toggle-icon>
 
-            <toggle-icon icon="groupmode"
-                         animation="flip-horizontal"
-                         class="checked-blue mode-selector" disabled></toggle-icon>
+            <toggle-icon id="groupMode"
+                        icon="groupmode"
+                        animation="flip-horizontal"
+                        class="checked-blue mode-selector"
+                        on-click="_group"></toggle-icon>
 
             <div class="divider"></div>
             <!-- TODO: hide if active selection -->
@@ -242,8 +258,9 @@ Custom property | Description | Default
             -->
             <!--[[mode]]-->
 
-            <div style="width:0;height:0;border:0;" tabindex="0" id="focusDummy"></div>
+            <div style="width:0;height:0;border:0;display:inline;" tabindex="0" id="focusDummy"></div>
             <slot name="logout"></slot>
+            <div class="displayMode">mode:[[mode]]</div>
         </div>
         <!-- Openseadragon is attached to host -->
         <div id="the_container">
@@ -388,7 +405,7 @@ Custom property | Description | Default
                         type: String,
                         observer: '_modeChange',
                         notify:true,
-                        value: 'osd' // open seadragon mode
+                        value: 'navigate' // open seadragon mode
                     },
                     modes: {
                         type: Object,
@@ -419,7 +436,6 @@ Custom property | Description | Default
                     console.log('Annotator init');
                     this.init = true;
                     this.mode = this.modes.SELECT;
-                    this.$.selectMode.checked = true;
                     // mouseTracker.setTracking(true)
                 });
 
@@ -597,10 +613,8 @@ Custom property | Description | Default
             _loadedChanged() {
                 if (!this.loaded) { return }
                 if (!this.init) {
-                    console.log('AAAAAAA')
                     return this._initOpenSeadragon();
                 }
-                console.log('BBBBBBBB')
                 this._addImage();
             }
 
@@ -629,20 +643,35 @@ Custom property | Description | Default
             }
 
             _createRect() {
-                this._preventToggle(this.modes.RECTANGLE, this.$.rectMode)
+                this.mode = this.modes.RECTANGLE
             }
 
             _createCircle() {
-                this._preventToggle(this.modes.CIRCLE, this.$.circleMode)
+                this.mode = this.modes.CIRCLE
             }
 
             _createPolygon() {
-                this._preventToggle(this.modes.POLYGON, this.$.polyMode)
+                this.mode = this.modes.POLYGON
             }
 
             _edit() {
                 if (this._noShapeSelected(this.selectedShape)) { return }
                 this.mode = this.modes.EDIT
+            }
+
+            _onHome(e) {
+                this._fabricOverlay.deselect();
+                this.viewer.viewport.goHome();
+                this.viewer.setMouseNavEnabled(true);
+                this.mode = this.modes.NAVIGATE
+            }
+
+            _panzoom(e) {
+                this.mode = this.modes.NAVIGATE
+            }
+
+            _select(e) {
+                this.mode = this.modes.SELECT
             }
 
             /*
@@ -665,67 +694,48 @@ Custom property | Description | Default
                 }
             }
 
+
             _modeChange(newVal, oldVal) {
                 console.log('_modeChanged ', newVal, oldVal);
 
                 if (!this.init) { return }
                 if (newVal === oldVal) { return }
 
+                const mapMode2Toggle = {}
+                mapMode2Toggle[this.modes.NAVIGATE] = this.$.panzoom
+                mapMode2Toggle[this.modes.SELECT] = this.$.selectMode
+                mapMode2Toggle[this.modes.RECTANGLE] = this.$.rectMode
+                mapMode2Toggle[this.modes.CIRCLE] = this.$.circleMode
+                mapMode2Toggle[this.modes.POLYGON] = this.$.polyMode
+                mapMode2Toggle[this.modes.EDIT] = this.$.editMode
+
+                mapMode2Toggle[oldVal].checked = false
+                mapMode2Toggle[newVal].checked = true
+
                 const mode = newVal;
                 switch (mode) {
                     case this.modes.RECTANGLE:
                     case this.modes.CIRCLE:
                     case this.modes.POLYGON:
-                    case this.modes.SELECT:
                         this.viewer.setMouseNavEnabled(false);
-                        this._unCheckModes();
                         this._fabricOverlay.deselect();
                         break;
+                    case this.modes.SELECT:
+                        this.viewer.setMouseNavEnabled(false);
+//                        this._fabricOverlay.deselect();
+                        break;
                     case this.modes.EDIT:
-                        this._unCheckModes();
                         this._fabricOverlay.editActiveShape();
                         break
                     case this.modes.GROUP:
                     case this.modes.NAVIGATE:
-                        this._unCheckModes();
-                        this._fabricOverlay.deselect();
+//                        this._fabricOverlay.deselect();
                         this.viewer.setMouseNavEnabled(true);
                         break;
                     default:
                         console.log('mode ', mode, ' is not known');
                 }
 
-            }
-
-            _unCheckModes() {
-                console.log('UNCHECK this out');
-                [...this.shadowRoot.querySelectorAll('.mode-selector')]
-                    .forEach(e => e.checked = false);
-            }
-
-            _onHome(e) {
-                this._fabricOverlay.deselect();
-                this.viewer.viewport.goHome();
-                this.viewer.setMouseNavEnabled(true);
-                this.mode = this.modes.NAVIGATE
-            }
-
-            _panzoom(e) {
-                this._preventToggle(this.modes.NAVIGATE, this.$.panzoom)
-            }
-
-            _select(e) {
-                this._preventToggle(this.modes.SELECT, this.$.selectMode)
-            }
-
-            // disable toggling if mode did not change
-            _preventToggle(mode, element) {
-                if (this.mode === mode) {
-                    console.debug('toggle prevented')
-                    element.checked = false
-                    return
-                }
-                this.mode = mode
             }
 
             addShapesFromAnnotations(annotations) {
@@ -738,11 +748,13 @@ Custom property | Description | Default
             }
 
             _fillMode() {
+                this.$.fillMode.toggleChecked()
                 this._fabricOverlay.switchFillMode();
             }
 
             _group(e) {
-//                console.log('group keyboard action ', e);
+                this.$.groupMode.toggleChecked()
+                console.log('group keyboard action ', e);
             }
 
             _noShapeSelected(selectedShape) {
@@ -757,38 +769,32 @@ Custom property | Description | Default
                 switch (key) {
                     case 'g':
                         console.log('grouping mode triggered');
-                        this.mode = this.modes.GROUP
+                        this.mode = this.modes.GROUP;
                         break;
                     case 'e':
                         console.log('edit mode');
                         if (this._noShapeSelected(this.selectedShape)) { return }
                         this.mode = this.modes.EDIT
-                        this.$.editMode.checked = true
                         break;
                     case 'r':
                         console.log('add rectangle');
                         this.mode = this.modes.RECTANGLE
-                        this.$.rectangle.checked = true
                         break;
                     case 'c':
                         console.log('add circle');
                         this.mode = this.modes.CIRCLE
-                        this.$.circle.checked = true
                         break;
                     case 'p':
                         console.log('add polygon');
                         this.mode = this.modes.POLYGON
-                        this.$.polygon.checked = true
                         break;
                     case 's':
                         console.log('select');
                         this.mode = this.modes.SELECT
-                        this.$.selectMode.checked = true
                         break;
                     case 'n':
                         console.log('navigate');
                         this.mode = this.modes.NAVIGATE
-                        this.$.panzoom.checked = true
                         break;
                     default:
                         console.log('undefined key ', key);
