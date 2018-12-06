@@ -87,6 +87,7 @@
                         type: Array,
                         value: []
                     },
+                    // TODO: refactor to data attribute in shape
                     targetToAnnotationMap: {
                         type: Object,
                         value: {}
@@ -169,8 +170,16 @@
 
                 if (e.type === 'shape-deleted') {
                     // find index of connected entry by e.detail.id
-                    this.splice('targetToAnnotationMap', this.targetToAnnotationMap.indexOf(shapeId), 1);
-                    return this.splice(['annotations', index, 'target'], targetIndex, 1)
+                    const index = this.itemIndexByShapeId(shapeId)
+                    if (index < 0) { return console.warn('deleted shape had no annotation') }
+                    // TODO: remove target from annotation
+                    // const targetIndex = this
+                    // this.splice(['annotations', index, 'target'], targetIndex, 1)
+                    // TODO: if this is the last shape of the annotation
+                    // remove annotation 
+                    this.splice('annotations', index, 1)
+                    // this.splice('targetToAnnotationMap', this.annotations.indexOf(annotation), 1);
+                    return 
                 }
 
                 if (e.type === 'shape-changed') {
