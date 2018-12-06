@@ -537,7 +537,7 @@
         case this._annotator.modes.CIRCLE:
           // circle is special
           this.activeShape.set("hasBorders", true);
-          this.activeShape.set("hasControls", true);
+          this.activeShape.set("hasControls", false);
           this.activeShape.setCoords();
           this.activeShape.id = this._getShapeId()
           this._highlight(this.activeShape)
