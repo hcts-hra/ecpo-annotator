@@ -182,12 +182,17 @@
     },
 
     _highlight: function (object) {
-      if (object === this.activeShape) { return console.log('same same but different') }
-      this.deselect()
-      console.log('highlight', object)
-      this.activeShape = object
-      this._fabricCanvas.setActiveObject(object)
-      this._fabricCanvas.renderAll()
+        if (object === this.activeShape) {
+            return console.log('same same but different');
+        }
+        this.deselect();
+        console.log('highlight', object);
+        this.activeShape = object;
+        object.borderColor = 'red';
+        object.borderScaleFactor = 3;
+
+        this._fabricCanvas.setActiveObject(object);
+        this._fabricCanvas.renderAll();
     },
 
     markPoints: function (object) {
