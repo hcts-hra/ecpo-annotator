@@ -63,9 +63,9 @@
 
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
-    this._fabricCanvas.on('mouse:move', this._mouseMove.bind(this))
     this._fabricCanvas.on('object:selected', this._notifyShapeSelected.bind(this))
-
+    // this will be dynamically registered
+    this._boundMouseMoveListener = this._mouseMove.bind(this)
   };
 
   // ----------
@@ -428,6 +428,7 @@
           this.deselect()
           break
         case this._annotator.modes.RECTANGLE:
+          this._fabricCanvas.on('mouse:move', this._boundMouseMoveListener)
           const rect = new fabric.Rect(Object.assign({}, this.defaultStyle, {
             left: pointer.x,
             top: pointer.y
@@ -439,6 +440,7 @@
           this._fabricCanvas.renderAll();
           break
         case this._annotator.modes.CIRCLE:
+          this._fabricCanvas.on('mouse:move', this._boundMouseMoveListener)
           // TODO improve circle painting
           const circle = new fabric.Circle(Object.assign({}, this.defaultStyle, {
             left: pointer.x,
@@ -458,16 +460,19 @@
             this.pointArray.length === 0 ||
             options.target.id !== this.pointArray[0].id
           ) {
+            // register event listener
+            this._fabricCanvas.on('mouse:move', this._boundMouseMoveListener)
             this.addPointFromEvent(options);
             break;
           }
+
           // if the target id is the same as the first one created
           const polygon = this._generatePolygon();
           polygon.set(this.getFillAndStroke(polygon))
           this._fabricCanvas.add(polygon);
           this._highlight(polygon);
           this._notifyShapeCreated(polygon)
-          this._annotator.mode = this._annotator.modes.SELECT
+          // this._annotator.mode = this._annotator.modes.SELECT
           break;
       }
       return options
@@ -513,6 +518,7 @@
           this._notifyShapeChanged(this.activeShape)
           break
         case this._annotator.modes.RECTANGLE:
+          this._fabricCanvas.off('mouse:move', this._boundMouseMoveListener)
           const rect = this.activeShape
           const points = [
             { x: rect.left, y: rect.top },
@@ -532,19 +538,23 @@
           this._highlight(reimport)
           this.activeShape.set(this.getFillAndStroke(this.activeShape))
           this._notifyShapeCreated(reimport)
-          this._annotator.mode = this._annotator.modes.SELECT
+          // this._annotator.mode = this._annotator.modes.SELECT
           break
         case this._annotator.modes.CIRCLE:
+          this._fabricCanvas.off('mouse:move', this._boundMouseMoveListener)
           // circle is special
           this.activeShape.set("hasBorders", true);
-          this.activeShape.set("hasControls", false);
+          // this.activeShape.set("hasControls", false);
           this.activeShape.setCoords();
           this.activeShape.id = this._getShapeId()
           this._highlight(this.activeShape)
           this.activeShape.set(this.getFillAndStroke(this.activeShape))
           this._notifyShapeCreated(this.activeShape)
-          this._annotator.mode = this._annotator.modes.SELECT
+          // this._annotator.mode = this._annotator.modes.SELECT
           break;
+        case this._annotator.modes.POLYGON:
+          this._fabricCanvas.off('mouse:move', this._boundMouseMoveListener)
+          break
       }
       if (!this.activeShape) { return }
     },
