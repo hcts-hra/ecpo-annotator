@@ -150,6 +150,7 @@
     },
 
     resizecanvas: function() {
+      // TODO: use image top left instead of OSD top left as origin?
       const origin = new OpenSeadragon.Point(0, 0);
       this._fabricCanvas.setWidth(this._containerWidth);
       this._fabricCanvas.setHeight(this._containerHeight);
@@ -164,13 +165,14 @@
       const canvasOffset = this._canvasdiv.getBoundingClientRect();
 
       const pageScroll = OpenSeadragon.getPageScroll();
-
       this._fabricCanvas.absolutePan(
         new fabric.Point(
           canvasOffset.left - x + pageScroll.x,
           canvasOffset.top - y + pageScroll.y
         )
       );
+      // set borderScaleFactor for all shapes
+
     },
 
     highlight: function (idOrElement) {
@@ -260,9 +262,10 @@
     },
 
     remove: function () {
-      const ao = this._fabricCanvas.getActiveObject();
-      if(!ao) return;
-
+      const ao = this._fabricCanvas.getActiveObject() || this.activeShape;
+      if (!ao) { return; }
+      this.reset()
+      this._annotator.mode = this._annotator.modes.SELECT
       this._fabricCanvas.remove(ao);
       this._fabricCanvas.renderAll();
       this._canvas.dispatchEvent(new CustomEvent('shape-deleted', {
