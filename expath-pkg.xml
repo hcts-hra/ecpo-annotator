@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<package xmlns="http://expath.org/ns/pkg" name="http://exist-db.org/apps/ecpo" abbrev="ecpo" version="1.12.1" spec="1.0">
+<package xmlns="http://expath.org/ns/pkg" name="http://exist-db.org/apps/ecpo" abbrev="ecpo" version="1.13.0" spec="1.0">
     <title>ECPO</title>
 </package>

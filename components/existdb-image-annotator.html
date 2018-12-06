@@ -59,8 +59,6 @@ Custom property | Description | Default
                     height: 40px;
                 };
                 @apply(--paper-font-common-base);
-
-
             }
 
             toggle-icon {
@@ -453,7 +451,7 @@ Custom property | Description | Default
                 // document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
                 // document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
                 document.addEventListener('shape-selected', this._selectedShapeHandler.bind(this))
-                this.addEventListener('keypress', this._keyHandler);
+                this.addEventListener('keydown', this._keyHandler);
                 this.$.focusDummy.focus();
             }
 
@@ -763,9 +761,8 @@ Custom property | Description | Default
             }
 
             _keyHandler(e) {
-                console.log('_keyHandler', e.key);
-
                 const key = e.key;
+                console.log('_keyHandler', key);
 
                 switch (key) {
                     case 'g':
@@ -796,6 +793,14 @@ Custom property | Description | Default
                     case 'n':
                         console.log('navigate');
                         this.mode = this.modes.NAVIGATE
+                        break;
+                    case 'Escape':
+                        this._fabricOverlay.deselect()
+                        this.mode = this.modes.SELECT
+                        break;
+                    case 'Backspace':
+                        this._fabricOverlay.remove()
+                        this.mode = this.modes.SELECT
                         break;
                     default:
                         console.log('undefined key ', key);
