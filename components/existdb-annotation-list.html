@@ -2,7 +2,6 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
-<link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
@@ -15,51 +14,26 @@
             :host {
                 display: block;
                 @apply(--paper-font-common-base);
-                /*border-left:1px solid var(--paper-blue-700);*/
-
-                box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14),
-                0 1px 10px 0 rgba(0, 0, 0, 0.12),
-                0 2px 4px -1px rgba(0, 0, 0, 0.4);
-
+                box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
                 height: 100%;
                 text-align: center;
             }
-            h2{
-                padding:10px;
-                font-weight: 300;
-                margin:0;
-                font-size:20px;
-                background: var(--paper-grey-100);
-            }
-            .wrapper{
-                padding: 10px;
-            }
-            app-toolbar{
-                background: var(--paper-blue-700);
-                color:white;
-            }
-
-            paper-button{
+            
+            paper-button {
                 margin:10px 0;
                 font-size: 12px;
             }
         </style>
-<!--
-        <app-toolbar>
-            <span main-title></span>
-            <paper-button>submit</paper-button>
-            <paper-icon-button icon='save' on-click='save'>save</paper-icon-button></h2>
-        </app-toolbar>
--->
+
+        <iron-ajax id="annotationsAPI"
+            url="/exist/apps/wap/annotations/"
+            on-error="_handleError" 
+            verbose with-credentials handle-as="json"></iron-ajax>
+
         <paper-button raised on-click="save">submit</paper-button>
-
-<!--
-        <template is="dom-repeat" items="{{annotations}}" as="annotation">
-            <existdb-annotation-item id="{{annotation.id}}" body="{{annotation.body}}" target="{{annotation.target}}"></existdb-annotation-item>
-        </template>
--->
-
-        <existdb-annotation-item id="{{current.id}}" body="{{current.body}}" target="{{current.target}}" on-annotation-changed="_handleAnnotationChange"></existdb-annotation-item>
+        
+        <existdb-annotation-item id="{{current.id}}" body="{{current.body}}" target="{{current.target}}"
+            on-annotation-changed="_handleAnnotationChange"></existdb-annotation-item>
 
     </template>
 
@@ -137,7 +111,6 @@
 
             handle (e) {
                 console.log('annotation-list handle e ',e);
-                console.log('annotation-list.annotations ', this.annotations);
 
                 if (e.type === 'shape-selected' && e.detail.shape == null) {
                     // nothing selected
@@ -154,7 +127,7 @@
                 if (e.type === 'shape-created') {
                     const newAnnotation = this.createAnnotation({
                         id: 's-' + Date.now(),
-                        body: '',
+                        body: [],
                         target: [this.createAnnotationTarget(e.detail.shape)]
                     });
 
@@ -172,23 +145,27 @@
                     // find index of connected entry by e.detail.id
                     const index = this.itemIndexByShapeId(shapeId)
                     if (index < 0) { return console.warn('deleted shape had no annotation') }
-                    // TODO: remove target from annotation
-                    // const targetIndex = this
-                    // this.splice(['annotations', index, 'target'], targetIndex, 1)
-                    // TODO: if this is the last shape of the annotation
-                    // remove annotation 
-                    this.splice('annotations', index, 1)
-                    // this.splice('targetToAnnotationMap', this.annotations.indexOf(annotation), 1);
-                    return 
+                    const anno = this.get('annotations', index)
+
+                    // remove target from annotation
+                    const targetIndex = anno.target.map(t=>t.id).indexOf(shapeId)
+                    this.splice(['annotations', index, 'target'], targetIndex, 1)
+    
+                    // remove annotation if it has no target left
+                    if (this.get(['annotations', index, 'target']).length === 0) {
+                        this.splice('annotations', index, 1)
+                    }
+
+                    return;
                 }
 
                 if (e.type === 'shape-changed') {
                     // find index of connected entry by e.detail.id
-                    return this.splice(['annotations', index, 'target'], targetIndex, 1, this.createAnnotationTarget(e.detail.shape))
+                    const updated = this.createAnnotationTarget(e.detail.shape)
+                    return this.splice(['annotations', index, 'target'], targetIndex, 1, updated)
                 }
 
                 if (e.type === 'shape-selected') {
-//                    const shapeId = this.targetToAnnotationMap.indexOf(e.detail.shape.id);
                     console.log('selected: shapeId ', e.detail.shape.id);
                     const anno = this.itemByShapeId(e.detail.shape.id);
                     console.log('set current to', anno);
@@ -196,7 +173,7 @@
                     return;
                 }
 
-                    console.log('annotation-list', 'unhandled', e)
+                console.log('annotation-list', 'unhandled', e)
             }
 
             setCurrent (annotation) {
@@ -214,21 +191,35 @@
                         "type": "SvgSelector",
                         "value": shape.svg
                     },
-                    "source": this.sourcefile
+                    "source": this.source
+                }
+            }
+            
+            createAnnotationBody () {
+                return {
+                    type: "CategoryLabel",
+                    value: {
+                        name: 'uncategorized',
+                        color: 'grey'
+                    }
                 }
             }
 
             createAnnotation(annotation) {
                 const annotationDefaults = {
-                    "@context": "http://www.w3.org/ns/anno.jsonld",
                     "type": "Annotation",
-                    "body": annotation.body
+                    "created": (new Date()).toISOString()
                 }
                 return Object.assign({}, annotation, annotationDefaults)
             }
 
-            setAnnotationBody(annotationId, body){
+            setAnnotationBody(annotationId, body) {
+                this.set(['annotations', this.itemIndexById(annotationId), 'body'], body)
+            }
 
+            addAnnotationContext(annotation) {
+                annotation['@context'] = "http://www.w3.org/ns/anno.jsonld"
+                return annotation
             }
 
             addAnnotation(annotation) {
@@ -236,34 +227,118 @@
                 annotation.target.map(target => this.targetToAnnotationMap[target.id] = annotation.id)
             }
 
-            switchColorMode(){
+            switchColorMode() {
                 annotations.forEach(annotation => this._switchColor(annotation))
             }
 
-            _switchColor(annotation){
+            _switchColor(annotation) {
                 console.log("annotation _switchColor ", annotation);
             }
 
             save() {
-                const stringified = JSON.stringify(this.annotations)
+                const basicContainer = {
+                    '@context': [
+                        "http://www.w3.org/ns/anno.jsonld",
+                        "http://www.w3.org/ns/ldp.jsonld"
+                   ],
+                    'type': 'BasicContainer',
+                    'items': this.get('annotations').filter(annotations => annotations.body.length)
+                }
+
+                // also store state in localstorage
+                const stringified = JSON.stringify(basicContainer)
                 console.log('save', stringified)
+
+                // store on server
+                const api = this.$.annotationsAPI
+                api.body = stringified;
+                api.method = 'post'
+                api.contentType = 'text/plain'
+
+                const xhr = api.generateRequest()
+                xhr.completes.then(this._handleSaveResponse.bind(this))
+                
                 localStorage.setItem('annotations', stringified);
             }
 
-            load() {
-                const found = localStorage.getItem('annotations')
-                const annotations = JSON.parse(found)
-                if (!annotations || !annotations.length) { return console.info('no annotations found') }
-                annotations.forEach(annotation => this.addAnnotation(annotation))
-                this.dispatchEvent(new CustomEvent('annotations-loaded', {
-                   detail: this.get(['annotations'])
-                }))
+            _handleSaveResponse(result) {
+                console.log('_handleLoadResponse', result)
             }
 
-            _handleAnnotationChange(e){
+            load(page) {
+                const api = this.$.annotationsAPI
+                api.body = null;
+                api.method = 'get';
+                api.headers = {
+                    "Accept": "application/ld+json; profile=\"http://www.w3.org/ns/anno.jsonld\"",
+                    "Prefer": "return=representation;include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""
+                }
+                // TODO: add page parameter
+
+                const xhr = api.generateRequest()
+                xhr.completes.then(this._handleLoadResponse.bind(this))
+            }
+
+            _handleLoadResponse(request) {
+                console.log('_handleLoadResponse', request.response)
+                const container = request.response
+
+                // basic response validity check
+                if (
+                    !container || 
+                    !container.type ||
+                    container.type.indexOf('AnnotationPage') < 0
+                ) {
+                    return console.info('no annotations found', container)
+                }
+
+                // need to fetch next paged result?
+                if (this._hasNextPage(request.response)) {
+                    // request next page
+                    const parsed = new URL(request.next)
+                    console.log('request to next page', parsed.searchParams)
+                }
+
+                // add annotations
+                // needs some translations, since the response from existdb 
+                // target.selector.value has <> url-encoded 
+                function htmlDecode(input) {
+                    var doc = new DOMParser().parseFromString(input, "text/html");
+                    return doc.documentElement.textContent;
+                }
+                const items = container.items.map(item => {
+                    const convertedTargets = item.target.map(target => {
+                        const decoded = htmlDecode(target.selector.value)
+                        target.selector.value = decoded
+                        return target
+                    })
+                    item.target = convertedTargets
+                    return item
+                })
+                items.forEach(annotation => this.addAnnotation(annotation))
+                const loaded = this.get(['annotations'])
+
+                // inform about new annotations
+                this.dispatchEvent(new CustomEvent('annotations-loaded', {
+                   detail: loaded
+                }))
+
+                console.log('got Annotations', items)
+                console.log('loaded Annotations', loaded)
+            }
+
+            _hasNextPage(container) {
+                return container.next !== container.last
+            }
+
+            _handleError(e) {
+                console.error('_handleError', e, this.$.annotationsAPI.lastError)
+                alert('FAILURE: \n' + this.$.annotationsAPI.lastError);
+            }
+
+            _handleAnnotationChange(e) {
                 console.log('_handleAnnotationChange', e)
-                const annotationId = e.detail.id;
-                const index = this.itemIndexById(annotationId);
+                const index = this.itemIndexById(e.detail.id);
                 const anno = this.get(['annotations', index])
                 anno.body = e.detail.body;
                 anno.target = e.detail.target;

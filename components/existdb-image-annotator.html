@@ -739,7 +739,7 @@ Custom property | Description | Default
 
             addShapesFromAnnotations(annotations) {
                 annotations.forEach(annotation => {
-                    const attributes = {data: {label: annotation.body}}
+                    const attributes = {data: {label: annotation.body[0].value}}
                     annotation.target.forEach(target => {
                         this._fabricOverlay.importSVG(target.selector.value, attributes)
                     })
@@ -765,6 +765,9 @@ Custom property | Description | Default
                 console.log('_keyHandler', key);
 
                 switch (key) {
+                    case 'i':
+                        console.log(this.viewer.tileSource[0].imageToViewportCoordinates(0,0))
+                        break
                     case 'g':
                         console.log('grouping mode triggered');
                         this.mode = this.modes.GROUP;

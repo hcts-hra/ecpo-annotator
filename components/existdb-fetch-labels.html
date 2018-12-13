@@ -31,7 +31,6 @@
                    url="/exist/apps/ecpo/modules/get-labels.xql"
                    on-error="_handleError"
                    auto></iron-ajax>
-        <!--<slot></slot>-->
 
         <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label" attr-for-selected="name">
             <template id="labelList" is="dom-repeat" items="[[labels]]" as="label">
@@ -82,10 +81,7 @@
             }
 
             _selectedChanged(newVal, oldVal) {
-//                console.log('labels loaded ', this.labels);
-//                console.log('selected changed ', newVal);
                 const label = this.getLabelByName(newVal)
-//                console.log('selected value changed ', label);
                 if (!newVal || !label) return;
                 this.dispatchEvent(new CustomEvent('label-selected', {bubbles: true, composed: true, detail: {label:label}}));
             }

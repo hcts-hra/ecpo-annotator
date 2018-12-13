@@ -288,9 +288,11 @@
         `<svg xmlns="http://www.w3.org/2000/svg">${svg}</svg>`,
         objects => {
           objects.map(object => {
-            const props = Object.assign({}, this.defaultStyle, attributes, this.getFillAndStroke(attributes))
+            const props = Object.assign({}, this.defaultStyle)
             object.set(props)
             this._fabricCanvas.add(object)
+            object.set(attributes)
+            object.set(this.getFillAndStroke(object))
           })
         }
       )

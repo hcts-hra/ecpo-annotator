@@ -94,7 +94,7 @@
             drawLoadedAnnotations (e) {
                 const annotations = e.detail
                 // TODO listen for init event
-                setTimeout(() => { this.$.viewer.addShapesFromAnnotations(annotations) }, 500);
+                setTimeout(() => { this.$.viewer.addShapesFromAnnotations(annotations) }, 1500);
             }
 
             handleLabelSelected (e) {

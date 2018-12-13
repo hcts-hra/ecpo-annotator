@@ -58,7 +58,7 @@
     <div class="item">
       <div class="type">[[id]]</div>
       <div class="item-body">
-        <existdb-fetch-labels selected="{{body.name}}" id="labels" labels="{{labels}}" on-label-selected="_setLabel" ></existdb-fetch-labels>
+        <existdb-fetch-labels selected="{{body.0.value.name}}" id="labels" labels="{{labels}}" on-label-selected="_setLabel" ></existdb-fetch-labels>
       </div>
     </div>
   </template>
@@ -87,8 +87,8 @@
             value: ""
           },
           body: {
-            type: Object,
-            value: _ => ({})
+            type: Array,
+            value: _ => []
           },
           target: {
             type: Array,
@@ -130,12 +130,19 @@
 
       _setLabel(e) {
         console.log(e.detail.label)
-        this.set('body', e.detail.label);
+        console.log(this.get('body'))
+        this.set('body.0', {
+          type: 'CategoryLabel',
+          value: e.detail.label
+        });
         this.dispatchEvent(
           new CustomEvent("annotation-changed", {
             bubbles: true,
             composed: true,
-            detail: { id: this.id, body: this.body, target: this.target }
+            detail: {
+              id: this.id,
+              body: this.body,
+              target: this.target }
           })
         );
       }
