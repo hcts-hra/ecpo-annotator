@@ -253,7 +253,7 @@
                 const api = this.$.annotationsAPI
                 api.body = stringified;
                 api.method = 'post'
-                api.contentType = 'text/plain'
+                api.contentType = 'application/ld+json'
 
                 const xhr = api.generateRequest()
                 xhr.completes.then(this._handleSaveResponse.bind(this))
