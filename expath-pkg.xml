@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://expath.org/ns/pkg" 
     name="http://exist-db.org/apps/ecpo" abbrev="ecpo" 
-    version="1.14.0" spec="1.0">
+    version="1.15.0" spec="1.0">
     <!-- <dependency package="http://exist-db.org/apps/web-annotation-service" semver="1.0.0"/> -->
     <title>ECPO</title>
 </package>

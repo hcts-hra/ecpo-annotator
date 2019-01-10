@@ -440,19 +440,22 @@ Custom property | Description | Default
                 document.addEventListener('WebComponentsReady', function () {
                     console.log('webcomponentsready');
                     // Init openseadragon if we are using a deep zoom image
-                    if (this.dzi) {
-                        // Add src changed observer
-                        this._initOpenSeadragon();
-                        this._initFabric();
-                        this.dispatchEvent(new CustomEvent('annotator-initialized', {}));
-                    }
-                }.bind(this));
+                });
                 // document.addEventListener('shape-created', this._newShapeHandler.bind(this))
                 // document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
                 // document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
                 document.addEventListener('shape-selected', this._selectedShapeHandler.bind(this))
                 this.addEventListener('keydown', this._keyHandler);
                 this.$.focusDummy.focus();
+            }
+
+            initialize () {
+                console.log('initialize');
+
+                this._initOpenSeadragon();
+                console.log('OSD init done');
+                this._initFabric();
+                this.dispatchEvent(new CustomEvent('annotator-initialized', {}));
             }
 
             disconnectedCallback() {
@@ -483,7 +486,7 @@ Custom property | Description | Default
             }
 
             _initFabric() {
-                const self = this;
+                console.log('_initFabric start');
                 const options = {annotator: this};
                 this._fabricOverlay = this.viewer.fabricjsOverlay(options);
                 console.log('_initFabric done');
@@ -497,6 +500,7 @@ Custom property | Description | Default
                     url: this.src,
                     buildPyramid: false
                 };
+                console.log('_initOpenSeadragon');
 
                 this.viewer = OpenSeadragon({
                     element: this,
@@ -523,6 +527,7 @@ Custom property | Description | Default
                     zoomInButton: this.$.zoomIn,
                     zoomOutButton: this.$.zoomOut
                 });
+                console.log('_initOpenSeadragon end');
             }
 
             _newShapeHandler(e) {
@@ -601,20 +606,27 @@ Custom property | Description | Default
             }
 
             _srcChanged(newVal, oldVal) {
-//                console.log('_srcChanged');
-                if (this.dzi && this.init) {
-                    this._addTiledImage();
+                console.log('_srcChanged');
+                if (!newVal || newVal == '') {return}
+                if (!this.init) {
+                    return this.initialize();
                 }
+                if (this.dzi && this.init) {
+                    return this._addTiledImage();
+                }
+   
+                this._addImage()
             }
 
-            // Add loaded images to viewer
-            _loadedChanged() {
-                if (!this.loaded) { return }
-                if (!this.init) {
-                    return this._initOpenSeadragon();
-                }
-                this._addImage();
-            }
+            // // Add loaded images to viewer
+            // _loadedChanged() {
+            //     if (!this.loaded) { return }
+            //     if (!this.init) {
+            //         return this._initOpenSeadragon();
+            //     }
+            //     this._clear()
+            //     this._addImage();
+            // }
 
             _addImage() {
                 this.viewer.addSimpleImage({url: this.src, index: 0, replace: true});
@@ -747,6 +759,7 @@ Custom property | Description | Default
             }
 
             _fillMode() {
+                if (!this.init) {return}
                 this.$.fillMode.toggleChecked()
                 this._fabricOverlay.switchFillMode();
             }

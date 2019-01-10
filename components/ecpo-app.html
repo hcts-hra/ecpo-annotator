@@ -34,7 +34,7 @@
                     on-label-selected="handleLabelSelected"></existdb-annotation-list>
             </app-drawer>
 
-            <existdb-image-annotator id="viewer" class="viewer" dzi="true"
+            <existdb-image-annotator id="viewer" class="viewer"
                                         show-zoom-control="show-zoom-control"
                                         show-home-control="false"
                                         show-full-page-control="true"
@@ -70,7 +70,8 @@
                 return {
                     document: {
                         type: String,
-                        value: "bower_components/img-pan-zoom/demo/images/output.dzi"
+                        value: "",
+                        // observer: "_addImage"
                     }
                 };
             }
@@ -94,13 +95,19 @@
             drawLoadedAnnotations (e) {
                 const annotations = e.detail
                 // TODO listen for init event
-                setTimeout(() => { this.$.viewer.addShapesFromAnnotations(annotations) }, 1500);
+                console.log('drawLoadedAnnotations', annotations)
+                setTimeout(() => { this.$.viewer.addShapesFromAnnotations(annotations) }, 15000);
             }
 
             handleLabelSelected (e) {
                 this.$.viewer.changeSelectedShapes({data: e.detail})
             }
 
+            // _addImage (oldVal, newVal) {
+            //     if (!newVal || oldVal == newVal) { return }
+            //     this.$.viewer.src(newVal)
+            //     this.$.viewer.initialize()
+            // }
         }
 
         window.customElements.define(EcpoApp.is, EcpoApp);

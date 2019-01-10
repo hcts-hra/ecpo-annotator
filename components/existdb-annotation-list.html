@@ -55,7 +55,8 @@
                 return {
                     source: {
                         type: String,
-                        value: ''
+                        value: '',
+                        observer: 'load'
                     },
                     annotations: {
                         type: Array,
@@ -99,7 +100,6 @@
 
             connectedCallback() {
                 super.connectedCallback();
-                this.load()
                 console.log("this.targetToAnnotationMap", this.targetToAnnotationMap)
                 console.log("this.annotations", this.annotations)
                 console.log("this.test", this.test)
@@ -265,13 +265,17 @@
                 console.log('_handleLoadResponse', result)
             }
 
-            load(page) {
+            load (newSrc, oldSrc) {
+                if (!newSrc || newSrc == '') {return}
                 const api = this.$.annotationsAPI
                 api.body = null;
                 api.method = 'get';
                 api.headers = {
                     "Accept": "application/ld+json; profile=\"http://www.w3.org/ns/anno.jsonld\"",
                     "Prefer": "return=representation;include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""
+                }
+                api.params = {
+                    "document": newSrc
                 }
                 // TODO: add page parameter
 

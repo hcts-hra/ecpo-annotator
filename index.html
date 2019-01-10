@@ -24,5 +24,25 @@
 </head>
 <body>
   <ecpo-app> </ecpo-app>
+  <script>
+      document.addEventListener('WebComponentsReady', function () {
+        fetch('modules/list-image-links.xq', { method: 'GET', credentials: 'same-origin' })
+          .then(function(response) {
+              if(!response.ok){
+                  return console.error(response)
+              }
+            return response.json()
+          })
+          .then(function (list) {
+            console.log('RESPONSEJSON', list)
+            let items = list.images.length
+            let randomIndex = Math.floor(Math.random() * items)  
+            document.querySelector('ecpo-app').setAttribute('document', list.images[randomIndex].id)
+          })
+          .catch(function (reason) {
+            return console.error(reason)
+          })
+      })
+  </script>
 </body>
 </html>
