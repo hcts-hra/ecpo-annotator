@@ -1,930 +1,930 @@
 <base name="jingbao">
-<file name="jb_0001_1919-03-03_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0001_1919-03-03_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0002_1919-03-06_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0002_1919-03-06_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0003_1919-03-09_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0003_1919-03-09_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0004_1919-03-12_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0004_1919-03-12_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0005_1919-03-15_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0005_1919-03-15_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0006_1919-03-18_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0006_1919-03-18_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0007_1919-03-21_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0007_1919-03-21_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0008_1919-03-24_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0008_1919-03-24_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0009_1919-03-27_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0009_1919-03-27_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0010_1919-03-30_0001+0004.tif" year="1919" month="03"/>
-<file name="jb_0010_1919-03-30_0002+0003.tif" year="1919" month="03"/>
-<file name="jb_0011_1919-04-03_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0011_1919-04-03_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0012_1919-04-06_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0012_1919-04-06_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0013_1919-04-09_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0013_1919-04-09_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0014_1919-04-12_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0014_1919-04-12_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0015_1919-04-15_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0015_1919-04-15_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0016_1919-04-18_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0016_1919-04-18_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0017_1919-04-21_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0017_1919-04-21_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0018_1919-04-24_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0018_1919-04-24_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0019_1919-04-27_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0019_1919-04-27_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0020_1919-04-30_0001+0004.tif" year="1919" month="04"/>
-<file name="jb_0020_1919-04-30_0002+0003.tif" year="1919" month="04"/>
-<file name="jb_0021_1919-05-03_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0021_1919-05-03_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0022_1919-05-06_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0022_1919-05-06_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0023_1919-05-09_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0023_1919-05-09_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0024_1919-05-12_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0024_1919-05-12_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0025_1919-05-15_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0025_1919-05-15_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0026_1919-05-18_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0026_1919-05-18_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0027_1919-05-21_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0027_1919-05-21_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0028_1919-05-24_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0028_1919-05-24_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0029_1919-05-27_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0029_1919-05-27_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0030_1919-05-30_0001+0004.tif" year="1919" month="05"/>
-<file name="jb_0030_1919-05-30_0002+0003.tif" year="1919" month="05"/>
-<file name="jb_0031_1919-06-03_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0031_1919-06-03_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0032_1919-06-06_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0032_1919-06-06_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0033_1919-06-09_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0033_1919-06-09_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0034_1919-06-12_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0034_1919-06-12_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0035_1919-06-15_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0035_1919-06-15_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0036_1919-06-18_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0036_1919-06-18_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0037_1919-06-21_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0037_1919-06-21_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0038_1919-06-24_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0038_1919-06-24_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0039_1919-06-27_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0039_1919-06-27_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0040_1919-06-30_0001+0004.tif" year="1919" month="06"/>
-<file name="jb_0040_1919-06-30_0002+0003.tif" year="1919" month="06"/>
-<file name="jb_0041_1919-07-03_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0041_1919-07-03_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0042_1919-07-06_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0042_1919-07-06_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0043_1919-07-09_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0043_1919-07-09_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0044_1919-07-12_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0044_1919-07-12_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0045_1919-07-15_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0045_1919-07-15_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0046_1919-07-18_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0046_1919-07-18_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0047_1919-07-21_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0047_1919-07-21_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0048_1919-07-24_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0048_1919-07-24_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0049_1919-07-27_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0049_1919-07-27_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0050_1919-07-30_0001+0004.tif" year="1919" month="07"/>
-<file name="jb_0050_1919-07-30_0002+0003.tif" year="1919" month="07"/>
-<file name="jb_0051_1919-08-03_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0051_1919-08-03_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0052_1919-08-06_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0052_1919-08-06_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0053_1919-08-09_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0053_1919-08-09_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0054_1919-08-12_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0054_1919-08-12_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0055_1919-08-15_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0055_1919-08-15_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0056_1919-08-18_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0056_1919-08-18_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0057_1919-08-21_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0057_1919-08-21_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0058_1919-08-24_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0058_1919-08-24_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0059_1919-08-27_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0059_1919-08-27_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0060_1919-08-30_0001+0004.tif" year="1919" month="08"/>
-<file name="jb_0060_1919-08-30_0002+0003.tif" year="1919" month="08"/>
-<file name="jb_0061_1919-09-03_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0061_1919-09-03_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0062_1919-09-06_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0062_1919-09-06_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0063_1919-09-09_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0063_1919-09-09_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0064_1919-09-12_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0064_1919-09-12_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0065_1919-09-15_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0065_1919-09-15_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0066_1919-09-18_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0066_1919-09-18_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0067_1919-09-21_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0067_1919-09-21_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0068_1919-09-24_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0068_1919-09-24_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0069_1919-09-27_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0069_1919-09-27_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0070_1919-09-30_0001+0004.tif" year="1919" month="09"/>
-<file name="jb_0070_1919-09-30_0002+0003.tif" year="1919" month="09"/>
-<file name="jb_0071_1919-10-03_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0071_1919-10-03_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0072_1919-10-06_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0072_1919-10-06_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0073_1919-10-10_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0073_1919-10-10_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0073_1919-10-10_0005+0008.tif" year="1919" month="10"/>
-<file name="jb_0073_1919-10-10_0006+0007.tif" year="1919" month="10"/>
-<file name="jb_0074_1919-10-12_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0074_1919-10-12_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0075_1919-10-15_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0075_1919-10-15_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0076_1919-10-18_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0076_1919-10-18_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0077_1919-10-21_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0077_1919-10-21_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0078_1919-10-24_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0078_1919-10-24_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0079_1919-10-27_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0079_1919-10-27_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0080_1919-10-30_0001+0004.tif" year="1919" month="10"/>
-<file name="jb_0080_1919-10-30_0002+0003.tif" year="1919" month="10"/>
-<file name="jb_0081_1919-11-03_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0081_1919-11-03_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0082_1919-11-06_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0082_1919-11-06_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0083_1919-11-09_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0083_1919-11-09_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0084_1919-11-12_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0084_1919-11-12_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0085_1919-11-15_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0085_1919-11-15_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0086_1919-11-18_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0086_1919-11-18_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0087_1919-11-21_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0087_1919-11-21_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0088_1919-11-24_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0088_1919-11-24_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0089_1919-11-27_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0089_1919-11-27_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0090_1919-11-30_0001+0004.tif" year="1919" month="11"/>
-<file name="jb_0090_1919-11-30_0002+0003.tif" year="1919" month="11"/>
-<file name="jb_0091_1919-12-03_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0091_1919-12-03_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0092_1919-12-06_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0092_1919-12-06_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0093_1919-12-09_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0093_1919-12-09_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0094_1919-12-12_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0094_1919-12-12_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0095_1919-12-15_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0095_1919-12-15_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0096_1919-12-18_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0096_1919-12-18_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0097_1919-12-21_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0097_1919-12-21_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0098_1919-12-24_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0098_1919-12-24_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0099_1919-12-27_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0099_1919-12-27_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0100_1919-12-30_0001+0004.tif" year="1919" month="12"/>
-<file name="jb_0100_1919-12-30_0002+0003.tif" year="1919" month="12"/>
-<file name="jb_0101_1920-01-01_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0101_1920-01-01_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0101_1920-01-01_0005+0008.tif" year="1920" month="01"/>
-<file name="jb_0101_1920-01-01_0006+0007.tif" year="1920" month="01"/>
-<file name="jb_0102_1920-01-06_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0102_1920-01-06_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0103_1920-01-09_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0103_1920-01-09_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0104_1920-01-12_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0104_1920-01-12_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0105_1920-01-15_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0105_1920-01-15_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0106_1920-01-18_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0106_1920-01-18_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0107_1920-01-21_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0107_1920-01-21_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0108_1920-01-24_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0108_1920-01-24_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0109_1920-01-27_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0109_1920-01-27_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0110_1920-01-30_0001+0004.tif" year="1920" month="01"/>
-<file name="jb_0110_1920-01-30_0002+0003.tif" year="1920" month="01"/>
-<file name="jb_0111_1920-02-03_0001+0004.tif" year="1920" month="02"/>
-<file name="jb_0111_1920-02-03_0002+0003.tif" year="1920" month="02"/>
-<file name="jb_0112_1920-02-06_0001+0004.tif" year="1920" month="02"/>
-<file name="jb_0112_1920-02-06_0002+0003.tif" year="1920" month="02"/>
-<file name="jb_0113_1920-02-09_0001+0004.tif" year="1920" month="02"/>
-<file name="jb_0113_1920-02-09_0002+0003.tif" year="1920" month="02"/>
-<file name="jb_0114_1920-02-12_0001+0004.tif" year="1920" month="02"/>
-<file name="jb_0114_1920-02-12_0002+0003.tif" year="1920" month="02"/>
-<file name="jb_0115_1920-02-15_0001+0004.tif" year="1920" month="02"/>
-<file name="jb_0115_1920-02-15_0002+0003.tif" year="1920" month="02"/>
-<file name="jb_0115_1920-02-24_0001+0004.tif" year="1920" month="02"/>
-<file name="jb_0115_1920-02-24_0002+0003.tif" year="1920" month="02"/>
-<file name="jb_0117_1920-02-27_0001+0004.tif" year="1920" month="02"/>
-<file name="jb_0117_1920-02-27_0002+0003.tif" year="1920" month="02"/>
-<file name="jb_0118_1920-03-01_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0118_1920-03-01_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0119_1920-03-03_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0119_1920-03-03_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0120_1920-03-06_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0120_1920-03-06_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0121_1920-03-09_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0121_1920-03-09_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0122_1920-03-12_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0122_1920-03-12_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0123_1920-03-15_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0123_1920-03-15_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0124_1920-03-18_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0124_1920-03-18_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0125_1920-03-21_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0125_1920-03-21_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0126_1920-03-24_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0126_1920-03-24_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0127_1920-03-27_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0127_1920-03-27_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0128_1920-03-30_0001+0004.tif" year="1920" month="03"/>
-<file name="jb_0128_1920-03-30_0002+0003.tif" year="1920" month="03"/>
-<file name="jb_0129_1920-04-03_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0129_1920-04-03_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0130_1920-04-06_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0130_1920-04-06_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0131_1920-04-09_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0131_1920-04-09_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0132_1920-04-12_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0132_1920-04-12_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0133_1920-04-15_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0133_1920-04-15_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0134_1920-04-18_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0134_1920-04-18_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0135_1920-04-21_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0135_1920-04-21_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0136_1920-04-24_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0136_1920-04-24_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0137_1920-04-27_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0137_1920-04-27_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0138_1920-04-30_0001+0004.tif" year="1920" month="04"/>
-<file name="jb_0138_1920-04-30_0002+0003.tif" year="1920" month="04"/>
-<file name="jb_0139_1920-05-03_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0139_1920-05-03_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0140_1920-05-06_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0140_1920-05-06_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0141_1920-05-09_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0141_1920-05-09_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0142_1920-05-12_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0142_1920-05-12_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0143_1920-05-15_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0143_1920-05-15_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0144_1920-05-18_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0144_1920-05-18_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0145_1920-05-21_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0145_1920-05-21_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0146_1920-05-24_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0146_1920-05-24_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0147_1920-05-27_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0147_1920-05-27_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0148_1920-05-30_0001+0004.tif" year="1920" month="05"/>
-<file name="jb_0148_1920-05-30_0002+0003.tif" year="1920" month="05"/>
-<file name="jb_0149_1920-06-03_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0149_1920-06-03_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0150_1920-06-06_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0150_1920-06-06_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0151_1920-06-09_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0151_1920-06-09_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0152_1920-06-12_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0152_1920-06-12_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0153_1920-06-15_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0153_1920-06-15_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0154_1920-06-18_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0154_1920-06-18_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0155_1920-06-21_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0155_1920-06-21_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0156_1920-06-24_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0156_1920-06-24_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0157_1920-06-27_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0157_1920-06-27_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0158_1920-06-30_0001+0004.tif" year="1920" month="06"/>
-<file name="jb_0158_1920-06-30_0002+0003.tif" year="1920" month="06"/>
-<file name="jb_0159_1920-07-03_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0159_1920-07-03_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0160_1920-07-06_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0160_1920-07-06_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0161_1920-07-09_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0161_1920-07-09_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0162_1920-07-12_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0162_1920-07-12_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0163_1920-07-15_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0163_1920-07-15_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0164_1920-07-18_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0164_1920-07-18_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0165_1920-07-21_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0165_1920-07-21_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0166_1920-07-24_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0166_1920-07-24_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0167_1920-07-27_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0167_1920-07-27_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0168_1920-07-30_0001+0004.tif" year="1920" month="07"/>
-<file name="jb_0168_1920-07-30_0002+0003.tif" year="1920" month="07"/>
-<file name="jb_0169_1920-08-03_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0169_1920-08-03_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0170_1920-08-06_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0170_1920-08-06_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0171_1920-08-09_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0171_1920-08-09_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0172_1920-08-12_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0172_1920-08-12_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0173_1920-08-15_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0173_1920-08-15_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0174_1920-08-18_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0174_1920-08-18_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0175_1920-08-21_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0175_1920-08-21_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0176_1920-08-24_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0176_1920-08-24_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0177_1920-08-27_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0177_1920-08-27_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0178_1920-08-30_0001+0004.tif" year="1920" month="08"/>
-<file name="jb_0178_1920-08-30_0002+0003.tif" year="1920" month="08"/>
-<file name="jb_0179_1920-09-03_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0179_1920-09-03_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0180_1920-09-06_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0180_1920-09-06_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0181_1920-09-09_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0181_1920-09-09_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0182_1920-09-12_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0182_1920-09-12_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0183_1920-09-15_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0183_1920-09-15_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0184_1920-09-18_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0184_1920-09-18_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0185_1920-09-21_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0185_1920-09-21_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0186_1920-09-24_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0186_1920-09-24_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0187_1920-09-27_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0187_1920-09-27_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0188_1920-09-30_0001+0004.tif" year="1920" month="09"/>
-<file name="jb_0188_1920-09-30_0002+0003.tif" year="1920" month="09"/>
-<file name="jb_0189_1920-10-03_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0189_1920-10-03_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0190_1920-10-06_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0190_1920-10-06_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0191_1920-10-10_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0191_1920-10-10_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0191_1920-10-10_0005+0008.tif" year="1920" month="10"/>
-<file name="jb_0191_1920-10-10_0006+0007.tif" year="1920" month="10"/>
-<file name="jb_0192_1920-10-12_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0192_1920-10-12_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0193_1920-10-15_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0193_1920-10-15_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0194_1920-10-18_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0194_1920-10-18_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0195_1920-10-21_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0195_1920-10-21_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0196_1920-10-24_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0196_1920-10-24_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0197_1920-10-27_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0197_1920-10-27_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0198_1920-10-30_0001+0004.tif" year="1920" month="10"/>
-<file name="jb_0198_1920-10-30_0002+0003.tif" year="1920" month="10"/>
-<file name="jb_0199_1920-11-03_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0199_1920-11-03_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0200_1920-11-06_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0200_1920-11-06_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0201_1920-11-09_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0201_1920-11-09_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0202_1920-11-12_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0202_1920-11-12_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0203_1920-11-15_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0203_1920-11-15_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0204_1920-11-18_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0204_1920-11-18_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0205_1920-11-21_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0205_1920-11-21_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0206_1920-11-24_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0206_1920-11-24_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0207_1920-11-27_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0207_1920-11-27_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0208_1920-11-30_0001+0004.tif" year="1920" month="11"/>
-<file name="jb_0208_1920-11-30_0002+0003.tif" year="1920" month="11"/>
-<file name="jb_0209_1920-12-03_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0209_1920-12-03_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0210_1920-12-06_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0210_1920-12-06_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0211_1920-12-09_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0211_1920-12-09_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0212_1920-12-12_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0212_1920-12-12_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0213_1920-12-15_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0213_1920-12-15_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0214_1920-12-18_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0214_1920-12-18_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0215_1920-12-21_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0215_1920-12-21_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0216_1920-12-24_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0216_1920-12-24_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0217_1920-12-27_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0217_1920-12-27_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0218_1920-12-30_0001+0004.tif" year="1920" month="12"/>
-<file name="jb_0218_1920-12-30_0002+0003.tif" year="1920" month="12"/>
-<file name="jb_0219_1921-01-01_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0219_1921-01-01_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0220_1921-01-03_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0220_1921-01-03_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0221_1921-01-06_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0221_1921-01-06_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0222_1921-01-09_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0222_1921-01-09_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0223_1921-01-12_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0223_1921-01-12_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0224_1921-01-15_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0224_1921-01-15_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0225_1921-01-18_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0225_1921-01-18_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0226_1921-01-21_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0226_1921-01-21_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0227_1921-01-24_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0227_1921-01-24_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0228_1921-01-27_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0228_1921-01-27_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0229_1921-01-30_0001+0004.tif" year="1921" month="01"/>
-<file name="jb_0229_1921-01-30_0002+0003.tif" year="1921" month="01"/>
-<file name="jb_0230_1921-02-03_0001+0004.tif" year="1921" month="02"/>
-<file name="jb_0230_1921-02-03_0002+0003.tif" year="1921" month="02"/>
-<file name="jb_0231_1921-02-12_0001+0004.tif" year="1921" month="02"/>
-<file name="jb_0231_1921-02-12_0002+0003.tif" year="1921" month="02"/>
-<file name="jb_0232_1921-02-15_0001+0004.tif" year="1921" month="02"/>
-<file name="jb_0232_1921-02-15_0002+0003.tif" year="1921" month="02"/>
-<file name="jb_0233_1921-02-18_0001+0004.tif" year="1921" month="02"/>
-<file name="jb_0233_1921-02-18_0002+0003.tif" year="1921" month="02"/>
-<file name="jb_0234_1921-02-21_0001+0004.tif" year="1921" month="02"/>
-<file name="jb_0234_1921-02-21_0002+0003.tif" year="1921" month="02"/>
-<file name="jb_0235_1921-02-24_0001+0004.tif" year="1921" month="02"/>
-<file name="jb_0235_1921-02-24_0002+0003.tif" year="1921" month="02"/>
-<file name="jb_0236_1921-02-27_0001+0004.tif" year="1921" month="02"/>
-<file name="jb_0236_1921-02-27_0002+0003.tif" year="1921" month="02"/>
-<file name="jb_0237_1921-03-01_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0237_1921-03-01_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0238_1921-03-03_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0238_1921-03-03_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0239_1921-03-06_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0239_1921-03-06_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0240_1921-03-09_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0240_1921-03-09_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0241_1921-03-12_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0241_1921-03-12_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0242_1921-03-15_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0242_1921-03-15_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0243_1921-03-18_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0243_1921-03-18_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0244_1921-03-21_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0244_1921-03-21_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0245_1921-03-24_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0245_1921-03-24_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0246_1921-03-27_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0246_1921-03-27_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0247_1921-03-30_0001+0004.tif" year="1921" month="03"/>
-<file name="jb_0247_1921-03-30_0002+0003.tif" year="1921" month="03"/>
-<file name="jb_0248_1921-04-03_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0248_1921-04-03_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0249_1921-04-06_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0249_1921-04-06_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0250_1921-04-09_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0250_1921-04-09_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0251_1921-04-12_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0251_1921-04-12_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0252_1921-04-15_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0252_1921-04-15_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0253_1921-04-18_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0253_1921-04-18_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0254_1921-04-21_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0254_1921-04-21_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0255_1921-04-24_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0255_1921-04-24_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0256_1921-04-27_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0256_1921-04-27_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0257_1921-04-30_0001+0004.tif" year="1921" month="04"/>
-<file name="jb_0257_1921-04-30_0002+0003.tif" year="1921" month="04"/>
-<file name="jb_0258_1921-05-03_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0258_1921-05-03_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0259_1921-05-06_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0259_1921-05-06_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0260_1921-05-09_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0260_1921-05-09_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0261_1921-05-12_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0261_1921-05-12_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0262_1921-05-15_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0262_1921-05-15_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0263_1921-05-18_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0263_1921-05-18_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0264_1921-05-21_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0264_1921-05-21_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0265_1921-05-24_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0265_1921-05-24_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0266_1921-05-27_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0266_1921-05-27_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0267_1921-05-30_0001+0004.tif" year="1921" month="05"/>
-<file name="jb_0267_1921-05-30_0002+0003.tif" year="1921" month="05"/>
-<file name="jb_0268_1921-06-03_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0268_1921-06-03_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0269_1921-06-06_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0269_1921-06-06_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0270_1921-06-09_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0270_1921-06-09_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0271_1921-06-12_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0271_1921-06-12_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0272_1921-06-15_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0272_1921-06-15_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0273_1921-06-18_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0273_1921-06-18_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0274_1921-06-21_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0274_1921-06-21_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0275_1921-06-24_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0275_1921-06-24_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0276_1921-06-27_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0276_1921-06-27_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0277_1921-06-30_0001+0004.tif" year="1921" month="06"/>
-<file name="jb_0277_1921-06-30_0002+0003.tif" year="1921" month="06"/>
-<file name="jb_0278_1921-07-03_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0278_1921-07-03_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0279_1921-07-06_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0279_1921-07-06_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0280_1921-07-09_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0280_1921-07-09_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0281_1921-07-12_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0281_1921-07-12_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0282_1921-07-15_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0282_1921-07-15_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0283_1921-07-18_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0283_1921-07-18_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0284_1921-07-21_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0284_1921-07-21_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0285_1921-07-24_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0285_1921-07-24_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0286_1921-07-27_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0286_1921-07-27_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0287_1921-07-30_0001+0004.tif" year="1921" month="07"/>
-<file name="jb_0287_1921-07-30_0002+0003.tif" year="1921" month="07"/>
-<file name="jb_0288_1921-08-01_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0288_1921-08-01_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0289_1921-08-03_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0289_1921-08-03_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0290_1921-08-06_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0290_1921-08-06_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0291_1921-08-09_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0291_1921-08-09_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0292_1921-08-12_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0292_1921-08-12_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0293_1921-08-15_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0293_1921-08-15_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0294_1921-08-18_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0294_1921-08-18_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0295_1921-08-21_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0295_1921-08-21_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0296_1921-08-24_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0296_1921-08-24_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0297_1921-08-27_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0297_1921-08-27_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0298_1921-08-30_0001+0004.tif" year="1921" month="08"/>
-<file name="jb_0298_1921-08-30_0002+0003.tif" year="1921" month="08"/>
-<file name="jb_0299_1921-09-03_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0299_1921-09-03_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0300_1921-09-06_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0300_1921-09-06_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0301_1921-09-09_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0301_1921-09-09_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0302_1921-09-12_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0302_1921-09-12_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0303_1921-09-15_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0303_1921-09-15_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0304_1921-09-18_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0304_1921-09-18_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0305_1921-09-21_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0305_1921-09-21_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0306_1921-09-24_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0306_1921-09-24_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0307_1921-09-27_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0307_1921-09-27_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0308_1921-09-30_0001+0004.tif" year="1921" month="09"/>
-<file name="jb_0308_1921-09-30_0002+0003.tif" year="1921" month="09"/>
-<file name="jb_0309_1921-10-03_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0309_1921-10-03_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0310_1921-10-06_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0310_1921-10-06_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0311_1921-10-10_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0311_1921-10-10_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0311_z01_1921-10-10_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0311_z01_1921-10-10_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0312_1921-10-12_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0312_1921-10-12_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0313_1921-10-15_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0313_1921-10-15_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0314_1921-10-18_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0314_1921-10-18_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0315_1921-10-21_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0315_1921-10-21_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0316_1921-10-24_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0316_1921-10-24_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0317_1921-10-27_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0317_1921-10-27_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0318_1921-10-30_0001+0004.tif" year="1921" month="10"/>
-<file name="jb_0318_1921-10-30_0002+0003.tif" year="1921" month="10"/>
-<file name="jb_0319_1921-11-03_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0319_1921-11-03_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0320_1921-11-06_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0320_1921-11-06_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0321_1921-11-09_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0321_1921-11-09_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0322_1921-11-12_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0322_1921-11-12_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0323_1921-11-15_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0323_1921-11-15_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0324_1921-11-18_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0324_1921-11-18_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0325_1921-11-21_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0325_1921-11-21_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0326_1921-11-24_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0326_1921-11-24_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0327_1921-11-27_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0327_1921-11-27_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0328_1921-11-30_0001+0004.tif" year="1921" month="11"/>
-<file name="jb_0328_1921-11-30_0002+0003.tif" year="1921" month="11"/>
-<file name="jb_0329_1921-12-03_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0329_1921-12-03_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0330_1921-12-06_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0330_1921-12-06_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0331_1921-12-09_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0331_1921-12-09_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0332_1921-12-12_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0332_1921-12-12_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0333_1921-12-15_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0333_1921-12-15_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0334_1921-12-18_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0334_1921-12-18_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0335_1921-12-21_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0335_1921-12-21_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0336_1921-12-24_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0336_1921-12-24_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0337_1921-12-27_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0337_1921-12-27_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0338_1921-12-30_0001+0004.tif" year="1921" month="12"/>
-<file name="jb_0338_1921-12-30_0002+0003.tif" year="1921" month="12"/>
-<file name="jb_0339_1922-01-01_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0339_1922-01-01_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0340_1922-01-03_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0340_1922-01-03_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0341_1922-01-06_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0341_1922-01-06_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0342_1922-01-09_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0342_1922-01-09_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0343_1922-01-12_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0343_1922-01-12_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0344_1922-01-15_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0344_1922-01-15_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0345_1922-01-18_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0345_1922-01-18_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0346_1922-01-21_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0346_1922-01-21_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0347_1922-01-23_0001+0004.tif" year="1922" month="01"/>
-<file name="jb_0347_1922-01-23_0002+0003.tif" year="1922" month="01"/>
-<file name="jb_0348_1922-02-01_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0348_1922-02-01_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0349_1922-02-03_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0349_1922-02-03_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0350_1922-02-06_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0350_1922-02-06_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0351_1922-02-09_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0351_1922-02-09_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0352_1922-02-12_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0352_1922-02-12_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0353_1922-02-15_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0353_1922-02-15_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0354_1922-02-18_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0354_1922-02-18_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0355_1922-02-21_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0355_1922-02-21_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0356_1922-02-24_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0356_1922-02-24_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0357_1922-02-27_0001+0004.tif" year="1922" month="02"/>
-<file name="jb_0357_1922-02-27_0002+0003.tif" year="1922" month="02"/>
-<file name="jb_0358_1922-03-01_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0358_1922-03-01_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0359_z01_1922-03-03_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0359_z01_1922-03-03_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0359_z02_1922-03-03_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0359_z02_1922-03-03_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0360_1922-03-06_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0360_1922-03-06_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0361_1922-03-09_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0361_1922-03-09_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0362_1922-03-12_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0362_1922-03-12_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0363_1922-03-15_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0363_1922-03-15_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0364_1922-03-18_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0364_1922-03-18_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0365_1922-03-21_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0365_1922-03-21_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0366_1922-03-24_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0366_1922-03-24_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0367_1922-03-27_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0367_1922-03-27_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0368_1922-03-30_0001+0004.tif" year="1922" month="03"/>
-<file name="jb_0368_1922-03-30_0002+0003.tif" year="1922" month="03"/>
-<file name="jb_0369_1922-04-03_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0369_1922-04-03_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0370_1922-04-06_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0370_1922-04-06_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0371_1922-04-09_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0371_1922-04-09_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0372_1922-04-12_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0372_1922-04-12_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0373_1922-04-15_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0373_1922-04-15_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0374_1922-04-18_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0374_1922-04-18_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0375_1922-04-21_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0375_1922-04-21_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0376_1922-04-24_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0376_1922-04-24_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0377_1922-04-27_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0377_1922-04-27_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0378_1922-04-30_0001+0004.tif" year="1922" month="04"/>
-<file name="jb_0378_1922-04-30_0002+0003.tif" year="1922" month="04"/>
-<file name="jb_0379_1922-05-03_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0379_1922-05-03_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0380_1922-05-06_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0380_1922-05-06_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0381_1922-05-09_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0381_1922-05-09_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0382_1922-05-12_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0382_1922-05-12_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0383_1922-05-15_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0383_1922-05-15_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0384_1922-05-18_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0384_1922-05-18_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0385_1922-05-21_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0385_1922-05-21_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0386_1922-05-24_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0386_1922-05-24_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0387_1922-05-27_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0387_1922-05-27_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0388_1922-05-30_0001+0004.tif" year="1922" month="05"/>
-<file name="jb_0388_1922-05-30_0002+0003.tif" year="1922" month="05"/>
-<file name="jb_0389_1922-06-03_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0389_1922-06-03_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0390_1922-06-06_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0390_1922-06-06_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0391_1922-06-09_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0391_1922-06-09_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0392_1922-06-12_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0392_1922-06-12_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0393_1922-06-15_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0393_1922-06-15_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0394_1922-06-18_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0394_1922-06-18_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0395_1922-06-21_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0395_1922-06-21_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0396_1922-06-24_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0396_1922-06-24_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0397_1922-06-27_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0397_1922-06-27_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0398_1922-06-30_0001+0004.tif" year="1922" month="06"/>
-<file name="jb_0398_1922-06-30_0002+0003.tif" year="1922" month="06"/>
-<file name="jb_0399_1922-07-03_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0399_1922-07-03_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0400_1922-07-06_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0400_1922-07-06_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0401_1922-07-09_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0401_1922-07-09_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0402_1922-07-12_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0402_1922-07-12_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0403_1922-07-15_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0403_1922-07-15_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0404_1922-07-18_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0404_1922-07-18_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0405_1922-07-21_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0405_1922-07-21_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0406_1922-07-24_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0406_1922-07-24_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0407_1922-07-27_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0407_1922-07-27_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0408_1922-07-30_0001+0004.tif" year="1922" month="07"/>
-<file name="jb_0408_1922-07-30_0002+0003.tif" year="1922" month="07"/>
-<file name="jb_0409_1922-08-03_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0409_1922-08-03_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0410_1922-08-06_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0410_1922-08-06_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0411_1922-08-09_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0411_1922-08-09_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0412_1922-08-12_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0412_1922-08-12_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0413_1922-08-15_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0413_1922-08-15_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0414_1922-08-18_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0414_1922-08-18_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0415_1922-08-21_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0415_1922-08-21_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0416_1922-08-24_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0416_1922-08-24_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0417_1922-08-27_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0417_1922-08-27_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0418_1922-08-30_0001+0004.tif" year="1922" month="08"/>
-<file name="jb_0418_1922-08-30_0002+0003.tif" year="1922" month="08"/>
-<file name="jb_0419_1922-09-03_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0419_1922-09-03_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0420_1922-09-06_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0420_1922-09-06_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0421_1922-09-09_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0421_1922-09-09_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0422_1922-09-12_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0422_1922-09-12_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0423_1922-09-15_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0423_1922-09-15_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0424_1922-09-18_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0424_1922-09-18_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0425_1922-09-21_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0425_1922-09-21_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0426_1922-09-24_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0426_1922-09-24_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0427_1922-09-27_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0427_1922-09-27_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0428_1922-09-30_0001+0004.tif" year="1922" month="09"/>
-<file name="jb_0428_1922-09-30_0002+0003.tif" year="1922" month="09"/>
-<file name="jb_0429_1922-10-03_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0429_1922-10-03_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0430_1922-10-06_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0430_1922-10-06_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0431_1922-10-10_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0431_1922-10-10_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0431_z01_1922-10-10_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0431_z01_1922-10-10_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0432_1922-10-12_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0432_1922-10-12_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0433_1922-10-15_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0433_1922-10-15_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0434_1922-10-18_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0434_1922-10-18_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0435_1922-10-21_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0435_1922-10-21_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0436_1922-10-24_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0436_1922-10-24_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0437_1922-10-27_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0437_1922-10-27_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0438_1922-10-30_0001+0004.tif" year="1922" month="10"/>
-<file name="jb_0438_1922-10-30_0002+0003.tif" year="1922" month="10"/>
-<file name="jb_0439_1922-11-03_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0439_1922-11-03_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0440_1922-11-06_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0440_1922-11-06_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0441_1922-11-09_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0441_1922-11-09_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0442_1922-11-12_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0442_1922-11-12_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0443_1922-11-15_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0443_1922-11-15_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0444_1922-11-18_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0444_1922-11-18_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0445_1922-11-21_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0445_1922-11-21_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0446_1922-11-24_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0446_1922-11-24_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0447_1922-11-27_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0447_1922-11-27_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0448_1922-11-30_0001+0004.tif" year="1922" month="11"/>
-<file name="jb_0448_1922-11-30_0002+0003.tif" year="1922" month="11"/>
-<file name="jb_0449_1922-12-03_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0449_1922-12-03_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0450_1922-12-06_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0450_1922-12-06_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0451_1922-12-09_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0451_1922-12-09_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0452_1922-12-12_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0452_1922-12-12_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0453_1922-12-15_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0453_1922-12-15_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0454_1922-12-18_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0454_1922-12-18_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0455_1922-12-21_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0455_1922-12-21_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0456_1922-12-24_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0456_1922-12-24_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0457_1922-12-27_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0457_1922-12-27_0002+0003.tif" year="1922" month="12"/>
-<file name="jb_0458_1922-12-30_0001+0004.tif" year="1922" month="12"/>
-<file name="jb_0458_1922-12-30_0002+0003.tif" year="1922" month="12"/>
+<file name="jb_0001_1919-03-03_0001+0004.tif" year="1919" month="03" day="03" />
+<file name="jb_0001_1919-03-03_0002+0003.tif" year="1919" month="03" day="03" />
+<file name="jb_0002_1919-03-06_0001+0004.tif" year="1919" month="03" day="06" />
+<file name="jb_0002_1919-03-06_0002+0003.tif" year="1919" month="03" day="06" />
+<file name="jb_0003_1919-03-09_0001+0004.tif" year="1919" month="03" day="09" />
+<file name="jb_0003_1919-03-09_0002+0003.tif" year="1919" month="03" day="09" />
+<file name="jb_0004_1919-03-12_0001+0004.tif" year="1919" month="03" day="12" />
+<file name="jb_0004_1919-03-12_0002+0003.tif" year="1919" month="03" day="12" />
+<file name="jb_0005_1919-03-15_0001+0004.tif" year="1919" month="03" day="15" />
+<file name="jb_0005_1919-03-15_0002+0003.tif" year="1919" month="03" day="15" />
+<file name="jb_0006_1919-03-18_0001+0004.tif" year="1919" month="03" day="18" />
+<file name="jb_0006_1919-03-18_0002+0003.tif" year="1919" month="03" day="18" />
+<file name="jb_0007_1919-03-21_0001+0004.tif" year="1919" month="03" day="21" />
+<file name="jb_0007_1919-03-21_0002+0003.tif" year="1919" month="03" day="21" />
+<file name="jb_0008_1919-03-24_0001+0004.tif" year="1919" month="03" day="24" />
+<file name="jb_0008_1919-03-24_0002+0003.tif" year="1919" month="03" day="24" />
+<file name="jb_0009_1919-03-27_0001+0004.tif" year="1919" month="03" day="27" />
+<file name="jb_0009_1919-03-27_0002+0003.tif" year="1919" month="03" day="27" />
+<file name="jb_0010_1919-03-30_0001+0004.tif" year="1919" month="03" day="30" />
+<file name="jb_0010_1919-03-30_0002+0003.tif" year="1919" month="03" day="30" />
+<file name="jb_0011_1919-04-03_0001+0004.tif" year="1919" month="04" day="03" />
+<file name="jb_0011_1919-04-03_0002+0003.tif" year="1919" month="04" day="03" />
+<file name="jb_0012_1919-04-06_0001+0004.tif" year="1919" month="04" day="06" />
+<file name="jb_0012_1919-04-06_0002+0003.tif" year="1919" month="04" day="06" />
+<file name="jb_0013_1919-04-09_0001+0004.tif" year="1919" month="04" day="09" />
+<file name="jb_0013_1919-04-09_0002+0003.tif" year="1919" month="04" day="09" />
+<file name="jb_0014_1919-04-12_0001+0004.tif" year="1919" month="04" day="12" />
+<file name="jb_0014_1919-04-12_0002+0003.tif" year="1919" month="04" day="12" />
+<file name="jb_0015_1919-04-15_0001+0004.tif" year="1919" month="04" day="15" />
+<file name="jb_0015_1919-04-15_0002+0003.tif" year="1919" month="04" day="15" />
+<file name="jb_0016_1919-04-18_0001+0004.tif" year="1919" month="04" day="18" />
+<file name="jb_0016_1919-04-18_0002+0003.tif" year="1919" month="04" day="18" />
+<file name="jb_0017_1919-04-21_0001+0004.tif" year="1919" month="04" day="21" />
+<file name="jb_0017_1919-04-21_0002+0003.tif" year="1919" month="04" day="21" />
+<file name="jb_0018_1919-04-24_0001+0004.tif" year="1919" month="04" day="24" />
+<file name="jb_0018_1919-04-24_0002+0003.tif" year="1919" month="04" day="24" />
+<file name="jb_0019_1919-04-27_0001+0004.tif" year="1919" month="04" day="27" />
+<file name="jb_0019_1919-04-27_0002+0003.tif" year="1919" month="04" day="27" />
+<file name="jb_0020_1919-04-30_0001+0004.tif" year="1919" month="04" day="30" />
+<file name="jb_0020_1919-04-30_0002+0003.tif" year="1919" month="04" day="30" />
+<file name="jb_0021_1919-05-03_0001+0004.tif" year="1919" month="05" day="03" />
+<file name="jb_0021_1919-05-03_0002+0003.tif" year="1919" month="05" day="03" />
+<file name="jb_0022_1919-05-06_0001+0004.tif" year="1919" month="05" day="06" />
+<file name="jb_0022_1919-05-06_0002+0003.tif" year="1919" month="05" day="06" />
+<file name="jb_0023_1919-05-09_0001+0004.tif" year="1919" month="05" day="09" />
+<file name="jb_0023_1919-05-09_0002+0003.tif" year="1919" month="05" day="09" />
+<file name="jb_0024_1919-05-12_0001+0004.tif" year="1919" month="05" day="12" />
+<file name="jb_0024_1919-05-12_0002+0003.tif" year="1919" month="05" day="12" />
+<file name="jb_0025_1919-05-15_0001+0004.tif" year="1919" month="05" day="15" />
+<file name="jb_0025_1919-05-15_0002+0003.tif" year="1919" month="05" day="15" />
+<file name="jb_0026_1919-05-18_0001+0004.tif" year="1919" month="05" day="18" />
+<file name="jb_0026_1919-05-18_0002+0003.tif" year="1919" month="05" day="18" />
+<file name="jb_0027_1919-05-21_0001+0004.tif" year="1919" month="05" day="21" />
+<file name="jb_0027_1919-05-21_0002+0003.tif" year="1919" month="05" day="21" />
+<file name="jb_0028_1919-05-24_0001+0004.tif" year="1919" month="05" day="24" />
+<file name="jb_0028_1919-05-24_0002+0003.tif" year="1919" month="05" day="24" />
+<file name="jb_0029_1919-05-27_0001+0004.tif" year="1919" month="05" day="27" />
+<file name="jb_0029_1919-05-27_0002+0003.tif" year="1919" month="05" day="27" />
+<file name="jb_0030_1919-05-30_0001+0004.tif" year="1919" month="05" day="30" />
+<file name="jb_0030_1919-05-30_0002+0003.tif" year="1919" month="05" day="30" />
+<file name="jb_0031_1919-06-03_0001+0004.tif" year="1919" month="06" day="03" />
+<file name="jb_0031_1919-06-03_0002+0003.tif" year="1919" month="06" day="03" />
+<file name="jb_0032_1919-06-06_0001+0004.tif" year="1919" month="06" day="06" />
+<file name="jb_0032_1919-06-06_0002+0003.tif" year="1919" month="06" day="06" />
+<file name="jb_0033_1919-06-09_0001+0004.tif" year="1919" month="06" day="09" />
+<file name="jb_0033_1919-06-09_0002+0003.tif" year="1919" month="06" day="09" />
+<file name="jb_0034_1919-06-12_0001+0004.tif" year="1919" month="06" day="12" />
+<file name="jb_0034_1919-06-12_0002+0003.tif" year="1919" month="06" day="12" />
+<file name="jb_0035_1919-06-15_0001+0004.tif" year="1919" month="06" day="15" />
+<file name="jb_0035_1919-06-15_0002+0003.tif" year="1919" month="06" day="15" />
+<file name="jb_0036_1919-06-18_0001+0004.tif" year="1919" month="06" day="18" />
+<file name="jb_0036_1919-06-18_0002+0003.tif" year="1919" month="06" day="18" />
+<file name="jb_0037_1919-06-21_0001+0004.tif" year="1919" month="06" day="21" />
+<file name="jb_0037_1919-06-21_0002+0003.tif" year="1919" month="06" day="21" />
+<file name="jb_0038_1919-06-24_0001+0004.tif" year="1919" month="06" day="24" />
+<file name="jb_0038_1919-06-24_0002+0003.tif" year="1919" month="06" day="24" />
+<file name="jb_0039_1919-06-27_0001+0004.tif" year="1919" month="06" day="27" />
+<file name="jb_0039_1919-06-27_0002+0003.tif" year="1919" month="06" day="27" />
+<file name="jb_0040_1919-06-30_0001+0004.tif" year="1919" month="06" day="30" />
+<file name="jb_0040_1919-06-30_0002+0003.tif" year="1919" month="06" day="30" />
+<file name="jb_0041_1919-07-03_0001+0004.tif" year="1919" month="07" day="03" />
+<file name="jb_0041_1919-07-03_0002+0003.tif" year="1919" month="07" day="03" />
+<file name="jb_0042_1919-07-06_0001+0004.tif" year="1919" month="07" day="06" />
+<file name="jb_0042_1919-07-06_0002+0003.tif" year="1919" month="07" day="06" />
+<file name="jb_0043_1919-07-09_0001+0004.tif" year="1919" month="07" day="09" />
+<file name="jb_0043_1919-07-09_0002+0003.tif" year="1919" month="07" day="09" />
+<file name="jb_0044_1919-07-12_0001+0004.tif" year="1919" month="07" day="12" />
+<file name="jb_0044_1919-07-12_0002+0003.tif" year="1919" month="07" day="12" />
+<file name="jb_0045_1919-07-15_0001+0004.tif" year="1919" month="07" day="15" />
+<file name="jb_0045_1919-07-15_0002+0003.tif" year="1919" month="07" day="15" />
+<file name="jb_0046_1919-07-18_0001+0004.tif" year="1919" month="07" day="18" />
+<file name="jb_0046_1919-07-18_0002+0003.tif" year="1919" month="07" day="18" />
+<file name="jb_0047_1919-07-21_0001+0004.tif" year="1919" month="07" day="21" />
+<file name="jb_0047_1919-07-21_0002+0003.tif" year="1919" month="07" day="21" />
+<file name="jb_0048_1919-07-24_0001+0004.tif" year="1919" month="07" day="24" />
+<file name="jb_0048_1919-07-24_0002+0003.tif" year="1919" month="07" day="24" />
+<file name="jb_0049_1919-07-27_0001+0004.tif" year="1919" month="07" day="27" />
+<file name="jb_0049_1919-07-27_0002+0003.tif" year="1919" month="07" day="27" />
+<file name="jb_0050_1919-07-30_0001+0004.tif" year="1919" month="07" day="30" />
+<file name="jb_0050_1919-07-30_0002+0003.tif" year="1919" month="07" day="30" />
+<file name="jb_0051_1919-08-03_0001+0004.tif" year="1919" month="08" day="03" />
+<file name="jb_0051_1919-08-03_0002+0003.tif" year="1919" month="08" day="03" />
+<file name="jb_0052_1919-08-06_0001+0004.tif" year="1919" month="08" day="06" />
+<file name="jb_0052_1919-08-06_0002+0003.tif" year="1919" month="08" day="06" />
+<file name="jb_0053_1919-08-09_0001+0004.tif" year="1919" month="08" day="09" />
+<file name="jb_0053_1919-08-09_0002+0003.tif" year="1919" month="08" day="09" />
+<file name="jb_0054_1919-08-12_0001+0004.tif" year="1919" month="08" day="12" />
+<file name="jb_0054_1919-08-12_0002+0003.tif" year="1919" month="08" day="12" />
+<file name="jb_0055_1919-08-15_0001+0004.tif" year="1919" month="08" day="15" />
+<file name="jb_0055_1919-08-15_0002+0003.tif" year="1919" month="08" day="15" />
+<file name="jb_0056_1919-08-18_0001+0004.tif" year="1919" month="08" day="18" />
+<file name="jb_0056_1919-08-18_0002+0003.tif" year="1919" month="08" day="18" />
+<file name="jb_0057_1919-08-21_0001+0004.tif" year="1919" month="08" day="21" />
+<file name="jb_0057_1919-08-21_0002+0003.tif" year="1919" month="08" day="21" />
+<file name="jb_0058_1919-08-24_0001+0004.tif" year="1919" month="08" day="24" />
+<file name="jb_0058_1919-08-24_0002+0003.tif" year="1919" month="08" day="24" />
+<file name="jb_0059_1919-08-27_0001+0004.tif" year="1919" month="08" day="27" />
+<file name="jb_0059_1919-08-27_0002+0003.tif" year="1919" month="08" day="27" />
+<file name="jb_0060_1919-08-30_0001+0004.tif" year="1919" month="08" day="30" />
+<file name="jb_0060_1919-08-30_0002+0003.tif" year="1919" month="08" day="30" />
+<file name="jb_0061_1919-09-03_0001+0004.tif" year="1919" month="09" day="03" />
+<file name="jb_0061_1919-09-03_0002+0003.tif" year="1919" month="09" day="03" />
+<file name="jb_0062_1919-09-06_0001+0004.tif" year="1919" month="09" day="06" />
+<file name="jb_0062_1919-09-06_0002+0003.tif" year="1919" month="09" day="06" />
+<file name="jb_0063_1919-09-09_0001+0004.tif" year="1919" month="09" day="09" />
+<file name="jb_0063_1919-09-09_0002+0003.tif" year="1919" month="09" day="09" />
+<file name="jb_0064_1919-09-12_0001+0004.tif" year="1919" month="09" day="12" />
+<file name="jb_0064_1919-09-12_0002+0003.tif" year="1919" month="09" day="12" />
+<file name="jb_0065_1919-09-15_0001+0004.tif" year="1919" month="09" day="15" />
+<file name="jb_0065_1919-09-15_0002+0003.tif" year="1919" month="09" day="15" />
+<file name="jb_0066_1919-09-18_0001+0004.tif" year="1919" month="09" day="18" />
+<file name="jb_0066_1919-09-18_0002+0003.tif" year="1919" month="09" day="18" />
+<file name="jb_0067_1919-09-21_0001+0004.tif" year="1919" month="09" day="21" />
+<file name="jb_0067_1919-09-21_0002+0003.tif" year="1919" month="09" day="21" />
+<file name="jb_0068_1919-09-24_0001+0004.tif" year="1919" month="09" day="24" />
+<file name="jb_0068_1919-09-24_0002+0003.tif" year="1919" month="09" day="24" />
+<file name="jb_0069_1919-09-27_0001+0004.tif" year="1919" month="09" day="27" />
+<file name="jb_0069_1919-09-27_0002+0003.tif" year="1919" month="09" day="27" />
+<file name="jb_0070_1919-09-30_0001+0004.tif" year="1919" month="09" day="30" />
+<file name="jb_0070_1919-09-30_0002+0003.tif" year="1919" month="09" day="30" />
+<file name="jb_0071_1919-10-03_0001+0004.tif" year="1919" month="10" day="03" />
+<file name="jb_0071_1919-10-03_0002+0003.tif" year="1919" month="10" day="03" />
+<file name="jb_0072_1919-10-06_0001+0004.tif" year="1919" month="10" day="06" />
+<file name="jb_0072_1919-10-06_0002+0003.tif" year="1919" month="10" day="06" />
+<file name="jb_0073_1919-10-10_0001+0004.tif" year="1919" month="10" day="10" />
+<file name="jb_0073_1919-10-10_0002+0003.tif" year="1919" month="10" day="10" />
+<file name="jb_0073_1919-10-10_0005+0008.tif" year="1919" month="10" day="10" />
+<file name="jb_0073_1919-10-10_0006+0007.tif" year="1919" month="10" day="10" />
+<file name="jb_0074_1919-10-12_0001+0004.tif" year="1919" month="10" day="12" />
+<file name="jb_0074_1919-10-12_0002+0003.tif" year="1919" month="10" day="12" />
+<file name="jb_0075_1919-10-15_0001+0004.tif" year="1919" month="10" day="15" />
+<file name="jb_0075_1919-10-15_0002+0003.tif" year="1919" month="10" day="15" />
+<file name="jb_0076_1919-10-18_0001+0004.tif" year="1919" month="10" day="18" />
+<file name="jb_0076_1919-10-18_0002+0003.tif" year="1919" month="10" day="18" />
+<file name="jb_0077_1919-10-21_0001+0004.tif" year="1919" month="10" day="21" />
+<file name="jb_0077_1919-10-21_0002+0003.tif" year="1919" month="10" day="21" />
+<file name="jb_0078_1919-10-24_0001+0004.tif" year="1919" month="10" day="24" />
+<file name="jb_0078_1919-10-24_0002+0003.tif" year="1919" month="10" day="24" />
+<file name="jb_0079_1919-10-27_0001+0004.tif" year="1919" month="10" day="27" />
+<file name="jb_0079_1919-10-27_0002+0003.tif" year="1919" month="10" day="27" />
+<file name="jb_0080_1919-10-30_0001+0004.tif" year="1919" month="10" day="30" />
+<file name="jb_0080_1919-10-30_0002+0003.tif" year="1919" month="10" day="30" />
+<file name="jb_0081_1919-11-03_0001+0004.tif" year="1919" month="11" day="03" />
+<file name="jb_0081_1919-11-03_0002+0003.tif" year="1919" month="11" day="03" />
+<file name="jb_0082_1919-11-06_0001+0004.tif" year="1919" month="11" day="06" />
+<file name="jb_0082_1919-11-06_0002+0003.tif" year="1919" month="11" day="06" />
+<file name="jb_0083_1919-11-09_0001+0004.tif" year="1919" month="11" day="09" />
+<file name="jb_0083_1919-11-09_0002+0003.tif" year="1919" month="11" day="09" />
+<file name="jb_0084_1919-11-12_0001+0004.tif" year="1919" month="11" day="12" />
+<file name="jb_0084_1919-11-12_0002+0003.tif" year="1919" month="11" day="12" />
+<file name="jb_0085_1919-11-15_0001+0004.tif" year="1919" month="11" day="15" />
+<file name="jb_0085_1919-11-15_0002+0003.tif" year="1919" month="11" day="15" />
+<file name="jb_0086_1919-11-18_0001+0004.tif" year="1919" month="11" day="18" />
+<file name="jb_0086_1919-11-18_0002+0003.tif" year="1919" month="11" day="18" />
+<file name="jb_0087_1919-11-21_0001+0004.tif" year="1919" month="11" day="21" />
+<file name="jb_0087_1919-11-21_0002+0003.tif" year="1919" month="11" day="21" />
+<file name="jb_0088_1919-11-24_0001+0004.tif" year="1919" month="11" day="24" />
+<file name="jb_0088_1919-11-24_0002+0003.tif" year="1919" month="11" day="24" />
+<file name="jb_0089_1919-11-27_0001+0004.tif" year="1919" month="11" day="27" />
+<file name="jb_0089_1919-11-27_0002+0003.tif" year="1919" month="11" day="27" />
+<file name="jb_0090_1919-11-30_0001+0004.tif" year="1919" month="11" day="30" />
+<file name="jb_0090_1919-11-30_0002+0003.tif" year="1919" month="11" day="30" />
+<file name="jb_0091_1919-12-03_0001+0004.tif" year="1919" month="12" day="03" />
+<file name="jb_0091_1919-12-03_0002+0003.tif" year="1919" month="12" day="03" />
+<file name="jb_0092_1919-12-06_0001+0004.tif" year="1919" month="12" day="06" />
+<file name="jb_0092_1919-12-06_0002+0003.tif" year="1919" month="12" day="06" />
+<file name="jb_0093_1919-12-09_0001+0004.tif" year="1919" month="12" day="09" />
+<file name="jb_0093_1919-12-09_0002+0003.tif" year="1919" month="12" day="09" />
+<file name="jb_0094_1919-12-12_0001+0004.tif" year="1919" month="12" day="12" />
+<file name="jb_0094_1919-12-12_0002+0003.tif" year="1919" month="12" day="12" />
+<file name="jb_0095_1919-12-15_0001+0004.tif" year="1919" month="12" day="15" />
+<file name="jb_0095_1919-12-15_0002+0003.tif" year="1919" month="12" day="15" />
+<file name="jb_0096_1919-12-18_0001+0004.tif" year="1919" month="12" day="18" />
+<file name="jb_0096_1919-12-18_0002+0003.tif" year="1919" month="12" day="18" />
+<file name="jb_0097_1919-12-21_0001+0004.tif" year="1919" month="12" day="21" />
+<file name="jb_0097_1919-12-21_0002+0003.tif" year="1919" month="12" day="21" />
+<file name="jb_0098_1919-12-24_0001+0004.tif" year="1919" month="12" day="24" />
+<file name="jb_0098_1919-12-24_0002+0003.tif" year="1919" month="12" day="24" />
+<file name="jb_0099_1919-12-27_0001+0004.tif" year="1919" month="12" day="27" />
+<file name="jb_0099_1919-12-27_0002+0003.tif" year="1919" month="12" day="27" />
+<file name="jb_0100_1919-12-30_0001+0004.tif" year="1919" month="12" day="30" />
+<file name="jb_0100_1919-12-30_0002+0003.tif" year="1919" month="12" day="30" />
+<file name="jb_0101_1920-01-01_0001+0004.tif" year="1920" month="01" day="01" />
+<file name="jb_0101_1920-01-01_0002+0003.tif" year="1920" month="01" day="01" />
+<file name="jb_0101_1920-01-01_0005+0008.tif" year="1920" month="01" day="01" />
+<file name="jb_0101_1920-01-01_0006+0007.tif" year="1920" month="01" day="01" />
+<file name="jb_0102_1920-01-06_0001+0004.tif" year="1920" month="01" day="06" />
+<file name="jb_0102_1920-01-06_0002+0003.tif" year="1920" month="01" day="06" />
+<file name="jb_0103_1920-01-09_0001+0004.tif" year="1920" month="01" day="09" />
+<file name="jb_0103_1920-01-09_0002+0003.tif" year="1920" month="01" day="09" />
+<file name="jb_0104_1920-01-12_0001+0004.tif" year="1920" month="01" day="12" />
+<file name="jb_0104_1920-01-12_0002+0003.tif" year="1920" month="01" day="12" />
+<file name="jb_0105_1920-01-15_0001+0004.tif" year="1920" month="01" day="15" />
+<file name="jb_0105_1920-01-15_0002+0003.tif" year="1920" month="01" day="15" />
+<file name="jb_0106_1920-01-18_0001+0004.tif" year="1920" month="01" day="18" />
+<file name="jb_0106_1920-01-18_0002+0003.tif" year="1920" month="01" day="18" />
+<file name="jb_0107_1920-01-21_0001+0004.tif" year="1920" month="01" day="21" />
+<file name="jb_0107_1920-01-21_0002+0003.tif" year="1920" month="01" day="21" />
+<file name="jb_0108_1920-01-24_0001+0004.tif" year="1920" month="01" day="24" />
+<file name="jb_0108_1920-01-24_0002+0003.tif" year="1920" month="01" day="24" />
+<file name="jb_0109_1920-01-27_0001+0004.tif" year="1920" month="01" day="27" />
+<file name="jb_0109_1920-01-27_0002+0003.tif" year="1920" month="01" day="27" />
+<file name="jb_0110_1920-01-30_0001+0004.tif" year="1920" month="01" day="30" />
+<file name="jb_0110_1920-01-30_0002+0003.tif" year="1920" month="01" day="30" />
+<file name="jb_0111_1920-02-03_0001+0004.tif" year="1920" month="02" day="03" />
+<file name="jb_0111_1920-02-03_0002+0003.tif" year="1920" month="02" day="03" />
+<file name="jb_0112_1920-02-06_0001+0004.tif" year="1920" month="02" day="06" />
+<file name="jb_0112_1920-02-06_0002+0003.tif" year="1920" month="02" day="06" />
+<file name="jb_0113_1920-02-09_0001+0004.tif" year="1920" month="02" day="09" />
+<file name="jb_0113_1920-02-09_0002+0003.tif" year="1920" month="02" day="09" />
+<file name="jb_0114_1920-02-12_0001+0004.tif" year="1920" month="02" day="12" />
+<file name="jb_0114_1920-02-12_0002+0003.tif" year="1920" month="02" day="12" />
+<file name="jb_0115_1920-02-15_0001+0004.tif" year="1920" month="02" day="15" />
+<file name="jb_0115_1920-02-15_0002+0003.tif" year="1920" month="02" day="15" />
+<file name="jb_0115_1920-02-24_0001+0004.tif" year="1920" month="02" day="24" />
+<file name="jb_0115_1920-02-24_0002+0003.tif" year="1920" month="02" day="24" />
+<file name="jb_0117_1920-02-27_0001+0004.tif" year="1920" month="02" day="27" />
+<file name="jb_0117_1920-02-27_0002+0003.tif" year="1920" month="02" day="27" />
+<file name="jb_0118_1920-03-01_0001+0004.tif" year="1920" month="03" day="01" />
+<file name="jb_0118_1920-03-01_0002+0003.tif" year="1920" month="03" day="01" />
+<file name="jb_0119_1920-03-03_0001+0004.tif" year="1920" month="03" day="03" />
+<file name="jb_0119_1920-03-03_0002+0003.tif" year="1920" month="03" day="03" />
+<file name="jb_0120_1920-03-06_0001+0004.tif" year="1920" month="03" day="06" />
+<file name="jb_0120_1920-03-06_0002+0003.tif" year="1920" month="03" day="06" />
+<file name="jb_0121_1920-03-09_0001+0004.tif" year="1920" month="03" day="09" />
+<file name="jb_0121_1920-03-09_0002+0003.tif" year="1920" month="03" day="09" />
+<file name="jb_0122_1920-03-12_0001+0004.tif" year="1920" month="03" day="12" />
+<file name="jb_0122_1920-03-12_0002+0003.tif" year="1920" month="03" day="12" />
+<file name="jb_0123_1920-03-15_0001+0004.tif" year="1920" month="03" day="15" />
+<file name="jb_0123_1920-03-15_0002+0003.tif" year="1920" month="03" day="15" />
+<file name="jb_0124_1920-03-18_0001+0004.tif" year="1920" month="03" day="18" />
+<file name="jb_0124_1920-03-18_0002+0003.tif" year="1920" month="03" day="18" />
+<file name="jb_0125_1920-03-21_0001+0004.tif" year="1920" month="03" day="21" />
+<file name="jb_0125_1920-03-21_0002+0003.tif" year="1920" month="03" day="21" />
+<file name="jb_0126_1920-03-24_0001+0004.tif" year="1920" month="03" day="24" />
+<file name="jb_0126_1920-03-24_0002+0003.tif" year="1920" month="03" day="24" />
+<file name="jb_0127_1920-03-27_0001+0004.tif" year="1920" month="03" day="27" />
+<file name="jb_0127_1920-03-27_0002+0003.tif" year="1920" month="03" day="27" />
+<file name="jb_0128_1920-03-30_0001+0004.tif" year="1920" month="03" day="30" />
+<file name="jb_0128_1920-03-30_0002+0003.tif" year="1920" month="03" day="30" />
+<file name="jb_0129_1920-04-03_0001+0004.tif" year="1920" month="04" day="03" />
+<file name="jb_0129_1920-04-03_0002+0003.tif" year="1920" month="04" day="03" />
+<file name="jb_0130_1920-04-06_0001+0004.tif" year="1920" month="04" day="06" />
+<file name="jb_0130_1920-04-06_0002+0003.tif" year="1920" month="04" day="06" />
+<file name="jb_0131_1920-04-09_0001+0004.tif" year="1920" month="04" day="09" />
+<file name="jb_0131_1920-04-09_0002+0003.tif" year="1920" month="04" day="09" />
+<file name="jb_0132_1920-04-12_0001+0004.tif" year="1920" month="04" day="12" />
+<file name="jb_0132_1920-04-12_0002+0003.tif" year="1920" month="04" day="12" />
+<file name="jb_0133_1920-04-15_0001+0004.tif" year="1920" month="04" day="15" />
+<file name="jb_0133_1920-04-15_0002+0003.tif" year="1920" month="04" day="15" />
+<file name="jb_0134_1920-04-18_0001+0004.tif" year="1920" month="04" day="18" />
+<file name="jb_0134_1920-04-18_0002+0003.tif" year="1920" month="04" day="18" />
+<file name="jb_0135_1920-04-21_0001+0004.tif" year="1920" month="04" day="21" />
+<file name="jb_0135_1920-04-21_0002+0003.tif" year="1920" month="04" day="21" />
+<file name="jb_0136_1920-04-24_0001+0004.tif" year="1920" month="04" day="24" />
+<file name="jb_0136_1920-04-24_0002+0003.tif" year="1920" month="04" day="24" />
+<file name="jb_0137_1920-04-27_0001+0004.tif" year="1920" month="04" day="27" />
+<file name="jb_0137_1920-04-27_0002+0003.tif" year="1920" month="04" day="27" />
+<file name="jb_0138_1920-04-30_0001+0004.tif" year="1920" month="04" day="30" />
+<file name="jb_0138_1920-04-30_0002+0003.tif" year="1920" month="04" day="30" />
+<file name="jb_0139_1920-05-03_0001+0004.tif" year="1920" month="05" day="03" />
+<file name="jb_0139_1920-05-03_0002+0003.tif" year="1920" month="05" day="03" />
+<file name="jb_0140_1920-05-06_0001+0004.tif" year="1920" month="05" day="06" />
+<file name="jb_0140_1920-05-06_0002+0003.tif" year="1920" month="05" day="06" />
+<file name="jb_0141_1920-05-09_0001+0004.tif" year="1920" month="05" day="09" />
+<file name="jb_0141_1920-05-09_0002+0003.tif" year="1920" month="05" day="09" />
+<file name="jb_0142_1920-05-12_0001+0004.tif" year="1920" month="05" day="12" />
+<file name="jb_0142_1920-05-12_0002+0003.tif" year="1920" month="05" day="12" />
+<file name="jb_0143_1920-05-15_0001+0004.tif" year="1920" month="05" day="15" />
+<file name="jb_0143_1920-05-15_0002+0003.tif" year="1920" month="05" day="15" />
+<file name="jb_0144_1920-05-18_0001+0004.tif" year="1920" month="05" day="18" />
+<file name="jb_0144_1920-05-18_0002+0003.tif" year="1920" month="05" day="18" />
+<file name="jb_0145_1920-05-21_0001+0004.tif" year="1920" month="05" day="21" />
+<file name="jb_0145_1920-05-21_0002+0003.tif" year="1920" month="05" day="21" />
+<file name="jb_0146_1920-05-24_0001+0004.tif" year="1920" month="05" day="24" />
+<file name="jb_0146_1920-05-24_0002+0003.tif" year="1920" month="05" day="24" />
+<file name="jb_0147_1920-05-27_0001+0004.tif" year="1920" month="05" day="27" />
+<file name="jb_0147_1920-05-27_0002+0003.tif" year="1920" month="05" day="27" />
+<file name="jb_0148_1920-05-30_0001+0004.tif" year="1920" month="05" day="30" />
+<file name="jb_0148_1920-05-30_0002+0003.tif" year="1920" month="05" day="30" />
+<file name="jb_0149_1920-06-03_0001+0004.tif" year="1920" month="06" day="03" />
+<file name="jb_0149_1920-06-03_0002+0003.tif" year="1920" month="06" day="03" />
+<file name="jb_0150_1920-06-06_0001+0004.tif" year="1920" month="06" day="06" />
+<file name="jb_0150_1920-06-06_0002+0003.tif" year="1920" month="06" day="06" />
+<file name="jb_0151_1920-06-09_0001+0004.tif" year="1920" month="06" day="09" />
+<file name="jb_0151_1920-06-09_0002+0003.tif" year="1920" month="06" day="09" />
+<file name="jb_0152_1920-06-12_0001+0004.tif" year="1920" month="06" day="12" />
+<file name="jb_0152_1920-06-12_0002+0003.tif" year="1920" month="06" day="12" />
+<file name="jb_0153_1920-06-15_0001+0004.tif" year="1920" month="06" day="15" />
+<file name="jb_0153_1920-06-15_0002+0003.tif" year="1920" month="06" day="15" />
+<file name="jb_0154_1920-06-18_0001+0004.tif" year="1920" month="06" day="18" />
+<file name="jb_0154_1920-06-18_0002+0003.tif" year="1920" month="06" day="18" />
+<file name="jb_0155_1920-06-21_0001+0004.tif" year="1920" month="06" day="21" />
+<file name="jb_0155_1920-06-21_0002+0003.tif" year="1920" month="06" day="21" />
+<file name="jb_0156_1920-06-24_0001+0004.tif" year="1920" month="06" day="24" />
+<file name="jb_0156_1920-06-24_0002+0003.tif" year="1920" month="06" day="24" />
+<file name="jb_0157_1920-06-27_0001+0004.tif" year="1920" month="06" day="27" />
+<file name="jb_0157_1920-06-27_0002+0003.tif" year="1920" month="06" day="27" />
+<file name="jb_0158_1920-06-30_0001+0004.tif" year="1920" month="06" day="30" />
+<file name="jb_0158_1920-06-30_0002+0003.tif" year="1920" month="06" day="30" />
+<file name="jb_0159_1920-07-03_0001+0004.tif" year="1920" month="07" day="03" />
+<file name="jb_0159_1920-07-03_0002+0003.tif" year="1920" month="07" day="03" />
+<file name="jb_0160_1920-07-06_0001+0004.tif" year="1920" month="07" day="06" />
+<file name="jb_0160_1920-07-06_0002+0003.tif" year="1920" month="07" day="06" />
+<file name="jb_0161_1920-07-09_0001+0004.tif" year="1920" month="07" day="09" />
+<file name="jb_0161_1920-07-09_0002+0003.tif" year="1920" month="07" day="09" />
+<file name="jb_0162_1920-07-12_0001+0004.tif" year="1920" month="07" day="12" />
+<file name="jb_0162_1920-07-12_0002+0003.tif" year="1920" month="07" day="12" />
+<file name="jb_0163_1920-07-15_0001+0004.tif" year="1920" month="07" day="15" />
+<file name="jb_0163_1920-07-15_0002+0003.tif" year="1920" month="07" day="15" />
+<file name="jb_0164_1920-07-18_0001+0004.tif" year="1920" month="07" day="18" />
+<file name="jb_0164_1920-07-18_0002+0003.tif" year="1920" month="07" day="18" />
+<file name="jb_0165_1920-07-21_0001+0004.tif" year="1920" month="07" day="21" />
+<file name="jb_0165_1920-07-21_0002+0003.tif" year="1920" month="07" day="21" />
+<file name="jb_0166_1920-07-24_0001+0004.tif" year="1920" month="07" day="24" />
+<file name="jb_0166_1920-07-24_0002+0003.tif" year="1920" month="07" day="24" />
+<file name="jb_0167_1920-07-27_0001+0004.tif" year="1920" month="07" day="27" />
+<file name="jb_0167_1920-07-27_0002+0003.tif" year="1920" month="07" day="27" />
+<file name="jb_0168_1920-07-30_0001+0004.tif" year="1920" month="07" day="30" />
+<file name="jb_0168_1920-07-30_0002+0003.tif" year="1920" month="07" day="30" />
+<file name="jb_0169_1920-08-03_0001+0004.tif" year="1920" month="08" day="03" />
+<file name="jb_0169_1920-08-03_0002+0003.tif" year="1920" month="08" day="03" />
+<file name="jb_0170_1920-08-06_0001+0004.tif" year="1920" month="08" day="06" />
+<file name="jb_0170_1920-08-06_0002+0003.tif" year="1920" month="08" day="06" />
+<file name="jb_0171_1920-08-09_0001+0004.tif" year="1920" month="08" day="09" />
+<file name="jb_0171_1920-08-09_0002+0003.tif" year="1920" month="08" day="09" />
+<file name="jb_0172_1920-08-12_0001+0004.tif" year="1920" month="08" day="12" />
+<file name="jb_0172_1920-08-12_0002+0003.tif" year="1920" month="08" day="12" />
+<file name="jb_0173_1920-08-15_0001+0004.tif" year="1920" month="08" day="15" />
+<file name="jb_0173_1920-08-15_0002+0003.tif" year="1920" month="08" day="15" />
+<file name="jb_0174_1920-08-18_0001+0004.tif" year="1920" month="08" day="18" />
+<file name="jb_0174_1920-08-18_0002+0003.tif" year="1920" month="08" day="18" />
+<file name="jb_0175_1920-08-21_0001+0004.tif" year="1920" month="08" day="21" />
+<file name="jb_0175_1920-08-21_0002+0003.tif" year="1920" month="08" day="21" />
+<file name="jb_0176_1920-08-24_0001+0004.tif" year="1920" month="08" day="24" />
+<file name="jb_0176_1920-08-24_0002+0003.tif" year="1920" month="08" day="24" />
+<file name="jb_0177_1920-08-27_0001+0004.tif" year="1920" month="08" day="27" />
+<file name="jb_0177_1920-08-27_0002+0003.tif" year="1920" month="08" day="27" />
+<file name="jb_0178_1920-08-30_0001+0004.tif" year="1920" month="08" day="30" />
+<file name="jb_0178_1920-08-30_0002+0003.tif" year="1920" month="08" day="30" />
+<file name="jb_0179_1920-09-03_0001+0004.tif" year="1920" month="09" day="03" />
+<file name="jb_0179_1920-09-03_0002+0003.tif" year="1920" month="09" day="03" />
+<file name="jb_0180_1920-09-06_0001+0004.tif" year="1920" month="09" day="06" />
+<file name="jb_0180_1920-09-06_0002+0003.tif" year="1920" month="09" day="06" />
+<file name="jb_0181_1920-09-09_0001+0004.tif" year="1920" month="09" day="09" />
+<file name="jb_0181_1920-09-09_0002+0003.tif" year="1920" month="09" day="09" />
+<file name="jb_0182_1920-09-12_0001+0004.tif" year="1920" month="09" day="12" />
+<file name="jb_0182_1920-09-12_0002+0003.tif" year="1920" month="09" day="12" />
+<file name="jb_0183_1920-09-15_0001+0004.tif" year="1920" month="09" day="15" />
+<file name="jb_0183_1920-09-15_0002+0003.tif" year="1920" month="09" day="15" />
+<file name="jb_0184_1920-09-18_0001+0004.tif" year="1920" month="09" day="18" />
+<file name="jb_0184_1920-09-18_0002+0003.tif" year="1920" month="09" day="18" />
+<file name="jb_0185_1920-09-21_0001+0004.tif" year="1920" month="09" day="21" />
+<file name="jb_0185_1920-09-21_0002+0003.tif" year="1920" month="09" day="21" />
+<file name="jb_0186_1920-09-24_0001+0004.tif" year="1920" month="09" day="24" />
+<file name="jb_0186_1920-09-24_0002+0003.tif" year="1920" month="09" day="24" />
+<file name="jb_0187_1920-09-27_0001+0004.tif" year="1920" month="09" day="27" />
+<file name="jb_0187_1920-09-27_0002+0003.tif" year="1920" month="09" day="27" />
+<file name="jb_0188_1920-09-30_0001+0004.tif" year="1920" month="09" day="30" />
+<file name="jb_0188_1920-09-30_0002+0003.tif" year="1920" month="09" day="30" />
+<file name="jb_0189_1920-10-03_0001+0004.tif" year="1920" month="10" day="03" />
+<file name="jb_0189_1920-10-03_0002+0003.tif" year="1920" month="10" day="03" />
+<file name="jb_0190_1920-10-06_0001+0004.tif" year="1920" month="10" day="06" />
+<file name="jb_0190_1920-10-06_0002+0003.tif" year="1920" month="10" day="06" />
+<file name="jb_0191_1920-10-10_0001+0004.tif" year="1920" month="10" day="10" />
+<file name="jb_0191_1920-10-10_0002+0003.tif" year="1920" month="10" day="10" />
+<file name="jb_0191_1920-10-10_0005+0008.tif" year="1920" month="10" day="10" />
+<file name="jb_0191_1920-10-10_0006+0007.tif" year="1920" month="10" day="10" />
+<file name="jb_0192_1920-10-12_0001+0004.tif" year="1920" month="10" day="12" />
+<file name="jb_0192_1920-10-12_0002+0003.tif" year="1920" month="10" day="12" />
+<file name="jb_0193_1920-10-15_0001+0004.tif" year="1920" month="10" day="15" />
+<file name="jb_0193_1920-10-15_0002+0003.tif" year="1920" month="10" day="15" />
+<file name="jb_0194_1920-10-18_0001+0004.tif" year="1920" month="10" day="18" />
+<file name="jb_0194_1920-10-18_0002+0003.tif" year="1920" month="10" day="18" />
+<file name="jb_0195_1920-10-21_0001+0004.tif" year="1920" month="10" day="21" />
+<file name="jb_0195_1920-10-21_0002+0003.tif" year="1920" month="10" day="21" />
+<file name="jb_0196_1920-10-24_0001+0004.tif" year="1920" month="10" day="24" />
+<file name="jb_0196_1920-10-24_0002+0003.tif" year="1920" month="10" day="24" />
+<file name="jb_0197_1920-10-27_0001+0004.tif" year="1920" month="10" day="27" />
+<file name="jb_0197_1920-10-27_0002+0003.tif" year="1920" month="10" day="27" />
+<file name="jb_0198_1920-10-30_0001+0004.tif" year="1920" month="10" day="30" />
+<file name="jb_0198_1920-10-30_0002+0003.tif" year="1920" month="10" day="30" />
+<file name="jb_0199_1920-11-03_0001+0004.tif" year="1920" month="11" day="03" />
+<file name="jb_0199_1920-11-03_0002+0003.tif" year="1920" month="11" day="03" />
+<file name="jb_0200_1920-11-06_0001+0004.tif" year="1920" month="11" day="06" />
+<file name="jb_0200_1920-11-06_0002+0003.tif" year="1920" month="11" day="06" />
+<file name="jb_0201_1920-11-09_0001+0004.tif" year="1920" month="11" day="09" />
+<file name="jb_0201_1920-11-09_0002+0003.tif" year="1920" month="11" day="09" />
+<file name="jb_0202_1920-11-12_0001+0004.tif" year="1920" month="11" day="12" />
+<file name="jb_0202_1920-11-12_0002+0003.tif" year="1920" month="11" day="12" />
+<file name="jb_0203_1920-11-15_0001+0004.tif" year="1920" month="11" day="15" />
+<file name="jb_0203_1920-11-15_0002+0003.tif" year="1920" month="11" day="15" />
+<file name="jb_0204_1920-11-18_0001+0004.tif" year="1920" month="11" day="18" />
+<file name="jb_0204_1920-11-18_0002+0003.tif" year="1920" month="11" day="18" />
+<file name="jb_0205_1920-11-21_0001+0004.tif" year="1920" month="11" day="21" />
+<file name="jb_0205_1920-11-21_0002+0003.tif" year="1920" month="11" day="21" />
+<file name="jb_0206_1920-11-24_0001+0004.tif" year="1920" month="11" day="24" />
+<file name="jb_0206_1920-11-24_0002+0003.tif" year="1920" month="11" day="24" />
+<file name="jb_0207_1920-11-27_0001+0004.tif" year="1920" month="11" day="27" />
+<file name="jb_0207_1920-11-27_0002+0003.tif" year="1920" month="11" day="27" />
+<file name="jb_0208_1920-11-30_0001+0004.tif" year="1920" month="11" day="30" />
+<file name="jb_0208_1920-11-30_0002+0003.tif" year="1920" month="11" day="30" />
+<file name="jb_0209_1920-12-03_0001+0004.tif" year="1920" month="12" day="03" />
+<file name="jb_0209_1920-12-03_0002+0003.tif" year="1920" month="12" day="03" />
+<file name="jb_0210_1920-12-06_0001+0004.tif" year="1920" month="12" day="06" />
+<file name="jb_0210_1920-12-06_0002+0003.tif" year="1920" month="12" day="06" />
+<file name="jb_0211_1920-12-09_0001+0004.tif" year="1920" month="12" day="09" />
+<file name="jb_0211_1920-12-09_0002+0003.tif" year="1920" month="12" day="09" />
+<file name="jb_0212_1920-12-12_0001+0004.tif" year="1920" month="12" day="12" />
+<file name="jb_0212_1920-12-12_0002+0003.tif" year="1920" month="12" day="12" />
+<file name="jb_0213_1920-12-15_0001+0004.tif" year="1920" month="12" day="15" />
+<file name="jb_0213_1920-12-15_0002+0003.tif" year="1920" month="12" day="15" />
+<file name="jb_0214_1920-12-18_0001+0004.tif" year="1920" month="12" day="18" />
+<file name="jb_0214_1920-12-18_0002+0003.tif" year="1920" month="12" day="18" />
+<file name="jb_0215_1920-12-21_0001+0004.tif" year="1920" month="12" day="21" />
+<file name="jb_0215_1920-12-21_0002+0003.tif" year="1920" month="12" day="21" />
+<file name="jb_0216_1920-12-24_0001+0004.tif" year="1920" month="12" day="24" />
+<file name="jb_0216_1920-12-24_0002+0003.tif" year="1920" month="12" day="24" />
+<file name="jb_0217_1920-12-27_0001+0004.tif" year="1920" month="12" day="27" />
+<file name="jb_0217_1920-12-27_0002+0003.tif" year="1920" month="12" day="27" />
+<file name="jb_0218_1920-12-30_0001+0004.tif" year="1920" month="12" day="30" />
+<file name="jb_0218_1920-12-30_0002+0003.tif" year="1920" month="12" day="30" />
+<file name="jb_0219_1921-01-01_0001+0004.tif" year="1921" month="01" day="01" />
+<file name="jb_0219_1921-01-01_0002+0003.tif" year="1921" month="01" day="01" />
+<file name="jb_0220_1921-01-03_0001+0004.tif" year="1921" month="01" day="03" />
+<file name="jb_0220_1921-01-03_0002+0003.tif" year="1921" month="01" day="03" />
+<file name="jb_0221_1921-01-06_0001+0004.tif" year="1921" month="01" day="06" />
+<file name="jb_0221_1921-01-06_0002+0003.tif" year="1921" month="01" day="06" />
+<file name="jb_0222_1921-01-09_0001+0004.tif" year="1921" month="01" day="09" />
+<file name="jb_0222_1921-01-09_0002+0003.tif" year="1921" month="01" day="09" />
+<file name="jb_0223_1921-01-12_0001+0004.tif" year="1921" month="01" day="12" />
+<file name="jb_0223_1921-01-12_0002+0003.tif" year="1921" month="01" day="12" />
+<file name="jb_0224_1921-01-15_0001+0004.tif" year="1921" month="01" day="15" />
+<file name="jb_0224_1921-01-15_0002+0003.tif" year="1921" month="01" day="15" />
+<file name="jb_0225_1921-01-18_0001+0004.tif" year="1921" month="01" day="18" />
+<file name="jb_0225_1921-01-18_0002+0003.tif" year="1921" month="01" day="18" />
+<file name="jb_0226_1921-01-21_0001+0004.tif" year="1921" month="01" day="21" />
+<file name="jb_0226_1921-01-21_0002+0003.tif" year="1921" month="01" day="21" />
+<file name="jb_0227_1921-01-24_0001+0004.tif" year="1921" month="01" day="24" />
+<file name="jb_0227_1921-01-24_0002+0003.tif" year="1921" month="01" day="24" />
+<file name="jb_0228_1921-01-27_0001+0004.tif" year="1921" month="01" day="27" />
+<file name="jb_0228_1921-01-27_0002+0003.tif" year="1921" month="01" day="27" />
+<file name="jb_0229_1921-01-30_0001+0004.tif" year="1921" month="01" day="30" />
+<file name="jb_0229_1921-01-30_0002+0003.tif" year="1921" month="01" day="30" />
+<file name="jb_0230_1921-02-03_0001+0004.tif" year="1921" month="02" day="03" />
+<file name="jb_0230_1921-02-03_0002+0003.tif" year="1921" month="02" day="03" />
+<file name="jb_0231_1921-02-12_0001+0004.tif" year="1921" month="02" day="12" />
+<file name="jb_0231_1921-02-12_0002+0003.tif" year="1921" month="02" day="12" />
+<file name="jb_0232_1921-02-15_0001+0004.tif" year="1921" month="02" day="15" />
+<file name="jb_0232_1921-02-15_0002+0003.tif" year="1921" month="02" day="15" />
+<file name="jb_0233_1921-02-18_0001+0004.tif" year="1921" month="02" day="18" />
+<file name="jb_0233_1921-02-18_0002+0003.tif" year="1921" month="02" day="18" />
+<file name="jb_0234_1921-02-21_0001+0004.tif" year="1921" month="02" day="21" />
+<file name="jb_0234_1921-02-21_0002+0003.tif" year="1921" month="02" day="21" />
+<file name="jb_0235_1921-02-24_0001+0004.tif" year="1921" month="02" day="24" />
+<file name="jb_0235_1921-02-24_0002+0003.tif" year="1921" month="02" day="24" />
+<file name="jb_0236_1921-02-27_0001+0004.tif" year="1921" month="02" day="27" />
+<file name="jb_0236_1921-02-27_0002+0003.tif" year="1921" month="02" day="27" />
+<file name="jb_0237_1921-03-01_0001+0004.tif" year="1921" month="03" day="01" />
+<file name="jb_0237_1921-03-01_0002+0003.tif" year="1921" month="03" day="01" />
+<file name="jb_0238_1921-03-03_0001+0004.tif" year="1921" month="03" day="03" />
+<file name="jb_0238_1921-03-03_0002+0003.tif" year="1921" month="03" day="03" />
+<file name="jb_0239_1921-03-06_0001+0004.tif" year="1921" month="03" day="06" />
+<file name="jb_0239_1921-03-06_0002+0003.tif" year="1921" month="03" day="06" />
+<file name="jb_0240_1921-03-09_0001+0004.tif" year="1921" month="03" day="09" />
+<file name="jb_0240_1921-03-09_0002+0003.tif" year="1921" month="03" day="09" />
+<file name="jb_0241_1921-03-12_0001+0004.tif" year="1921" month="03" day="12" />
+<file name="jb_0241_1921-03-12_0002+0003.tif" year="1921" month="03" day="12" />
+<file name="jb_0242_1921-03-15_0001+0004.tif" year="1921" month="03" day="15" />
+<file name="jb_0242_1921-03-15_0002+0003.tif" year="1921" month="03" day="15" />
+<file name="jb_0243_1921-03-18_0001+0004.tif" year="1921" month="03" day="18" />
+<file name="jb_0243_1921-03-18_0002+0003.tif" year="1921" month="03" day="18" />
+<file name="jb_0244_1921-03-21_0001+0004.tif" year="1921" month="03" day="21" />
+<file name="jb_0244_1921-03-21_0002+0003.tif" year="1921" month="03" day="21" />
+<file name="jb_0245_1921-03-24_0001+0004.tif" year="1921" month="03" day="24" />
+<file name="jb_0245_1921-03-24_0002+0003.tif" year="1921" month="03" day="24" />
+<file name="jb_0246_1921-03-27_0001+0004.tif" year="1921" month="03" day="27" />
+<file name="jb_0246_1921-03-27_0002+0003.tif" year="1921" month="03" day="27" />
+<file name="jb_0247_1921-03-30_0001+0004.tif" year="1921" month="03" day="30" />
+<file name="jb_0247_1921-03-30_0002+0003.tif" year="1921" month="03" day="30" />
+<file name="jb_0248_1921-04-03_0001+0004.tif" year="1921" month="04" day="03" />
+<file name="jb_0248_1921-04-03_0002+0003.tif" year="1921" month="04" day="03" />
+<file name="jb_0249_1921-04-06_0001+0004.tif" year="1921" month="04" day="06" />
+<file name="jb_0249_1921-04-06_0002+0003.tif" year="1921" month="04" day="06" />
+<file name="jb_0250_1921-04-09_0001+0004.tif" year="1921" month="04" day="09" />
+<file name="jb_0250_1921-04-09_0002+0003.tif" year="1921" month="04" day="09" />
+<file name="jb_0251_1921-04-12_0001+0004.tif" year="1921" month="04" day="12" />
+<file name="jb_0251_1921-04-12_0002+0003.tif" year="1921" month="04" day="12" />
+<file name="jb_0252_1921-04-15_0001+0004.tif" year="1921" month="04" day="15" />
+<file name="jb_0252_1921-04-15_0002+0003.tif" year="1921" month="04" day="15" />
+<file name="jb_0253_1921-04-18_0001+0004.tif" year="1921" month="04" day="18" />
+<file name="jb_0253_1921-04-18_0002+0003.tif" year="1921" month="04" day="18" />
+<file name="jb_0254_1921-04-21_0001+0004.tif" year="1921" month="04" day="21" />
+<file name="jb_0254_1921-04-21_0002+0003.tif" year="1921" month="04" day="21" />
+<file name="jb_0255_1921-04-24_0001+0004.tif" year="1921" month="04" day="24" />
+<file name="jb_0255_1921-04-24_0002+0003.tif" year="1921" month="04" day="24" />
+<file name="jb_0256_1921-04-27_0001+0004.tif" year="1921" month="04" day="27" />
+<file name="jb_0256_1921-04-27_0002+0003.tif" year="1921" month="04" day="27" />
+<file name="jb_0257_1921-04-30_0001+0004.tif" year="1921" month="04" day="30" />
+<file name="jb_0257_1921-04-30_0002+0003.tif" year="1921" month="04" day="30" />
+<file name="jb_0258_1921-05-03_0001+0004.tif" year="1921" month="05" day="03" />
+<file name="jb_0258_1921-05-03_0002+0003.tif" year="1921" month="05" day="03" />
+<file name="jb_0259_1921-05-06_0001+0004.tif" year="1921" month="05" day="06" />
+<file name="jb_0259_1921-05-06_0002+0003.tif" year="1921" month="05" day="06" />
+<file name="jb_0260_1921-05-09_0001+0004.tif" year="1921" month="05" day="09" />
+<file name="jb_0260_1921-05-09_0002+0003.tif" year="1921" month="05" day="09" />
+<file name="jb_0261_1921-05-12_0001+0004.tif" year="1921" month="05" day="12" />
+<file name="jb_0261_1921-05-12_0002+0003.tif" year="1921" month="05" day="12" />
+<file name="jb_0262_1921-05-15_0001+0004.tif" year="1921" month="05" day="15" />
+<file name="jb_0262_1921-05-15_0002+0003.tif" year="1921" month="05" day="15" />
+<file name="jb_0263_1921-05-18_0001+0004.tif" year="1921" month="05" day="18" />
+<file name="jb_0263_1921-05-18_0002+0003.tif" year="1921" month="05" day="18" />
+<file name="jb_0264_1921-05-21_0001+0004.tif" year="1921" month="05" day="21" />
+<file name="jb_0264_1921-05-21_0002+0003.tif" year="1921" month="05" day="21" />
+<file name="jb_0265_1921-05-24_0001+0004.tif" year="1921" month="05" day="24" />
+<file name="jb_0265_1921-05-24_0002+0003.tif" year="1921" month="05" day="24" />
+<file name="jb_0266_1921-05-27_0001+0004.tif" year="1921" month="05" day="27" />
+<file name="jb_0266_1921-05-27_0002+0003.tif" year="1921" month="05" day="27" />
+<file name="jb_0267_1921-05-30_0001+0004.tif" year="1921" month="05" day="30" />
+<file name="jb_0267_1921-05-30_0002+0003.tif" year="1921" month="05" day="30" />
+<file name="jb_0268_1921-06-03_0001+0004.tif" year="1921" month="06" day="03" />
+<file name="jb_0268_1921-06-03_0002+0003.tif" year="1921" month="06" day="03" />
+<file name="jb_0269_1921-06-06_0001+0004.tif" year="1921" month="06" day="06" />
+<file name="jb_0269_1921-06-06_0002+0003.tif" year="1921" month="06" day="06" />
+<file name="jb_0270_1921-06-09_0001+0004.tif" year="1921" month="06" day="09" />
+<file name="jb_0270_1921-06-09_0002+0003.tif" year="1921" month="06" day="09" />
+<file name="jb_0271_1921-06-12_0001+0004.tif" year="1921" month="06" day="12" />
+<file name="jb_0271_1921-06-12_0002+0003.tif" year="1921" month="06" day="12" />
+<file name="jb_0272_1921-06-15_0001+0004.tif" year="1921" month="06" day="15" />
+<file name="jb_0272_1921-06-15_0002+0003.tif" year="1921" month="06" day="15" />
+<file name="jb_0273_1921-06-18_0001+0004.tif" year="1921" month="06" day="18" />
+<file name="jb_0273_1921-06-18_0002+0003.tif" year="1921" month="06" day="18" />
+<file name="jb_0274_1921-06-21_0001+0004.tif" year="1921" month="06" day="21" />
+<file name="jb_0274_1921-06-21_0002+0003.tif" year="1921" month="06" day="21" />
+<file name="jb_0275_1921-06-24_0001+0004.tif" year="1921" month="06" day="24" />
+<file name="jb_0275_1921-06-24_0002+0003.tif" year="1921" month="06" day="24" />
+<file name="jb_0276_1921-06-27_0001+0004.tif" year="1921" month="06" day="27" />
+<file name="jb_0276_1921-06-27_0002+0003.tif" year="1921" month="06" day="27" />
+<file name="jb_0277_1921-06-30_0001+0004.tif" year="1921" month="06" day="30" />
+<file name="jb_0277_1921-06-30_0002+0003.tif" year="1921" month="06" day="30" />
+<file name="jb_0278_1921-07-03_0001+0004.tif" year="1921" month="07" day="03" />
+<file name="jb_0278_1921-07-03_0002+0003.tif" year="1921" month="07" day="03" />
+<file name="jb_0279_1921-07-06_0001+0004.tif" year="1921" month="07" day="06" />
+<file name="jb_0279_1921-07-06_0002+0003.tif" year="1921" month="07" day="06" />
+<file name="jb_0280_1921-07-09_0001+0004.tif" year="1921" month="07" day="09" />
+<file name="jb_0280_1921-07-09_0002+0003.tif" year="1921" month="07" day="09" />
+<file name="jb_0281_1921-07-12_0001+0004.tif" year="1921" month="07" day="12" />
+<file name="jb_0281_1921-07-12_0002+0003.tif" year="1921" month="07" day="12" />
+<file name="jb_0282_1921-07-15_0001+0004.tif" year="1921" month="07" day="15" />
+<file name="jb_0282_1921-07-15_0002+0003.tif" year="1921" month="07" day="15" />
+<file name="jb_0283_1921-07-18_0001+0004.tif" year="1921" month="07" day="18" />
+<file name="jb_0283_1921-07-18_0002+0003.tif" year="1921" month="07" day="18" />
+<file name="jb_0284_1921-07-21_0001+0004.tif" year="1921" month="07" day="21" />
+<file name="jb_0284_1921-07-21_0002+0003.tif" year="1921" month="07" day="21" />
+<file name="jb_0285_1921-07-24_0001+0004.tif" year="1921" month="07" day="24" />
+<file name="jb_0285_1921-07-24_0002+0003.tif" year="1921" month="07" day="24" />
+<file name="jb_0286_1921-07-27_0001+0004.tif" year="1921" month="07" day="27" />
+<file name="jb_0286_1921-07-27_0002+0003.tif" year="1921" month="07" day="27" />
+<file name="jb_0287_1921-07-30_0001+0004.tif" year="1921" month="07" day="30" />
+<file name="jb_0287_1921-07-30_0002+0003.tif" year="1921" month="07" day="30" />
+<file name="jb_0288_1921-08-01_0001+0004.tif" year="1921" month="08" day="01" />
+<file name="jb_0288_1921-08-01_0002+0003.tif" year="1921" month="08" day="01" />
+<file name="jb_0289_1921-08-03_0001+0004.tif" year="1921" month="08" day="03" />
+<file name="jb_0289_1921-08-03_0002+0003.tif" year="1921" month="08" day="03" />
+<file name="jb_0290_1921-08-06_0001+0004.tif" year="1921" month="08" day="06" />
+<file name="jb_0290_1921-08-06_0002+0003.tif" year="1921" month="08" day="06" />
+<file name="jb_0291_1921-08-09_0001+0004.tif" year="1921" month="08" day="09" />
+<file name="jb_0291_1921-08-09_0002+0003.tif" year="1921" month="08" day="09" />
+<file name="jb_0292_1921-08-12_0001+0004.tif" year="1921" month="08" day="12" />
+<file name="jb_0292_1921-08-12_0002+0003.tif" year="1921" month="08" day="12" />
+<file name="jb_0293_1921-08-15_0001+0004.tif" year="1921" month="08" day="15" />
+<file name="jb_0293_1921-08-15_0002+0003.tif" year="1921" month="08" day="15" />
+<file name="jb_0294_1921-08-18_0001+0004.tif" year="1921" month="08" day="18" />
+<file name="jb_0294_1921-08-18_0002+0003.tif" year="1921" month="08" day="18" />
+<file name="jb_0295_1921-08-21_0001+0004.tif" year="1921" month="08" day="21" />
+<file name="jb_0295_1921-08-21_0002+0003.tif" year="1921" month="08" day="21" />
+<file name="jb_0296_1921-08-24_0001+0004.tif" year="1921" month="08" day="24" />
+<file name="jb_0296_1921-08-24_0002+0003.tif" year="1921" month="08" day="24" />
+<file name="jb_0297_1921-08-27_0001+0004.tif" year="1921" month="08" day="27" />
+<file name="jb_0297_1921-08-27_0002+0003.tif" year="1921" month="08" day="27" />
+<file name="jb_0298_1921-08-30_0001+0004.tif" year="1921" month="08" day="30" />
+<file name="jb_0298_1921-08-30_0002+0003.tif" year="1921" month="08" day="30" />
+<file name="jb_0299_1921-09-03_0001+0004.tif" year="1921" month="09" day="03" />
+<file name="jb_0299_1921-09-03_0002+0003.tif" year="1921" month="09" day="03" />
+<file name="jb_0300_1921-09-06_0001+0004.tif" year="1921" month="09" day="06" />
+<file name="jb_0300_1921-09-06_0002+0003.tif" year="1921" month="09" day="06" />
+<file name="jb_0301_1921-09-09_0001+0004.tif" year="1921" month="09" day="09" />
+<file name="jb_0301_1921-09-09_0002+0003.tif" year="1921" month="09" day="09" />
+<file name="jb_0302_1921-09-12_0001+0004.tif" year="1921" month="09" day="12" />
+<file name="jb_0302_1921-09-12_0002+0003.tif" year="1921" month="09" day="12" />
+<file name="jb_0303_1921-09-15_0001+0004.tif" year="1921" month="09" day="15" />
+<file name="jb_0303_1921-09-15_0002+0003.tif" year="1921" month="09" day="15" />
+<file name="jb_0304_1921-09-18_0001+0004.tif" year="1921" month="09" day="18" />
+<file name="jb_0304_1921-09-18_0002+0003.tif" year="1921" month="09" day="18" />
+<file name="jb_0305_1921-09-21_0001+0004.tif" year="1921" month="09" day="21" />
+<file name="jb_0305_1921-09-21_0002+0003.tif" year="1921" month="09" day="21" />
+<file name="jb_0306_1921-09-24_0001+0004.tif" year="1921" month="09" day="24" />
+<file name="jb_0306_1921-09-24_0002+0003.tif" year="1921" month="09" day="24" />
+<file name="jb_0307_1921-09-27_0001+0004.tif" year="1921" month="09" day="27" />
+<file name="jb_0307_1921-09-27_0002+0003.tif" year="1921" month="09" day="27" />
+<file name="jb_0308_1921-09-30_0001+0004.tif" year="1921" month="09" day="30" />
+<file name="jb_0308_1921-09-30_0002+0003.tif" year="1921" month="09" day="30" />
+<file name="jb_0309_1921-10-03_0001+0004.tif" year="1921" month="10" day="03" />
+<file name="jb_0309_1921-10-03_0002+0003.tif" year="1921" month="10" day="03" />
+<file name="jb_0310_1921-10-06_0001+0004.tif" year="1921" month="10" day="06" />
+<file name="jb_0310_1921-10-06_0002+0003.tif" year="1921" month="10" day="06" />
+<file name="jb_0311_1921-10-10_0001+0004.tif" year="1921" month="10" day="10" />
+<file name="jb_0311_1921-10-10_0002+0003.tif" year="1921" month="10" day="10" />
+<file name="jb_0311_z01_1921-10-10_0001+0004.tif" year="1921" month="10" day="10" />
+<file name="jb_0311_z01_1921-10-10_0002+0003.tif" year="1921" month="10" day="10" />
+<file name="jb_0312_1921-10-12_0001+0004.tif" year="1921" month="10" day="12" />
+<file name="jb_0312_1921-10-12_0002+0003.tif" year="1921" month="10" day="12" />
+<file name="jb_0313_1921-10-15_0001+0004.tif" year="1921" month="10" day="15" />
+<file name="jb_0313_1921-10-15_0002+0003.tif" year="1921" month="10" day="15" />
+<file name="jb_0314_1921-10-18_0001+0004.tif" year="1921" month="10" day="18" />
+<file name="jb_0314_1921-10-18_0002+0003.tif" year="1921" month="10" day="18" />
+<file name="jb_0315_1921-10-21_0001+0004.tif" year="1921" month="10" day="21" />
+<file name="jb_0315_1921-10-21_0002+0003.tif" year="1921" month="10" day="21" />
+<file name="jb_0316_1921-10-24_0001+0004.tif" year="1921" month="10" day="24" />
+<file name="jb_0316_1921-10-24_0002+0003.tif" year="1921" month="10" day="24" />
+<file name="jb_0317_1921-10-27_0001+0004.tif" year="1921" month="10" day="27" />
+<file name="jb_0317_1921-10-27_0002+0003.tif" year="1921" month="10" day="27" />
+<file name="jb_0318_1921-10-30_0001+0004.tif" year="1921" month="10" day="30" />
+<file name="jb_0318_1921-10-30_0002+0003.tif" year="1921" month="10" day="30" />
+<file name="jb_0319_1921-11-03_0001+0004.tif" year="1921" month="11" day="03" />
+<file name="jb_0319_1921-11-03_0002+0003.tif" year="1921" month="11" day="03" />
+<file name="jb_0320_1921-11-06_0001+0004.tif" year="1921" month="11" day="06" />
+<file name="jb_0320_1921-11-06_0002+0003.tif" year="1921" month="11" day="06" />
+<file name="jb_0321_1921-11-09_0001+0004.tif" year="1921" month="11" day="09" />
+<file name="jb_0321_1921-11-09_0002+0003.tif" year="1921" month="11" day="09" />
+<file name="jb_0322_1921-11-12_0001+0004.tif" year="1921" month="11" day="12" />
+<file name="jb_0322_1921-11-12_0002+0003.tif" year="1921" month="11" day="12" />
+<file name="jb_0323_1921-11-15_0001+0004.tif" year="1921" month="11" day="15" />
+<file name="jb_0323_1921-11-15_0002+0003.tif" year="1921" month="11" day="15" />
+<file name="jb_0324_1921-11-18_0001+0004.tif" year="1921" month="11" day="18" />
+<file name="jb_0324_1921-11-18_0002+0003.tif" year="1921" month="11" day="18" />
+<file name="jb_0325_1921-11-21_0001+0004.tif" year="1921" month="11" day="21" />
+<file name="jb_0325_1921-11-21_0002+0003.tif" year="1921" month="11" day="21" />
+<file name="jb_0326_1921-11-24_0001+0004.tif" year="1921" month="11" day="24" />
+<file name="jb_0326_1921-11-24_0002+0003.tif" year="1921" month="11" day="24" />
+<file name="jb_0327_1921-11-27_0001+0004.tif" year="1921" month="11" day="27" />
+<file name="jb_0327_1921-11-27_0002+0003.tif" year="1921" month="11" day="27" />
+<file name="jb_0328_1921-11-30_0001+0004.tif" year="1921" month="11" day="30" />
+<file name="jb_0328_1921-11-30_0002+0003.tif" year="1921" month="11" day="30" />
+<file name="jb_0329_1921-12-03_0001+0004.tif" year="1921" month="12" day="03" />
+<file name="jb_0329_1921-12-03_0002+0003.tif" year="1921" month="12" day="03" />
+<file name="jb_0330_1921-12-06_0001+0004.tif" year="1921" month="12" day="06" />
+<file name="jb_0330_1921-12-06_0002+0003.tif" year="1921" month="12" day="06" />
+<file name="jb_0331_1921-12-09_0001+0004.tif" year="1921" month="12" day="09" />
+<file name="jb_0331_1921-12-09_0002+0003.tif" year="1921" month="12" day="09" />
+<file name="jb_0332_1921-12-12_0001+0004.tif" year="1921" month="12" day="12" />
+<file name="jb_0332_1921-12-12_0002+0003.tif" year="1921" month="12" day="12" />
+<file name="jb_0333_1921-12-15_0001+0004.tif" year="1921" month="12" day="15" />
+<file name="jb_0333_1921-12-15_0002+0003.tif" year="1921" month="12" day="15" />
+<file name="jb_0334_1921-12-18_0001+0004.tif" year="1921" month="12" day="18" />
+<file name="jb_0334_1921-12-18_0002+0003.tif" year="1921" month="12" day="18" />
+<file name="jb_0335_1921-12-21_0001+0004.tif" year="1921" month="12" day="21" />
+<file name="jb_0335_1921-12-21_0002+0003.tif" year="1921" month="12" day="21" />
+<file name="jb_0336_1921-12-24_0001+0004.tif" year="1921" month="12" day="24" />
+<file name="jb_0336_1921-12-24_0002+0003.tif" year="1921" month="12" day="24" />
+<file name="jb_0337_1921-12-27_0001+0004.tif" year="1921" month="12" day="27" />
+<file name="jb_0337_1921-12-27_0002+0003.tif" year="1921" month="12" day="27" />
+<file name="jb_0338_1921-12-30_0001+0004.tif" year="1921" month="12" day="30" />
+<file name="jb_0338_1921-12-30_0002+0003.tif" year="1921" month="12" day="30" />
+<file name="jb_0339_1922-01-01_0001+0004.tif" year="1922" month="01" day="01" />
+<file name="jb_0339_1922-01-01_0002+0003.tif" year="1922" month="01" day="01" />
+<file name="jb_0340_1922-01-03_0001+0004.tif" year="1922" month="01" day="03" />
+<file name="jb_0340_1922-01-03_0002+0003.tif" year="1922" month="01" day="03" />
+<file name="jb_0341_1922-01-06_0001+0004.tif" year="1922" month="01" day="06" />
+<file name="jb_0341_1922-01-06_0002+0003.tif" year="1922" month="01" day="06" />
+<file name="jb_0342_1922-01-09_0001+0004.tif" year="1922" month="01" day="09" />
+<file name="jb_0342_1922-01-09_0002+0003.tif" year="1922" month="01" day="09" />
+<file name="jb_0343_1922-01-12_0001+0004.tif" year="1922" month="01" day="12" />
+<file name="jb_0343_1922-01-12_0002+0003.tif" year="1922" month="01" day="12" />
+<file name="jb_0344_1922-01-15_0001+0004.tif" year="1922" month="01" day="15" />
+<file name="jb_0344_1922-01-15_0002+0003.tif" year="1922" month="01" day="15" />
+<file name="jb_0345_1922-01-18_0001+0004.tif" year="1922" month="01" day="18" />
+<file name="jb_0345_1922-01-18_0002+0003.tif" year="1922" month="01" day="18" />
+<file name="jb_0346_1922-01-21_0001+0004.tif" year="1922" month="01" day="21" />
+<file name="jb_0346_1922-01-21_0002+0003.tif" year="1922" month="01" day="21" />
+<file name="jb_0347_1922-01-23_0001+0004.tif" year="1922" month="01" day="23" />
+<file name="jb_0347_1922-01-23_0002+0003.tif" year="1922" month="01" day="23" />
+<file name="jb_0348_1922-02-01_0001+0004.tif" year="1922" month="02" day="01" />
+<file name="jb_0348_1922-02-01_0002+0003.tif" year="1922" month="02" day="01" />
+<file name="jb_0349_1922-02-03_0001+0004.tif" year="1922" month="02" day="03" />
+<file name="jb_0349_1922-02-03_0002+0003.tif" year="1922" month="02" day="03" />
+<file name="jb_0350_1922-02-06_0001+0004.tif" year="1922" month="02" day="06" />
+<file name="jb_0350_1922-02-06_0002+0003.tif" year="1922" month="02" day="06" />
+<file name="jb_0351_1922-02-09_0001+0004.tif" year="1922" month="02" day="09" />
+<file name="jb_0351_1922-02-09_0002+0003.tif" year="1922" month="02" day="09" />
+<file name="jb_0352_1922-02-12_0001+0004.tif" year="1922" month="02" day="12" />
+<file name="jb_0352_1922-02-12_0002+0003.tif" year="1922" month="02" day="12" />
+<file name="jb_0353_1922-02-15_0001+0004.tif" year="1922" month="02" day="15" />
+<file name="jb_0353_1922-02-15_0002+0003.tif" year="1922" month="02" day="15" />
+<file name="jb_0354_1922-02-18_0001+0004.tif" year="1922" month="02" day="18" />
+<file name="jb_0354_1922-02-18_0002+0003.tif" year="1922" month="02" day="18" />
+<file name="jb_0355_1922-02-21_0001+0004.tif" year="1922" month="02" day="21" />
+<file name="jb_0355_1922-02-21_0002+0003.tif" year="1922" month="02" day="21" />
+<file name="jb_0356_1922-02-24_0001+0004.tif" year="1922" month="02" day="24" />
+<file name="jb_0356_1922-02-24_0002+0003.tif" year="1922" month="02" day="24" />
+<file name="jb_0357_1922-02-27_0001+0004.tif" year="1922" month="02" day="27" />
+<file name="jb_0357_1922-02-27_0002+0003.tif" year="1922" month="02" day="27" />
+<file name="jb_0358_1922-03-01_0001+0004.tif" year="1922" month="03" day="01" />
+<file name="jb_0358_1922-03-01_0002+0003.tif" year="1922" month="03" day="01" />
+<file name="jb_0359_z01_1922-03-03_0001+0004.tif" year="1922" month="03" day="03" />
+<file name="jb_0359_z01_1922-03-03_0002+0003.tif" year="1922" month="03" day="03" />
+<file name="jb_0359_z02_1922-03-03_0001+0004.tif" year="1922" month="03" day="03" />
+<file name="jb_0359_z02_1922-03-03_0002+0003.tif" year="1922" month="03" day="03" />
+<file name="jb_0360_1922-03-06_0001+0004.tif" year="1922" month="03" day="06" />
+<file name="jb_0360_1922-03-06_0002+0003.tif" year="1922" month="03" day="06" />
+<file name="jb_0361_1922-03-09_0001+0004.tif" year="1922" month="03" day="09" />
+<file name="jb_0361_1922-03-09_0002+0003.tif" year="1922" month="03" day="09" />
+<file name="jb_0362_1922-03-12_0001+0004.tif" year="1922" month="03" day="12" />
+<file name="jb_0362_1922-03-12_0002+0003.tif" year="1922" month="03" day="12" />
+<file name="jb_0363_1922-03-15_0001+0004.tif" year="1922" month="03" day="15" />
+<file name="jb_0363_1922-03-15_0002+0003.tif" year="1922" month="03" day="15" />
+<file name="jb_0364_1922-03-18_0001+0004.tif" year="1922" month="03" day="18" />
+<file name="jb_0364_1922-03-18_0002+0003.tif" year="1922" month="03" day="18" />
+<file name="jb_0365_1922-03-21_0001+0004.tif" year="1922" month="03" day="21" />
+<file name="jb_0365_1922-03-21_0002+0003.tif" year="1922" month="03" day="21" />
+<file name="jb_0366_1922-03-24_0001+0004.tif" year="1922" month="03" day="24" />
+<file name="jb_0366_1922-03-24_0002+0003.tif" year="1922" month="03" day="24" />
+<file name="jb_0367_1922-03-27_0001+0004.tif" year="1922" month="03" day="27" />
+<file name="jb_0367_1922-03-27_0002+0003.tif" year="1922" month="03" day="27" />
+<file name="jb_0368_1922-03-30_0001+0004.tif" year="1922" month="03" day="30" />
+<file name="jb_0368_1922-03-30_0002+0003.tif" year="1922" month="03" day="30" />
+<file name="jb_0369_1922-04-03_0001+0004.tif" year="1922" month="04" day="03" />
+<file name="jb_0369_1922-04-03_0002+0003.tif" year="1922" month="04" day="03" />
+<file name="jb_0370_1922-04-06_0001+0004.tif" year="1922" month="04" day="06" />
+<file name="jb_0370_1922-04-06_0002+0003.tif" year="1922" month="04" day="06" />
+<file name="jb_0371_1922-04-09_0001+0004.tif" year="1922" month="04" day="09" />
+<file name="jb_0371_1922-04-09_0002+0003.tif" year="1922" month="04" day="09" />
+<file name="jb_0372_1922-04-12_0001+0004.tif" year="1922" month="04" day="12" />
+<file name="jb_0372_1922-04-12_0002+0003.tif" year="1922" month="04" day="12" />
+<file name="jb_0373_1922-04-15_0001+0004.tif" year="1922" month="04" day="15" />
+<file name="jb_0373_1922-04-15_0002+0003.tif" year="1922" month="04" day="15" />
+<file name="jb_0374_1922-04-18_0001+0004.tif" year="1922" month="04" day="18" />
+<file name="jb_0374_1922-04-18_0002+0003.tif" year="1922" month="04" day="18" />
+<file name="jb_0375_1922-04-21_0001+0004.tif" year="1922" month="04" day="21" />
+<file name="jb_0375_1922-04-21_0002+0003.tif" year="1922" month="04" day="21" />
+<file name="jb_0376_1922-04-24_0001+0004.tif" year="1922" month="04" day="24" />
+<file name="jb_0376_1922-04-24_0002+0003.tif" year="1922" month="04" day="24" />
+<file name="jb_0377_1922-04-27_0001+0004.tif" year="1922" month="04" day="27" />
+<file name="jb_0377_1922-04-27_0002+0003.tif" year="1922" month="04" day="27" />
+<file name="jb_0378_1922-04-30_0001+0004.tif" year="1922" month="04" day="30" />
+<file name="jb_0378_1922-04-30_0002+0003.tif" year="1922" month="04" day="30" />
+<file name="jb_0379_1922-05-03_0001+0004.tif" year="1922" month="05" day="03" />
+<file name="jb_0379_1922-05-03_0002+0003.tif" year="1922" month="05" day="03" />
+<file name="jb_0380_1922-05-06_0001+0004.tif" year="1922" month="05" day="06" />
+<file name="jb_0380_1922-05-06_0002+0003.tif" year="1922" month="05" day="06" />
+<file name="jb_0381_1922-05-09_0001+0004.tif" year="1922" month="05" day="09" />
+<file name="jb_0381_1922-05-09_0002+0003.tif" year="1922" month="05" day="09" />
+<file name="jb_0382_1922-05-12_0001+0004.tif" year="1922" month="05" day="12" />
+<file name="jb_0382_1922-05-12_0002+0003.tif" year="1922" month="05" day="12" />
+<file name="jb_0383_1922-05-15_0001+0004.tif" year="1922" month="05" day="15" />
+<file name="jb_0383_1922-05-15_0002+0003.tif" year="1922" month="05" day="15" />
+<file name="jb_0384_1922-05-18_0001+0004.tif" year="1922" month="05" day="18" />
+<file name="jb_0384_1922-05-18_0002+0003.tif" year="1922" month="05" day="18" />
+<file name="jb_0385_1922-05-21_0001+0004.tif" year="1922" month="05" day="21" />
+<file name="jb_0385_1922-05-21_0002+0003.tif" year="1922" month="05" day="21" />
+<file name="jb_0386_1922-05-24_0001+0004.tif" year="1922" month="05" day="24" />
+<file name="jb_0386_1922-05-24_0002+0003.tif" year="1922" month="05" day="24" />
+<file name="jb_0387_1922-05-27_0001+0004.tif" year="1922" month="05" day="27" />
+<file name="jb_0387_1922-05-27_0002+0003.tif" year="1922" month="05" day="27" />
+<file name="jb_0388_1922-05-30_0001+0004.tif" year="1922" month="05" day="30" />
+<file name="jb_0388_1922-05-30_0002+0003.tif" year="1922" month="05" day="30" />
+<file name="jb_0389_1922-06-03_0001+0004.tif" year="1922" month="06" day="03" />
+<file name="jb_0389_1922-06-03_0002+0003.tif" year="1922" month="06" day="03" />
+<file name="jb_0390_1922-06-06_0001+0004.tif" year="1922" month="06" day="06" />
+<file name="jb_0390_1922-06-06_0002+0003.tif" year="1922" month="06" day="06" />
+<file name="jb_0391_1922-06-09_0001+0004.tif" year="1922" month="06" day="09" />
+<file name="jb_0391_1922-06-09_0002+0003.tif" year="1922" month="06" day="09" />
+<file name="jb_0392_1922-06-12_0001+0004.tif" year="1922" month="06" day="12" />
+<file name="jb_0392_1922-06-12_0002+0003.tif" year="1922" month="06" day="12" />
+<file name="jb_0393_1922-06-15_0001+0004.tif" year="1922" month="06" day="15" />
+<file name="jb_0393_1922-06-15_0002+0003.tif" year="1922" month="06" day="15" />
+<file name="jb_0394_1922-06-18_0001+0004.tif" year="1922" month="06" day="18" />
+<file name="jb_0394_1922-06-18_0002+0003.tif" year="1922" month="06" day="18" />
+<file name="jb_0395_1922-06-21_0001+0004.tif" year="1922" month="06" day="21" />
+<file name="jb_0395_1922-06-21_0002+0003.tif" year="1922" month="06" day="21" />
+<file name="jb_0396_1922-06-24_0001+0004.tif" year="1922" month="06" day="24" />
+<file name="jb_0396_1922-06-24_0002+0003.tif" year="1922" month="06" day="24" />
+<file name="jb_0397_1922-06-27_0001+0004.tif" year="1922" month="06" day="27" />
+<file name="jb_0397_1922-06-27_0002+0003.tif" year="1922" month="06" day="27" />
+<file name="jb_0398_1922-06-30_0001+0004.tif" year="1922" month="06" day="30" />
+<file name="jb_0398_1922-06-30_0002+0003.tif" year="1922" month="06" day="30" />
+<file name="jb_0399_1922-07-03_0001+0004.tif" year="1922" month="07" day="03" />
+<file name="jb_0399_1922-07-03_0002+0003.tif" year="1922" month="07" day="03" />
+<file name="jb_0400_1922-07-06_0001+0004.tif" year="1922" month="07" day="06" />
+<file name="jb_0400_1922-07-06_0002+0003.tif" year="1922" month="07" day="06" />
+<file name="jb_0401_1922-07-09_0001+0004.tif" year="1922" month="07" day="09" />
+<file name="jb_0401_1922-07-09_0002+0003.tif" year="1922" month="07" day="09" />
+<file name="jb_0402_1922-07-12_0001+0004.tif" year="1922" month="07" day="12" />
+<file name="jb_0402_1922-07-12_0002+0003.tif" year="1922" month="07" day="12" />
+<file name="jb_0403_1922-07-15_0001+0004.tif" year="1922" month="07" day="15" />
+<file name="jb_0403_1922-07-15_0002+0003.tif" year="1922" month="07" day="15" />
+<file name="jb_0404_1922-07-18_0001+0004.tif" year="1922" month="07" day="18" />
+<file name="jb_0404_1922-07-18_0002+0003.tif" year="1922" month="07" day="18" />
+<file name="jb_0405_1922-07-21_0001+0004.tif" year="1922" month="07" day="21" />
+<file name="jb_0405_1922-07-21_0002+0003.tif" year="1922" month="07" day="21" />
+<file name="jb_0406_1922-07-24_0001+0004.tif" year="1922" month="07" day="24" />
+<file name="jb_0406_1922-07-24_0002+0003.tif" year="1922" month="07" day="24" />
+<file name="jb_0407_1922-07-27_0001+0004.tif" year="1922" month="07" day="27" />
+<file name="jb_0407_1922-07-27_0002+0003.tif" year="1922" month="07" day="27" />
+<file name="jb_0408_1922-07-30_0001+0004.tif" year="1922" month="07" day="30" />
+<file name="jb_0408_1922-07-30_0002+0003.tif" year="1922" month="07" day="30" />
+<file name="jb_0409_1922-08-03_0001+0004.tif" year="1922" month="08" day="03" />
+<file name="jb_0409_1922-08-03_0002+0003.tif" year="1922" month="08" day="03" />
+<file name="jb_0410_1922-08-06_0001+0004.tif" year="1922" month="08" day="06" />
+<file name="jb_0410_1922-08-06_0002+0003.tif" year="1922" month="08" day="06" />
+<file name="jb_0411_1922-08-09_0001+0004.tif" year="1922" month="08" day="09" />
+<file name="jb_0411_1922-08-09_0002+0003.tif" year="1922" month="08" day="09" />
+<file name="jb_0412_1922-08-12_0001+0004.tif" year="1922" month="08" day="12" />
+<file name="jb_0412_1922-08-12_0002+0003.tif" year="1922" month="08" day="12" />
+<file name="jb_0413_1922-08-15_0001+0004.tif" year="1922" month="08" day="15" />
+<file name="jb_0413_1922-08-15_0002+0003.tif" year="1922" month="08" day="15" />
+<file name="jb_0414_1922-08-18_0001+0004.tif" year="1922" month="08" day="18" />
+<file name="jb_0414_1922-08-18_0002+0003.tif" year="1922" month="08" day="18" />
+<file name="jb_0415_1922-08-21_0001+0004.tif" year="1922" month="08" day="21" />
+<file name="jb_0415_1922-08-21_0002+0003.tif" year="1922" month="08" day="21" />
+<file name="jb_0416_1922-08-24_0001+0004.tif" year="1922" month="08" day="24" />
+<file name="jb_0416_1922-08-24_0002+0003.tif" year="1922" month="08" day="24" />
+<file name="jb_0417_1922-08-27_0001+0004.tif" year="1922" month="08" day="27" />
+<file name="jb_0417_1922-08-27_0002+0003.tif" year="1922" month="08" day="27" />
+<file name="jb_0418_1922-08-30_0001+0004.tif" year="1922" month="08" day="30" />
+<file name="jb_0418_1922-08-30_0002+0003.tif" year="1922" month="08" day="30" />
+<file name="jb_0419_1922-09-03_0001+0004.tif" year="1922" month="09" day="03" />
+<file name="jb_0419_1922-09-03_0002+0003.tif" year="1922" month="09" day="03" />
+<file name="jb_0420_1922-09-06_0001+0004.tif" year="1922" month="09" day="06" />
+<file name="jb_0420_1922-09-06_0002+0003.tif" year="1922" month="09" day="06" />
+<file name="jb_0421_1922-09-09_0001+0004.tif" year="1922" month="09" day="09" />
+<file name="jb_0421_1922-09-09_0002+0003.tif" year="1922" month="09" day="09" />
+<file name="jb_0422_1922-09-12_0001+0004.tif" year="1922" month="09" day="12" />
+<file name="jb_0422_1922-09-12_0002+0003.tif" year="1922" month="09" day="12" />
+<file name="jb_0423_1922-09-15_0001+0004.tif" year="1922" month="09" day="15" />
+<file name="jb_0423_1922-09-15_0002+0003.tif" year="1922" month="09" day="15" />
+<file name="jb_0424_1922-09-18_0001+0004.tif" year="1922" month="09" day="18" />
+<file name="jb_0424_1922-09-18_0002+0003.tif" year="1922" month="09" day="18" />
+<file name="jb_0425_1922-09-21_0001+0004.tif" year="1922" month="09" day="21" />
+<file name="jb_0425_1922-09-21_0002+0003.tif" year="1922" month="09" day="21" />
+<file name="jb_0426_1922-09-24_0001+0004.tif" year="1922" month="09" day="24" />
+<file name="jb_0426_1922-09-24_0002+0003.tif" year="1922" month="09" day="24" />
+<file name="jb_0427_1922-09-27_0001+0004.tif" year="1922" month="09" day="27" />
+<file name="jb_0427_1922-09-27_0002+0003.tif" year="1922" month="09" day="27" />
+<file name="jb_0428_1922-09-30_0001+0004.tif" year="1922" month="09" day="30" />
+<file name="jb_0428_1922-09-30_0002+0003.tif" year="1922" month="09" day="30" />
+<file name="jb_0429_1922-10-03_0001+0004.tif" year="1922" month="10" day="03" />
+<file name="jb_0429_1922-10-03_0002+0003.tif" year="1922" month="10" day="03" />
+<file name="jb_0430_1922-10-06_0001+0004.tif" year="1922" month="10" day="06" />
+<file name="jb_0430_1922-10-06_0002+0003.tif" year="1922" month="10" day="06" />
+<file name="jb_0431_1922-10-10_0001+0004.tif" year="1922" month="10" day="10" />
+<file name="jb_0431_1922-10-10_0002+0003.tif" year="1922" month="10" day="10" />
+<file name="jb_0431_z01_1922-10-10_0001+0004.tif" year="1922" month="10" day="10" />
+<file name="jb_0431_z01_1922-10-10_0002+0003.tif" year="1922" month="10" day="10" />
+<file name="jb_0432_1922-10-12_0001+0004.tif" year="1922" month="10" day="12" />
+<file name="jb_0432_1922-10-12_0002+0003.tif" year="1922" month="10" day="12" />
+<file name="jb_0433_1922-10-15_0001+0004.tif" year="1922" month="10" day="15" />
+<file name="jb_0433_1922-10-15_0002+0003.tif" year="1922" month="10" day="15" />
+<file name="jb_0434_1922-10-18_0001+0004.tif" year="1922" month="10" day="18" />
+<file name="jb_0434_1922-10-18_0002+0003.tif" year="1922" month="10" day="18" />
+<file name="jb_0435_1922-10-21_0001+0004.tif" year="1922" month="10" day="21" />
+<file name="jb_0435_1922-10-21_0002+0003.tif" year="1922" month="10" day="21" />
+<file name="jb_0436_1922-10-24_0001+0004.tif" year="1922" month="10" day="24" />
+<file name="jb_0436_1922-10-24_0002+0003.tif" year="1922" month="10" day="24" />
+<file name="jb_0437_1922-10-27_0001+0004.tif" year="1922" month="10" day="27" />
+<file name="jb_0437_1922-10-27_0002+0003.tif" year="1922" month="10" day="27" />
+<file name="jb_0438_1922-10-30_0001+0004.tif" year="1922" month="10" day="30" />
+<file name="jb_0438_1922-10-30_0002+0003.tif" year="1922" month="10" day="30" />
+<file name="jb_0439_1922-11-03_0001+0004.tif" year="1922" month="11" day="03" />
+<file name="jb_0439_1922-11-03_0002+0003.tif" year="1922" month="11" day="03" />
+<file name="jb_0440_1922-11-06_0001+0004.tif" year="1922" month="11" day="06" />
+<file name="jb_0440_1922-11-06_0002+0003.tif" year="1922" month="11" day="06" />
+<file name="jb_0441_1922-11-09_0001+0004.tif" year="1922" month="11" day="09" />
+<file name="jb_0441_1922-11-09_0002+0003.tif" year="1922" month="11" day="09" />
+<file name="jb_0442_1922-11-12_0001+0004.tif" year="1922" month="11" day="12" />
+<file name="jb_0442_1922-11-12_0002+0003.tif" year="1922" month="11" day="12" />
+<file name="jb_0443_1922-11-15_0001+0004.tif" year="1922" month="11" day="15" />
+<file name="jb_0443_1922-11-15_0002+0003.tif" year="1922" month="11" day="15" />
+<file name="jb_0444_1922-11-18_0001+0004.tif" year="1922" month="11" day="18" />
+<file name="jb_0444_1922-11-18_0002+0003.tif" year="1922" month="11" day="18" />
+<file name="jb_0445_1922-11-21_0001+0004.tif" year="1922" month="11" day="21" />
+<file name="jb_0445_1922-11-21_0002+0003.tif" year="1922" month="11" day="21" />
+<file name="jb_0446_1922-11-24_0001+0004.tif" year="1922" month="11" day="24" />
+<file name="jb_0446_1922-11-24_0002+0003.tif" year="1922" month="11" day="24" />
+<file name="jb_0447_1922-11-27_0001+0004.tif" year="1922" month="11" day="27" />
+<file name="jb_0447_1922-11-27_0002+0003.tif" year="1922" month="11" day="27" />
+<file name="jb_0448_1922-11-30_0001+0004.tif" year="1922" month="11" day="30" />
+<file name="jb_0448_1922-11-30_0002+0003.tif" year="1922" month="11" day="30" />
+<file name="jb_0449_1922-12-03_0001+0004.tif" year="1922" month="12" day="03" />
+<file name="jb_0449_1922-12-03_0002+0003.tif" year="1922" month="12" day="03" />
+<file name="jb_0450_1922-12-06_0001+0004.tif" year="1922" month="12" day="06" />
+<file name="jb_0450_1922-12-06_0002+0003.tif" year="1922" month="12" day="06" />
+<file name="jb_0451_1922-12-09_0001+0004.tif" year="1922" month="12" day="09" />
+<file name="jb_0451_1922-12-09_0002+0003.tif" year="1922" month="12" day="09" />
+<file name="jb_0452_1922-12-12_0001+0004.tif" year="1922" month="12" day="12" />
+<file name="jb_0452_1922-12-12_0002+0003.tif" year="1922" month="12" day="12" />
+<file name="jb_0453_1922-12-15_0001+0004.tif" year="1922" month="12" day="15" />
+<file name="jb_0453_1922-12-15_0002+0003.tif" year="1922" month="12" day="15" />
+<file name="jb_0454_1922-12-18_0001+0004.tif" year="1922" month="12" day="18" />
+<file name="jb_0454_1922-12-18_0002+0003.tif" year="1922" month="12" day="18" />
+<file name="jb_0455_1922-12-21_0001+0004.tif" year="1922" month="12" day="21" />
+<file name="jb_0455_1922-12-21_0002+0003.tif" year="1922" month="12" day="21" />
+<file name="jb_0456_1922-12-24_0001+0004.tif" year="1922" month="12" day="24" />
+<file name="jb_0456_1922-12-24_0002+0003.tif" year="1922" month="12" day="24" />
+<file name="jb_0457_1922-12-27_0001+0004.tif" year="1922" month="12" day="27" />
+<file name="jb_0457_1922-12-27_0002+0003.tif" year="1922" month="12" day="27" />
+<file name="jb_0458_1922-12-30_0001+0004.tif" year="1922" month="12" day="30" />
+<file name="jb_0458_1922-12-30_0002+0003.tif" year="1922" month="12" day="30" />
 </base>
