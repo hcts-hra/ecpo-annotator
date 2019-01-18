@@ -1,8 +1,7 @@
 xquery version "3.1";
 
-declare namespace output="http://exquery.org/ns/rest/annotation/output";
-
-import module namespace login="http://exist-db.org/xquery/login" at "resource:org/exist/xquery/modules/persistentlogin/login.xql";
+import module namespace login="http://exist-db.org/xquery/login"
+    at "resource:org/exist/xquery/modules/persistentlogin/login.xql";
 
 declare variable $exist:path external;
 declare variable $exist:resource external;
@@ -11,92 +10,57 @@ declare variable $exist:prefix external;
 declare variable $exist:root external;
 declare variable $exist:context external;
 
-(: todo: fix url pathes to work in root context :)
-
 declare variable $local:login-domain := "org.exist.login";
 declare function local:user-allowed ($user) as xs:boolean {
-    (
-        not(empty($user)) and
-        not($user = "guest") and
-        sm:is-dba($user)
-    )
+    not(empty($user)) and $user ne "guest"
 };
 
-(:
-let $log := util:log("info", "root " || $exist:root)
-let $log := util:log("info", "controller " || $exist:controller)
-let $log := util:log("info", "requesturi " || request:get-uri())
-let $log := util:log("info", "prefix " || $exist:prefix)
-let $log := util:log("info", "context " || $exist:context)
-:)
+let $login := login:set-user($local:login-domain, (), false())
+let $user := request:get-attribute($local:login-domain || ".user")
 
-if ($exist:path eq '') then
+return
+if ($exist:path eq '')
+then (
    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
        <redirect url="{request:get-uri()}/"/>
    </dispatch>
-else if ($exist:path = "/") then(
+)
+else if ($exist:path eq "/login")
+then (
    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-       <redirect url="index.html"/>
+       <forward url="{$exist:controller}/login.html">
+           <cache-control cache="no"/>
+           <set-header name="Cache-Control" value="no-cache"/>
+       </forward>
    </dispatch>
 )
-else if($exist:path = "/login") then
+else if ($exist:path eq "/logout")
+then (
    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-       <redirect url="login.html">
+       <redirect url="/exist/{$exist:prefix}/{$exist:controller}/?logout=true">
            <cache-control cache="no"/>
            <set-header name="Cache-Control" value="no-cache"/>
        </redirect>
    </dispatch>
-else if($exist:path = "/logout") then(
-   login:set-user("org.exist.login", (), false()),
+)
+(: from this point you need to be logged in :)
+else if (not(local:user-allowed($user)))
+then (
+    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+        <redirect url="/exist/{$exist:prefix}/{$exist:controller}/login">
+            <cache-control cache="no"/>
+            <set-header name="Cache-Control" value="no-cache"/>
+        </redirect>
+    </dispatch>
+)
+else if ($exist:path eq "/")
+then (
    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-       <redirect url="index.html?logout=true">
-           <cache-control cache="no"/>
-           <set-header name="Cache-Control" value="no-cache"/>
-       </redirect>
+       <forward url="{$exist:controller}/index.html"/>
    </dispatch>
 )
-else if ($exist:path = "/index.html") then (
-   login:set-user("org.exist.login", (), true()),
-   let $user := request:get-attribute("org.exist.login.user")
-
-   let $route := request:get-parameter("route","")
-   let $log := util:log("info", "path " || $exist:path)
-   let $log := util:log("info", "route " || $route)
-
-   (:let $log := util:log("info", "login matched " || $exist:controller):)
-
-   return
-   if(local:user-allowed($user)) then(
-
-(:
-       let $log := util:log("info", "user is dba")
-       let $log := util:log("info", "effective " || request:get-uri())
-       let $log := util:log("info", "uri " || request:get-uri())
-       let $log := util:log("info", "pathinfo " || request:get-path-info())
-       let $log := util:log("info", "url " || request:get-url())
-       return
-:)
-
-   <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-       <cache-control cache="no"/>
-   </dispatch>
-
-   )
-   else(
-(:
-       let $log := util:log("info", "user is not logged in")
-       return
-:)
-       <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
-           (:<forward url="{$exist:controller}/index.html"></forward>:)
-           <redirect url="login.html">
-               <cache-control cache="no"/>
-               <set-header name="Cache-Control" value="no-cache"/>
-           </redirect>
-       </dispatch>
-       )
-)
-else
+else (
    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
        <cache-control cache="yes"/>
    </dispatch>
+)

@@ -8,6 +8,7 @@
     <copyright>true</copyright>
     <type>application</type>
     <target>ecpo</target>
-    <prepare></prepare>
+    <prepare/>
     <finish/>
+    <permissions user="ecpo" group="ecpo" mode="rwxrwxr--"/>
 </meta>
