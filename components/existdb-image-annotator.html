@@ -77,21 +77,6 @@ Custom property | Description | Default
                 color: var(--paper-grey-700);
             }
 
-            #viewer {
-                height: 100%;
-                width: 100%;
-                position: absolute;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                right: 0;
-            }
-
-            #the_container {
-                position: relative;
-                height: calc(100% - 40px);
-            }
-
             paper-spinner-lite {
                 opacity: 0;
                 display: block;
@@ -118,28 +103,10 @@ Custom property | Description | Default
                 display: none;
             }
 
-            .toolbarDiv {
-                background: blue;
-                height: 40px;
-            }
-
-            .canvasDiv,
-            #viewer,
-            #viewer ::slotted(existdb-fabric-canvas) {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            }
-
-            .canvasDiv {
-                z-index: -1;
-            }
-
             .buttonBar {
                 width: 100%;
-                z-index: 50;
+                height: 40px;
+                z-index: -1;
                 background: white;
                 border-bottom: 1px solid;
             }
@@ -159,14 +126,13 @@ Custom property | Description | Default
                 float:right;
             }
 
-/*
-            :host slot[name="logout"]{
-                position: absolute;
-                right: 266px;
-                padding:0;
-                margin-top:-40px;
+            :host ::slotted(#osd-slot-container){
+                position: relative;
+                top: 0;
+                left: 0;
+                height: calc(100% - 41px);
+                width: 100%; 
             }
-*/
 
             .displayMode{
                 position: absolute;
@@ -244,7 +210,6 @@ Custom property | Description | Default
 
             <div class="divider"></div>
 
-            <!--
 
             <span class="cursorposition" id="cursorWindowPosition"></span>
             <div class="divider"></div>
@@ -253,17 +218,13 @@ Custom property | Description | Default
             <span class="cursorposition" id="cursorImagePosition"></span>
             <div class="divider"></div>
             <span class="cursorposition" id="cursorViewportPosition"></span>
-            -->
-            <!--[[mode]]-->
 
             <div style="width:0;height:0;border:0;display:inline;" tabindex="0" id="focusDummy"></div>
             <slot name="logout"></slot>
             <div class="displayMode">mode:[[mode]]</div>
         </div>
-        <!-- Openseadragon is attached to host -->
-        <div id="the_container">
-            <slot></slot>
-        </div>
+        <!-- Openseadragon is attached to host inside a container element -->
+        <slot></slot>
 
     </template>
     <script>
@@ -423,24 +384,19 @@ Custom property | Description | Default
             connectedCallback() {
                 super.connectedCallback();
 
-                // const mouseTrackerMoveHandler = this.onMouseTrackerMove.bind(this)
-                // const mouseTracker = new OpenSeadragon.MouseTracker({
-                //     element: document,
-                //     moveHandler: mouseTrackerMoveHandler
-                // });
-                // this.modeSwitchButtons = this.shadowRoot.querySelectorAll('.mode-selector')
+                const mouseTrackerMoveHandler = this.onMouseTrackerMove.bind(this)
+                const mouseTracker = new OpenSeadragon.MouseTracker({
+                    element: document,
+                    moveHandler: mouseTrackerMoveHandler
+                });
 
                 this.addEventListener('annotator-initialized', function(){
                     console.log('Annotator init');
                     this.init = true;
                     this.mode = this.modes.SELECT;
-                    // mouseTracker.setTracking(true)
+                    mouseTracker.setTracking(true)
                 });
 
-                document.addEventListener('WebComponentsReady', function () {
-                    console.log('webcomponentsready');
-                    // Init openseadragon if we are using a deep zoom image
-                });
                 // document.addEventListener('shape-created', this._newShapeHandler.bind(this))
                 // document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
                 // document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
@@ -452,6 +408,9 @@ Custom property | Description | Default
             initialize () {
                 console.log('initialize');
 
+                let d = document.createElement('div')
+                d.id = 'osd-slot-container'
+                this.appendChild(d)
                 this._initOpenSeadragon();
                 console.log('OSD init done');
                 this._initFabric();
@@ -503,7 +462,7 @@ Custom property | Description | Default
                 console.log('_initOpenSeadragon');
 
                 this.viewer = OpenSeadragon({
-                    element: this,
+                    element: this.querySelector('#osd-slot-container'),
                     prefixUrl: "/exist/apps/ecpo/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
                     visibilityRatio: this.visibilityRatio,
                     constrainDuringPan: this.constrainDuringPan,
