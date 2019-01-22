@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
+
+  <title>Image Annotator demo with list</title>
+
+  <script src="/exist/apps/ecpo/bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <script src="/exist/apps/ecpo/bower_components/polymer/lib/elements/custom-style.html"></script>
+  <link rel="import" href="/exist/apps/ecpo/components/ecpo-app.html"/>
+  <style>
+    body {
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      display: block;
+      font-size: 20px;
+    }
+
+    h2 {
+      color: blue;
+    }
+  </style>
+</head>
+<body>
+  <ecpo-app> </ecpo-app>
+  <script>
+      document.addEventListener('WebComponentsReady', function () {
+        // look for URL parameter
+        const url = new URL(window.location)
+        const documentId = url.searchParams.get('document')
+        if (documentId) {
+          console.log('loading document:', documentId)
+          return document.querySelector('ecpo-app').setAttribute('document', documentId)
+        }
+
+        // load random image from list
+        console.log('Loading random Image ...')
+        fetch('/documents/', { method: 'GET', credentials: 'same-origin' })
+          .then(function(response) {
+            if(!response.ok){
+                return console.error(response)
+            }
+            return response.json()
+          })
+          .then(function (list) {
+            console.log('Image list loaded:', list)
+            const items = list.images.length
+            const randomIndex = Math.floor(Math.random() * items)
+            const randomImageId = list.images[randomIndex].id
+            console.log('Loading image:', randomImageId)
+            document.querySelector('ecpo-app').setAttribute('document', randomImageId)
+          })
+          .catch(function (reason) {
+            return console.error(reason)
+          })
+      })
+  </script>
+</body>
+</html>

@@ -18,7 +18,8 @@ declare function local:user-allowed ($user) as xs:boolean {
 let $login := login:set-user($local:login-domain, (), false())
 let $user := request:get-attribute($local:login-domain || ".user")
 
-return
+return (
+util:log('info', $exist:path),
 if ($exist:path eq '')
 then (
    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
@@ -59,8 +60,27 @@ then (
        <forward url="{$exist:controller}/index.html"/>
    </dispatch>
 )
+else if ($exist:path eq "/documents/")
+then (
+   <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+       <forward url="{$exist:controller}/modules/list-image-links.xq"/>
+   </dispatch>
+)
+else if ($exist:path eq "/labels/")
+then (
+   <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+       <forward url="{$exist:controller}/modules/get-labels.xq"/>
+   </dispatch>
+)
+else if ($exist:path eq "/annotator/")
+then (
+   <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+       <forward url="{$exist:controller}/annotator.html"/>
+   </dispatch>
+)
 else (
    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
        <cache-control cache="yes"/>
    </dispatch>
+)
 )

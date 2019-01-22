@@ -3,7 +3,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
 
-  <title>Image Annotator demo with list</title>
+  <title>Image Annotator Demo with List</title>
 
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <script src="bower_components/polymer/lib/elements/custom-style.html"></script>
@@ -23,21 +23,53 @@
   </style>
 </head>
 <body>
-  <ecpo-app> </ecpo-app>
+  <ul id='thelist'></ul>
   <script>
       document.addEventListener('WebComponentsReady', function () {
-        fetch('modules/list-image-links.xq', { method: 'GET', credentials: 'same-origin' })
+        fetch('/exist/apps/ecpo/documents/', { method: 'GET', credentials: 'same-origin' })
           .then(function(response) {
-              if(!response.ok){
-                  return console.error(response)
-              }
+            if (!response.ok) {
+                return console.error(response)
+            }
             return response.json()
           })
           .then(function (list) {
             console.log('RESPONSEJSON', list)
-            let items = list.images.length
-            let randomIndex = Math.floor(Math.random() * items)  
-            document.querySelector('ecpo-app').setAttribute('document', list.images[randomIndex].id)
+            const thelist = document.querySelector('#thelist')
+            let currentYear, currentMonth, yearList, monthList 
+            const items = list.images.map(function (imageData) {
+              const date = new Date(imageData.date)
+              const year = date.getFullYear()
+              const month = date.getMonth()
+              if (currentYear !== year) {
+                currentYear = year
+                let newYearItem = document.createElement('li')
+                thelist.appendChild(newYearItem)
+                let yearTitle = document.createElement('h2')
+                yearTitle.appendChild(document.createTextNode(year))
+                yearList = document.createElement('ul')
+                newYearItem.appendChild(yearTitle)
+                newYearItem.appendChild(yearList)
+              }
+              if (currentMonth !== month) {
+                currentMonth = month
+                let newMonthItem = document.createElement('li')
+                yearList.appendChild(newMonthItem)
+                let monthTitle = document.createElement('h3')
+                monthTitle.appendChild(document.createTextNode(month+1))
+                monthList = document.createElement('ul')
+                newMonthItem.appendChild(monthTitle)
+                newMonthItem.appendChild(monthList)
+              }
+              const listItem = document.createElement('li')
+              const link = document.createElement('a')
+              const label = document.createTextNode(`${imageData.date} (${imageData.name}`)
+
+              link.href = 'annotator/?document=' + encodeURI(imageData.id)
+              link.appendChild(label)              
+              listItem.appendChild(link)
+              monthList.appendChild(listItem)
+            })
           })
           .catch(function (reason) {
             return console.error(reason)
