@@ -265,8 +265,7 @@
                 console.log('_handleLoadResponse', result)
             }
 
-            load (newSrc, oldSrc) {
-                if (!newSrc || newSrc == '') {return}
+            _getPage(params) {
                 const api = this.$.annotationsAPI
                 api.body = null;
                 api.method = 'get';
@@ -274,13 +273,15 @@
                     "Accept": "application/ld+json; profile=\"http://www.w3.org/ns/anno.jsonld\"",
                     "Prefer": "return=representation;include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""
                 }
-                api.params = {
-                    "document": newSrc
-                }
-                // TODO: add page parameter
+                api.params = params
 
                 const xhr = api.generateRequest()
                 xhr.completes.then(this._handleLoadResponse.bind(this))
+            }
+
+            load (newSrc, oldSrc) {
+                if (!newSrc || newSrc == '') { return }
+                this._getPage({ "document": newSrc })
             }
 
             _handleLoadResponse(request) {
@@ -294,13 +295,6 @@
                     container.type.indexOf('AnnotationPage') < 0
                 ) {
                     return console.info('no annotations found', container)
-                }
-
-                // need to fetch next paged result?
-                if (this._hasNextPage(request.response)) {
-                    // request next page
-                    const parsed = new URL(request.next)
-                    console.log('request to next page', parsed.searchParams)
                 }
 
                 // add annotations
@@ -322,6 +316,20 @@
                 items.forEach(annotation => this.addAnnotation(annotation))
                 const loaded = this.get(['annotations'])
 
+                // need to fetch next paged result?
+                if (this._hasNextPage(request.response)) {
+                    console.log('request next page')
+                    // replacement needed because exist will always encode &
+                    const parsed = new URL(request.response.next.replace('&amp;', '&'))
+                    // TODO: add page parameter
+                    this._getPage({
+                        'document': parsed.searchParams.get('document'),
+                        'page': parsed.searchParams.get('page'),
+                    })
+                    return // do not dispatch event now
+                }
+                console.info('All annotations received. Finishing up...')
+
                 // inform about new annotations
                 this.dispatchEvent(new CustomEvent('annotations-loaded', {
                    detail: loaded
@@ -332,7 +340,7 @@
             }
 
             _hasNextPage(container) {
-                return container.next !== container.last
+                return container.id !== container.last
             }
 
             _handleError(e) {

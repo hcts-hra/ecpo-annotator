@@ -210,7 +210,7 @@ Custom property | Description | Default
 
             <div class="divider"></div>
 
-
+            <!--
             <span class="cursorposition" id="cursorWindowPosition"></span>
             <div class="divider"></div>
             <span class="cursorposition" id="cursorContainerPosition"></span>
@@ -218,6 +218,7 @@ Custom property | Description | Default
             <span class="cursorposition" id="cursorImagePosition"></span>
             <div class="divider"></div>
             <span class="cursorposition" id="cursorViewportPosition"></span>
+            -->
 
             <div style="width:0;height:0;border:0;display:inline;" tabindex="0" id="focusDummy"></div>
             <slot name="logout"></slot>
@@ -384,17 +385,17 @@ Custom property | Description | Default
             connectedCallback() {
                 super.connectedCallback();
 
-                const mouseTrackerMoveHandler = this.onMouseTrackerMove.bind(this)
-                const mouseTracker = new OpenSeadragon.MouseTracker({
-                    element: document,
-                    moveHandler: mouseTrackerMoveHandler
-                });
+                // const mouseTrackerMoveHandler = this.onMouseTrackerMove.bind(this)
+                // const mouseTracker = new OpenSeadragon.MouseTracker({
+                //     element: document,
+                //     moveHandler: mouseTrackerMoveHandler
+                // });
 
                 this.addEventListener('annotator-initialized', function(){
                     console.log('Annotator init');
                     this.init = true;
                     this.mode = this.modes.SELECT;
-                    mouseTracker.setTracking(true)
+                    // mouseTracker.setTracking(true)
                 });
 
                 // document.addEventListener('shape-created', this._newShapeHandler.bind(this))
