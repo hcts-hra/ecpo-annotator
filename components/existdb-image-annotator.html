@@ -678,6 +678,7 @@ Custom property | Description | Default
                 mapMode2Toggle[this.modes.CIRCLE] = this.$.circleMode
                 mapMode2Toggle[this.modes.POLYGON] = this.$.polyMode
                 mapMode2Toggle[this.modes.EDIT] = this.$.editMode
+                mapMode2Toggle[this.modes.GROUP] = this.$.groupMode
 
                 mapMode2Toggle[oldVal].checked = false
                 mapMode2Toggle[newVal].checked = true
@@ -699,6 +700,12 @@ Custom property | Description | Default
                         this._fabricOverlay.editActiveShape();
                         break
                     case this.modes.GROUP:
+                        this.viewer.setMouseNavEnabled(false);
+                        if (!this._fabricOverlay.fillMode) {
+                            this.$.fillMode.toggleChecked()
+                            this._fabricOverlay.switchFillMode();
+                        }
+                        break
                     case this.modes.NAVIGATE:
 //                        this._fabricOverlay.deselect();
                         this.viewer.setMouseNavEnabled(true);
@@ -725,8 +732,8 @@ Custom property | Description | Default
             }
 
             _group(e) {
-                this.$.groupMode.toggleChecked()
-                console.log('group keyboard action ', e);
+                // this.$.groupMode.toggleChecked()
+                // console.log('group keyboard action ', e);
             }
 
             _noShapeSelected(selectedShape) {
@@ -744,6 +751,8 @@ Custom property | Description | Default
                     case 'g':
                         console.log('grouping mode triggered');
                         this.mode = this.modes.GROUP;
+                        this._fabricOverlay.deselect();
+                        this._fabricOverlay.addGroup();
                         break;
                     case 'e':
                         console.log('edit mode');

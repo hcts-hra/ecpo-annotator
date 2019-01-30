@@ -72,6 +72,7 @@
   Overlay.prototype = {
     // modes: ['rectangle', 'circle', 'polygon', 'remove', 'select'],
     unassignedColor: 'grey',
+    currentHue: 114,
     defaultStyle: {
       strokeWidth: 2,
       opacity: 0.4,
@@ -348,6 +349,12 @@
 
     getFillAndStroke: function(object) {
       const color = object.data && object.data.label ? object.data.label.color : this.unassignedColor
+      if (this.fillMode && this._annotator.mode === this._annotator.modes.GROUP) {
+        return {
+          stroke: 'transparent',
+          fill: object.data.color || 'purple'
+        }  
+      }
       if (this.fillMode) {
         return {
           stroke: 'transparent',
@@ -371,7 +378,20 @@
       this._fabricCanvas.renderAll()
     },
 
-    _setState(options) {
+    addGroup: function () {
+      // TODO do something with the last group?
+      this.activeGroup = null
+      this.activeGroup = new fabric.Group()
+      this.activeGroup.data = {
+        id: this._getShapeId(),
+        color: `hsl(${this.currentHue}, 92%, 35%)`
+      }
+      this.currentHue = (this.currentHue + 100) % 255
+      console.log(this.currentHue, this.activeGroup.data)
+      this._fabricCanvas.add(this.activeGroup)
+    },
+
+    _setState: function (options) {
       console.log('_setState', options.pointer)
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
       this._clickOrigin = pointer
@@ -431,6 +451,17 @@
             this._highlight(options.target); break
           }
           this.deselect()
+          break
+        case this._annotator.modes.GROUP:
+          // enable multi select
+          this._fabricCanvas.selection = true;
+          if (options.target && !this.activeGroup.contains(options.target)) {
+            this.activeGroup.add(options.target);
+            options.target.set(this.getFillAndStroke(this.activeGroup))
+          }
+          // log selection
+          this._fabricCanvas.renderAll()
+          console.log(this.activeGroup.forEachObject(a=>a))
           break
         case this._annotator.modes.RECTANGLE:
           this._fabricCanvas.on('mouse:move', this._boundMouseMoveListener)
