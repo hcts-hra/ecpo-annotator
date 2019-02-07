@@ -654,8 +654,6 @@
 
     _generatePolygon: function () {
       const points = this.activeShape.get('points')
-      // the last point that was needs to be removed
-      const pointsMinusLast = points.slice(0, points.length-1)
 
       //cleanup
       this._fabricCanvas.remove(this.activeShape).remove(this.activeLine);
@@ -669,8 +667,8 @@
       this.line = null;
       this.activeLine = null;
 
-      console.log('numer of points', pointsMinusLast.length)
-      const polygon = new fabric.Polygon(pointsMinusLast, this.defaultStyle);
+      console.log('numer of points', points.length)
+      const polygon = new fabric.Polygon(points, this.defaultStyle);
       polygon.id = this._getShapeId()
       return this.reimport(polygon)
     },
