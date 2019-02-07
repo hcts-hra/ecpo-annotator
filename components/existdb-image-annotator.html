@@ -143,7 +143,6 @@ Custom property | Description | Default
             }
         </style>
 
-
         <div class="buttonBar">
             <!-- Openseadragon controls -->
             <paper-icon-button id="zoomIn" icon="zoom-in" title="zoom in"></paper-icon-button>
@@ -360,6 +359,10 @@ Custom property | Description | Default
                     selectedShape: {
                         type: Object,
                         value: _ => null
+                    },
+                    fill: {
+                        type: Boolean,
+                        value: false
                     },
                     mode: {
                         type: String,
@@ -664,7 +667,6 @@ Custom property | Description | Default
                 }
             }
 
-
             _modeChange(newVal, oldVal) {
                 console.log('_modeChanged ', newVal, oldVal);
 
@@ -692,6 +694,8 @@ Custom property | Description | Default
                         this._fabricOverlay.deselect();
                         break;
                     case this.modes.SELECT:
+                        // always call switchFillMode to switch back to shape colors
+                        this._fabricOverlay.switchFillMode(this.fill);
                         this.viewer.setMouseNavEnabled(false);
                         //this must be called. Otherwise points from edit mode won't be removed from canvas.
                         this._fabricOverlay.deselect();
@@ -701,10 +705,15 @@ Custom property | Description | Default
                         break
                     case this.modes.GROUP:
                         this.viewer.setMouseNavEnabled(false);
-                        if (!this._fabricOverlay.fillMode) {
+
+                        if (!this.fill) {
+                            // show button state, always fill at the beginning of group mode
                             this.$.fillMode.toggleChecked()
-                            this._fabricOverlay.switchFillMode();
+                            this.fill = true
                         }
+
+                        // always call switchFillMode to change to group colors
+                        this._fabricOverlay.switchFillMode(this.fill);
                         break
                     case this.modes.NAVIGATE:
 //                        this._fabricOverlay.deselect();
@@ -726,9 +735,10 @@ Custom property | Description | Default
             }
 
             _fillMode() {
-                if (!this.init) {return}
+                if (!this.init) { return }
                 this.$.fillMode.toggleChecked()
-                this._fabricOverlay.switchFillMode();
+                this.fill = !this.fill
+                this._fabricOverlay.switchFillMode(this.fill);
             }
 
             _group(e) {

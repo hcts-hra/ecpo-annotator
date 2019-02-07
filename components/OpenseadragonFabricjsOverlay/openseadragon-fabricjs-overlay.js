@@ -299,8 +299,8 @@
       )
     },
 
-    switchFillMode: function() {
-      this.fillMode = !this.fillMode
+    switchFillMode: function(newValue) {
+      this.fillMode = newValue
       console.log('switchFillMode to', this.fillMode)
       this._fabricCanvas.forEachObject(object => {
         if (this._isPointHandle(object)) { return }
@@ -348,13 +348,14 @@
     },
 
     getFillAndStroke: function(object) {
-      const color = object.data && object.data.label ? object.data.label.color : this.unassignedColor
-      if (this.fillMode && this._annotator.mode === this._annotator.modes.GROUP) {
-        return {
-          stroke: 'transparent',
-          fill: object.data.color || 'purple'
+      let color = this.unassignedColor
+      if ( object.data && object.data.label) {
+        color = object.data.label.color
         }  
+      if (this._annotator.mode === this._annotator.modes.GROUP) {
+        color = object.data.color || 'purple'
       }
+
       if (this.fillMode) {
         return {
           stroke: 'transparent',
