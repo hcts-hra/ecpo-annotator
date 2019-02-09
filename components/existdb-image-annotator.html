@@ -692,19 +692,25 @@ Custom property | Description | Default
                     case this.modes.POLYGON:
                         this.viewer.setMouseNavEnabled(false);
                         this._fabricOverlay.deselect();
+                        this._fabricOverlay.lockAllObjects(true);
                         break;
                     case this.modes.SELECT:
                         // always call switchFillMode to switch back to shape colors
                         this._fabricOverlay.switchFillMode(this.fill);
                         this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay.lockAllObjects(false);
+                        this._fabricOverlay._fabricCanvas.selection = false;
                         //this must be called. Otherwise points from edit mode won't be removed from canvas.
                         this._fabricOverlay.deselect();
                         break;
                     case this.modes.EDIT:
+                        this._fabricOverlay.lockAllObjects(true);
                         this._fabricOverlay.editActiveShape();
                         break
                     case this.modes.GROUP:
+                        this._fabricOverlay.lockAllObjects(false);
                         this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay._fabricCanvas.selection = true;
 
                         if (!this.fill) {
                             // show button state, always fill at the beginning of group mode

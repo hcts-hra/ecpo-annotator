@@ -66,7 +66,7 @@
 
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
-    this._fabricCanvas.on('object:selected', this._notifyShapeSelected.bind(this))
+    this._fabricCanvas.on('selection:created', this._notifyShapeSelected.bind(this))
     // this will be dynamically registered
     this._boundMouseMoveListener = this._mouseMove.bind(this)
   };
@@ -242,6 +242,7 @@
           lockMovementY: false
         })
       }
+      this._fabricCanvas.discardActiveObject()
       this._notifyShapeSelected()
       this.reset()
     },
@@ -251,6 +252,15 @@
         return o.id && o.id === id
       })
       return result[0];
+    },
+    lockAllObjects: function (lock) {
+      const oreos = this._fabricCanvas.getObjects()
+      console.log('oreos', oreos)
+      oreos.map(function (o) {
+        console.log('---------', o)
+        o.set({ selectable: !lock, evented: !lock })
+      })
+      this._fabricCanvas.renderAll()
     },
 
     reset: function () {
@@ -468,8 +478,11 @@
           console.log(this.activeGroup.forEachObject(a=>a))
           break
         case this._annotator.modes.RECTANGLE:
+          this.deselect()
           this._fabricCanvas.on('mouse:move', this._boundMouseMoveListener)
           const rect = new fabric.Rect(Object.assign({}, this.defaultStyle, {
+            evented: false,
+            selectable: false,
             left: pointer.x,
             top: pointer.y
           }));
@@ -480,9 +493,12 @@
           this._fabricCanvas.renderAll();
           break
         case this._annotator.modes.CIRCLE:
+          this.deselect()
           this._fabricCanvas.on('mouse:move', this._boundMouseMoveListener)
           // TODO improve circle painting
           const circle = new fabric.Circle(Object.assign({}, this.defaultStyle, {
+            evented: false,
+            selectable: false,
             left: pointer.x,
             top: pointer.y,
             selectionBackgroundColor: "transparent"
@@ -495,6 +511,9 @@
           this._fabricCanvas.renderAll();
           break
         case this._annotator.modes.POLYGON:
+          if (this.pointArray.length === 0) {
+            this.deselect()            
+          }
           if (
             !options.target || 
             this.pointArray.length === 0 ||
@@ -574,6 +593,8 @@
           const poly = new fabric.Polygon(points, Object.assign({}, this.defaultStyle))
           const reimport = this.reimport(poly)
           reimport.id = this._getShapeId()
+          reimport.evented = false
+          reimport.selectable = false
           this._fabricCanvas.add(reimport)
           this._highlight(reimport)
           this.activeShape.set(this.getFillAndStroke(this.activeShape))
@@ -668,7 +689,10 @@
       this.activeLine = null;
 
       console.log('numer of points', points.length)
-      const polygon = new fabric.Polygon(points, this.defaultStyle);
+      const polygon = new fabric.Polygon(points, this.defaultStyle, {
+        evented: false,
+        selectable: false
+      });
       polygon.id = this._getShapeId()
       return this.reimport(polygon)
     },
