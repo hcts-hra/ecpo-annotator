@@ -1,5 +1,45 @@
 # Changelog
 
+## [2.6.0]
+- Fix: avoid ie11 to throw on weird draw images [#5428](https://github.com/fabricjs/fabric.js/pull/5428)
+- Fix: a rare case of invisible clipPath [#5477](https://github.com/fabricjs/fabric.js/pull/5477)
+- Fix: testability of code under node when webgl is involved [#5478](https://github.com/fabricjs/fabric.js/pull/5478)
+- Add: Grapeheme text wrapping for Textbox (Textbox.splitByGrapheme) [#5479](https://github.com/fabricjs/fabric.js/pull/5479)
+- Add: fabric.Object.toCanvasElement [#5481](https://github.com/fabricjs/fabric.js/pull/5481)
+
+## [2.5.0]
+- Fix: textbox transform report newScaleX and newScaleY values [#5464](https://github.com/fabricjs/fabric.js/pull/5464)
+- Fix: export of svg and gradient with transforms [#5456](https://github.com/fabricjs/fabric.js/pull/5456)
+- Fix: detection of controls in perPixelTargetFind + cache [#5455](https://github.com/fabricjs/fabric.js/pull/5455)
+- Add: added canvas.toCanvasElement method [#5452](https://github.com/fabricjs/fabric.js/pull/5452)
+
+## [2.4.6]
+- Fix: unbreak the svg export broken in 2.4.5 [#5438](https://github.com/fabricjs/fabric.js/pull/5438)
+
+## [2.4.5]
+- Fix: svg import/export for canvas+clipPath and letterspacing. [#5424](https://github.com/fabricjs/fabric.js/pull/5424)
+- Fix: avoid stroke dash from group selection to leak on upper canvas [#5392](https://github.com/fabricjs/fabric.js/pull/5392)
+
+## [2.4.4]
+- Fix: add clipPath to stateful cache check. [#5384](https://github.com/fabricjs/fabric.js/pull/5384)
+- Fix: restore draggability of small objects [#5379](https://github.com/fabricjs/fabric.js/pull/5379)
+- Improvement: Added strokeDashOffset to objects and from SVG import. [#5398](https://github.com/fabricjs/fabric.js/pull/5398)
+- Fix: do not mark objects as invisible if strokeWidth is > 0 [#5382](https://github.com/fabricjs/fabric.js/pull/5382)
+- Improvement: Better gradients parsing with xlink:href [#5357](https://github.com/fabricjs/fabric.js/pull/5357)
+
+## [2.4.3]
+- Fix: Shift click and onSelect function [#5348](https://github.com/fabricjs/fabric.js/pull/5348)
+- Fix: Load from Json from images with filters and resize filters [#5346](https://github.com/fabricjs/fabric.js/pull/5346)
+- Fix: Remove special case of 1x1 rect [#5345](https://github.com/fabricjs/fabric.js/pull/5345)
+- Fix: Group with clipPath restore [#5344](https://github.com/fabricjs/fabric.js/pull/5344)
+- Fix: Fix shift + click interaction with unselectable objects [#5324](https://github.com/fabricjs/fabric.js/pull/5324)
+
+## [2.4.2]
+- Fix: Better toSVG support to enable clipPath [#5284](https://github.com/fabricjs/fabric.js/pull/5284)
+- Fix: Per pixel target find and groups and sub targets [#5287](https://github.com/fabricjs/fabric.js/pull/5287)
+- Fix: Object clone as Image and shadow clipping [#5308](https://github.com/fabricjs/fabric.js/pull/5308)
+- Fix: IE11 loading SVG [#5307](https://github.com/fabricjs/fabric.js/pull/5307)
+
 ## [2.4.1]
 - Fix: Avoid enterEditing if another object is the activeObject [#5261](https://github.com/fabricjs/fabric.js/pull/5261)
 - Fix: clipPath enliving for Image fromObject [#5279](https://github.com/fabricjs/fabric.js/pull/5279)
