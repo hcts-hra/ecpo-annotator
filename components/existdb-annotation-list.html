@@ -246,8 +246,9 @@
                         "http://www.w3.org/ns/anno.jsonld",
                         "http://www.w3.org/ns/ldp.jsonld"
                    ],
-                    'type': 'BasicContainer',
-                    'items': this.get('annotations').filter(annotations => annotations.body.length)
+                   document: this.source,
+                   type: 'BasicContainer',
+                   items: this.get('annotations').filter(annotations => annotations.body.length)
                 }
 
                 // also store state in localstorage
