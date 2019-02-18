@@ -85,8 +85,11 @@
                 width: 100vw;
                 height: 6vh;
             }
+            iron-list paper-item[todo] {
+                background: rgb(242, 233, 233);
+            }
             iron-list paper-item:hover {
-                background: rgb(242, 241, 236);
+                background: rgb(232, 200, 200);
             }
             iron-list paper-item .info {
                 flex: 2;
@@ -102,7 +105,7 @@
                 flex: 3;
             }
             iron-list paper-item:hover .actions paper-button {
-                background: rgb(184, 210, 243);
+                background: rgb(255, 244, 210);
             }
         </style>
 
@@ -159,7 +162,7 @@
             <div id="doclist">
                 <iron-list items="[[filter(documents, selectedYear, selectedMonth)]]" as="document">
                     <template>
-                        <paper-item name="[[document.name]]" on-click="openImageAnnotator">
+                        <paper-item name="[[document.name]]" on-click="openImageAnnotator"  todo$="[[isTodo(document.annotationsCount)]]">
                             <div class="date"><span class="label">[[formatDate(document.date)]]</span></div>
                             <div class="file">
                                 <span class="label name">[[document.name]]</span>
@@ -169,7 +172,7 @@
                                     <small class="label">annotations: [[formatCount(document.annotationsCount)]]</small>
                                 </div>
                                 <div>
-                                    <small class="label">last modified: [[formatModified(document.lastModified)]]</small>
+                                    <small class="label">[[formatModified(document.lastModified)]]</small>
                                 </div>
                             </div>
                             <div class="actions">
@@ -239,7 +242,10 @@
                 console.log('LOADED', response.images)
                 // tune document list by converting the date field into actual Date instances 
                 const documents = response.images.map(d => {
-                    return Object.assign({}, d, {date: new Date (d.date)})
+                    return Object.assign({}, d, {
+                        date: new Date(d.date),
+                        lastModified: d.lastModified ? new Date(d.lastModified) : null
+                    })
                 })
                 this.set('documents', documents)
                 this.set('years', documents.reduce((res, next) => {
@@ -284,12 +290,15 @@
             }
             formatModified (date) {
                 if (!date) {
-                    return 'not specified'
+                    return ''
                 }
-                return `${date.getMonth()+1} \n ${date.getFullYear()}`
+                return `last edit: ${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`
             }
             formatCount (count) {
                 return count || '0'
+            }
+            isTodo(count) {
+                return count === 0
             }
 
             downloadAll(e) {
