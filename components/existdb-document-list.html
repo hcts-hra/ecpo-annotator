@@ -1,0 +1,303 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../bower_components/web-animations-js/web-animations-next.min.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+<link rel="import" href="../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
+<link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+
+<!-- <link rel="import" href="existdb-document-list-item.html"> -->
+
+<dom-module id="existdb-document-list">
+    <template>
+        <style>            
+            #doclist {
+                height: (100vh - 100px);
+            }
+            iron-list {
+                height: 100%;
+                max-height: 100%;
+            }
+            app-header {
+                height: 100px;
+                z-index: 10;
+            }
+            .header {
+                height: 100px;
+                border-bottom: 1px solid grey;
+                display: flex;
+                background:white
+            }
+            .header h1 {
+                font-size: 5vw;
+                font-family: 'Roboto', sans-serif;
+                color: rgb(145, 26, 26);
+                flex: none;
+                margin: .4rem 1.2rem;
+            }
+
+            .filter paper-item {
+                z-index: 15;
+            }
+
+            .filter .label.filter-label {
+                display: inline-block;
+                height: 2rem;
+                line-height: 2.5rem;
+                vertical-align: middle;
+                margin: 0 1rem 0 0;
+            }
+
+            .header .action-and-info-container {
+                flex: auto;
+                display: flex;
+            }
+
+            .action-and-info-container .filter {
+                flex: auto;
+                margin: 0 1rem;
+            }
+
+            .action-and-info-container .filter-info {
+                flex: 1 0;
+                margin: 2rem 1rem 0 1rem;
+                width: 22rem;
+            }
+
+            .filter-info .label {
+                text-align: right;
+            }
+            .label {
+                font-family: 'Roboto', sans-serif;
+                margin: .2rem .1rem;
+            }
+            iron-list paper-item {
+                display: flex;
+                width: 100vw;
+                height: 6vh;
+            }
+            iron-list paper-item:hover {
+                background: rgb(242, 241, 236);
+            }
+            iron-list paper-item .info {
+                flex: 2;
+            }
+            iron-list paper-item .file {
+                flex: 3;
+            }
+            iron-list paper-item .date {
+                flex: 1;
+                font-size: 1.5rem;
+            } 
+            iron-list paper-item .actions {
+                flex: 3;
+            }
+            iron-list paper-item:hover .actions paper-button {
+                background: rgb(184, 210, 243);
+            }
+        </style>
+
+        <iron-ajax id="documentLoader"
+            url="http://localhost:8080/exist/apps/ecpo/documents/"
+            on-error="_handleError" 
+            on-response="_handleSuccess"
+            method="get"
+            handle-as="json"
+            auto verbose with-credentials></iron-ajax>
+
+        <app-header-layout fullbleed>
+            <app-header slot="header" fixed>
+                <app-toolbar class="header">
+                    <h1>ECPO</h1>
+                    <div class="action-and-info-container">
+                    <div class="filter">
+                        <div class="label filter-label">Filter by</div> 
+
+                        <paper-dropdown-menu label="year">
+                            <paper-listbox slot="dropdown-content" selected="{{selectedYear}}" attr-for-selected="name">
+                                <paper-item name=""></paper-item>
+                                <template id="yearList" is="dom-repeat" items="[[years]]" as="year">
+                                    <paper-item name="[[year]]">[[year]]</paper-item>
+                                </template>
+                            </paper-listbox>            
+                        </paper-dropdown-menu>
+            
+                        <paper-dropdown-menu label="month">
+                            <paper-listbox slot="dropdown-content" selected="{{selectedMonth}}" attr-for-selected="name">
+                                <paper-item name=""></paper-item>
+                                <paper-item name="0">1</paper-item>
+                                <paper-item name="1">2</paper-item>
+                                <paper-item name="2">3</paper-item>
+                                <paper-item name="3">4</paper-item>
+                                <paper-item name="4">5</paper-item>
+                                <paper-item name="5">6</paper-item>
+                                <paper-item name="6">7</paper-item>
+                                <paper-item name="7">8</paper-item>
+                                <paper-item name="8">9</paper-item>
+                                <paper-item name="9">10</paper-item>
+                                <paper-item name="10">11</paper-item>
+                                <paper-item name="11">12</paper-item>
+                            </paper-listbox>
+                        </paper-dropdown-menu>
+                    </div>
+                    <div class="filter-info">
+                        <span class='label'>showing: [[filteredItemsCount]] of [[documents.length]] total documents</span>
+                    </div>
+                </div>
+
+                </app-toolbar>
+            </app-header>
+            <div id="doclist">
+                <iron-list items="[[filter(documents, selectedYear, selectedMonth)]]" as="document">
+                    <template>
+                        <paper-item name="[[document.name]]" on-click="openImageAnnotator">
+                            <div class="date"><span class="label">[[formatDate(document.date)]]</span></div>
+                            <div class="file">
+                                <span class="label name">[[document.name]]</span>
+                            </div>
+                            <div class="info">
+                                <div>
+                                    <small class="label">annotations: [[formatCount(document.annotationsCount)]]</small>
+                                </div>
+                                <div>
+                                    <small class="label">last modified: [[formatModified(document.lastModified)]]</small>
+                                </div>
+                            </div>
+                            <div class="actions">
+                                <paper-button on-click="downloadAll">download all annotations</paper-button>
+                            </div>
+                        </paper-item>
+                    </template>
+                </iron-list>
+            </div>
+        </app-header-layout>
+    </template>
+
+    <script>
+        class ExistdbDocumentList extends Polymer.Element {
+            static get is() {
+                return 'existdb-document-list';
+            }
+
+            static get properties() {
+                return {
+                    loaded: {
+                        type: Boolean,
+                        reflectToAttribute: true,
+                        value: false
+                    },
+                    documents: {
+                        type: Array,
+                        value: function () {return []}
+                    },
+                    years: {
+                        type: Array,
+                        value: function () {return []}
+                    },
+                    selectedMonth: {
+                        type: Number,
+                        value: 0
+                    },
+                    selectedYear: {
+                        type: Number,
+                        value: 0
+                    },
+                    filteredItemsCount: {
+                        type: Number,
+                        value: 0
+                    }
+                }
+            }
+
+            connectedCallback () {
+                super.connectedCallback();
+                console.log('CONNECTED')
+            }
+
+            _handleError () {
+                alert("Couldn't load labels " + this.$.documentLoader.lastError);
+            }
+
+            openImageAnnotator (e) {
+                console.log(e)
+            }
+
+            _handleSuccess (event) {
+                const response = event.detail.response
+                if (!response.images) {
+                    return console.error(response)
+                }
+                console.log('LOADED', response.images)
+                // tune document list by converting the date field into actual Date instances 
+                const documents = response.images.map(d => {
+                    return Object.assign({}, d, {date: new Date (d.date)})
+                })
+                this.set('documents', documents)
+                this.set('years', documents.reduce((res, next) => {
+                    const YYYY = next.date.getFullYear()
+                    if (res.indexOf(YYYY) < 0) { res.push(YYYY) }
+                    return res
+                }, []).sort())
+                this.loaded = true
+            }
+
+            openImageAnnotator (e) {
+                console.log(e)
+                if (e.model) {
+                    const document = e.model.document
+                    window.open('annotator/?document=' + encodeURI(document.id))
+                    return
+                }
+                window.open('annotator/')
+            }
+
+            filter(documents, year, month) {
+                if (!year && !month) {
+                    this.set('filteredItemsCount', documents.length)
+                    return documents
+                }
+                const y = parseInt(year, 10)
+                const m = parseInt(month, 10)
+                console.log('year:', y, 'month:', m)
+                const filtered = documents.filter(d => {
+                    const condition = (
+                        (!year || d.date.getFullYear() === y) && 
+                        (!month || d.date.getMonth() === m)
+                    )
+                    return condition
+                })
+                this.set('filteredItemsCount', filtered.length)
+                return filtered
+            }
+
+            formatDate (date) {
+                return `${date.getMonth()+1} \n ${date.getFullYear()}`
+            }
+            formatModified (date) {
+                if (!date) {
+                    return 'not specified'
+                }
+                return `${date.getMonth()+1} \n ${date.getFullYear()}`
+            }
+            formatCount (count) {
+                return count || '0'
+            }
+
+            downloadAll(e) {
+                const document = e.model.document
+                window.open('/exist/apps/wap/annotations/?document=' + encodeURI(document.id) + '&items-per-page=1000')
+            }
+        }
+        window.customElements.define(ExistdbDocumentList.is, ExistdbDocumentList);
+
+    </script>
+</dom-module>
