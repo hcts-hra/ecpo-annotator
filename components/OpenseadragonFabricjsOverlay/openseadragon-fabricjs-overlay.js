@@ -289,12 +289,11 @@
 
     serializeObject: function (object) {
       if (!object) { return; }
+      // setting the noStyle parameter is only possible when calling fabric's private methods
+      const svg = object._createBaseSVGMarkup(object._toSVG(), { noStyle: true })
       return {
-        shape: {
-          id: object.id,
-          svg: object.toSVG(d => d)
+        shape: { id: object.id, svg: svg }
         }
-      }
     },
 
     importSVG: function (svg, attributes) {
