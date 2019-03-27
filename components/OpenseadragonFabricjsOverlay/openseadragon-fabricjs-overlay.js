@@ -54,6 +54,8 @@
     this.pointArray = [];
     this.lineArray = [];
 
+    this.groups = [];
+
     this._viewer.addHandler("update-viewport", function() {
       this.resize();
       this.resizecanvas();
@@ -314,11 +316,23 @@
     switchFillMode: function(newValue) {
       this.fillMode = newValue
       console.log('switchFillMode to', this.fillMode)
+
       this._fabricCanvas.forEachObject(object => {
         if (this._isPointHandle(object)) { return }
         console.log('fill and stroke', this.getFillAndStroke(object))
         object.set(this.getFillAndStroke(object))
       });
+
+      if (this._annotator.mode === this._annotator.modes.GROUP) {
+  
+        this._fabricCanvas.getObjects('group').map(g => {
+          let props = this.getFillAndStroke(g)
+          g.getObjects().map(o=>o.set(props))
+        })
+        this._fabricCanvas.renderAll()
+        return 
+      }
+
       this._fabricCanvas.renderAll()
     },
 
@@ -399,6 +413,8 @@
         id: this._getShapeId(),
         color: colors[this.currentHue]
       }
+      this.activeGroup.subTargetCheck = true;
+      this.groups.push(this.activeGroup)
       this.currentHue = (this.currentHue + 12) % colors.length
       console.log(this.currentHue, this.activeGroup.data)
       this._fabricCanvas.add(this.activeGroup)
@@ -469,12 +485,32 @@
           // enable multi select
           this._fabricCanvas.selection = true;
           if (options.target && !this.activeGroup.contains(options.target)) {
-            this.activeGroup.add(options.target);
+            // 
+            // const clone = options.target.clone()
+            // remove target from all previous groups (should only be one)
+            this.groups
+              .filter(g => g.contains(options.target))
+              .forEach(g => g.remove(options.target))
+
+            if (this.groups.some(g=> g.getObjects().length === 0)) {
+              console.log('group cleanup needed')
+              const cleanup = this.groups.filter(g => g.getObjects().length === 0)
+              const keep = this.groups.filter(g => g.getObjects().length > 0)
+              console.log('cleanup', cleanup)
+              console.log('keep', keep)
+
+              cleanup.map(g => g.destroy())
+              this.groups = keep
+            }
+            // TODO hide ungrouped base element
+
+            this.activeGroup.add(options.target)
             options.target.set(this.getFillAndStroke(this.activeGroup))
+            this._fabricCanvas.renderAll()
           }
           // log selection
-          this._fabricCanvas.renderAll()
-          console.log(this.activeGroup.forEachObject(a=>a))
+          console.log(this.activeGroup.getObjects())
+          console.log(this.groups.length)
           break
         case this._annotator.modes.RECTANGLE:
           this.deselect()
