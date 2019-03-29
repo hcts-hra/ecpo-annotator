@@ -56,15 +56,20 @@
 
     this.groups = [];
 
-    this._viewer.addHandler("update-viewport", function() {
+    this._viewer.addHandler('animation', _ => {
       this.resize();
-      this.resizecanvas();
-    }.bind(this));
+      this._fabricCanvas.renderAll();
+    });
 
-    this._viewer.addHandler("open", function() {
+    this._viewer.addHandler("update-viewport", _ => {
       this.resize();
       this.resizecanvas();
-    }.bind(this));
+    });
+
+    this._viewer.addHandler("open", _ => {
+      this.resize();
+      this.resizecanvas();
+    });
 
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
