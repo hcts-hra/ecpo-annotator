@@ -32,7 +32,7 @@
                    on-error="_handleError"
                    auto></iron-ajax>
 
-        <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label" attr-for-selected="name">
+        <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label" attr-for-selected="name" disabled="[[readonly]]">
             <template id="labelList" is="dom-repeat" items="[[labels]]" as="label">
                 <paper-item name="[[label.name]]" style="color:[[label.color]];">[[label.label]]</paper-item>
             </template>
@@ -60,10 +60,14 @@
                         type: Array,
                         value: _ => []
                     },
-                    selected:{
+                    selected: {
                         type: String,
                         reflectToAttribute: true,
                         observer: '_selectedChanged'
+                    },
+                    readonly: {
+                        type: Boolean,
+                        value: false
                     }
                 };
             }
@@ -82,7 +86,8 @@
 
             _selectedChanged(newVal, oldVal) {
                 const label = this.getLabelByName(newVal)
-                if (!newVal || !label) return;
+                if (!newVal || !label) { return }
+                if (this.readonly) { return }
                 this.dispatchEvent(new CustomEvent('label-selected', {bubbles: true, composed: true, detail: {label:label}}));
             }
         }

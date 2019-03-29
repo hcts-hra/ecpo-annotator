@@ -255,13 +255,13 @@
       })
       return result[0];
     },
+
     lockAllObjects: function (lock) {
-      const oreos = this._fabricCanvas.getObjects()
-      console.log('oreos', oreos)
-      oreos.map(function (o) {
-        console.log('---------', o)
-        o.set({ selectable: !lock, evented: !lock })
-      })
+      const objects = this._fabricCanvas.getObjects()
+      objects.map(object => object.set({ 
+        selectable: !lock, 
+        evented: !lock
+      }))
       this._fabricCanvas.renderAll()
     },
 
@@ -291,11 +291,20 @@
 
     serializeObject: function (object) {
       if (!object) { return; }
-      // setting the noStyle parameter is only possible when calling fabric's private methods
+      // clean filtering of the style attribute is only possible calling fabric's private methods
       const svg = object._createBaseSVGMarkup(object._toSVG(), { noStyle: true })
+      return { id: object.id, svg: svg }
+    },
+
+    serializeGroup: function (group) {
+       const contents = group.getObjects()
+       const serializedContents = contents.map(object => this.serializeObject(object))
+
       return {
-        shape: { id: object.id, svg: svg }
-        }
+        data: group.data,
+        objects: serializedContents,
+        dimensions: group.aCoords
+      }
     },
 
     importSVG: function (svg, attributes) {
@@ -313,6 +322,15 @@
       )
     },
 
+    importGroup: function (data, members) {
+      const group = new fabric.Group()
+      group.data = data
+      group.subTargetCheck = true;
+      this.groups.push(group)
+      this._fabricCanvas.add(group)
+      members.forEach(m => group.add(this.getObjectById(m.id)))
+    },
+
     switchFillMode: function(newValue) {
       this.fillMode = newValue
       console.log('switchFillMode to', this.fillMode)
@@ -327,7 +345,7 @@
   
         this._fabricCanvas.getObjects('group').map(g => {
           let props = this.getFillAndStroke(g)
-          g.getObjects().map(o=>o.set(props))
+          g.getObjects().map(o => o.set(props))
         })
         this._fabricCanvas.renderAll()
         return 
@@ -379,7 +397,7 @@
         color = object.data.label.color
       }
       if (this._annotator.mode === this._annotator.modes.GROUP) {
-        color = object.data.color || 'purple'
+        color = object.data.color || this.unassignedColor
       }
 
       if (this.fillMode) {
@@ -406,8 +424,6 @@
     },
 
     addGroup: function () {
-      // TODO do something with the last group?
-      this.activeGroup = null
       this.activeGroup = new fabric.Group()
       this.activeGroup.data = {
         id: this._getShapeId(),
@@ -418,6 +434,41 @@
       this.currentHue = (this.currentHue + 12) % colors.length
       console.log(this.currentHue, this.activeGroup.data)
       this._fabricCanvas.add(this.activeGroup)
+      this._notifyGroupCreated(this.activeGroup)
+    },
+
+    _groupIsEmpty: function (group) {
+      group.getObjects().length === 0
+    },
+
+    _groupHasObjects: function (group) {
+      group.getObjects().length > 0
+    },
+
+    _groupCleanup: function () {
+      if (
+        this.groups.length === 0 ||
+        this.groups.every(this._groupHasObjects)
+      ) { 
+        return console.log('No cleanup needed, no empty groups')
+      }
+
+      console.log('group cleanup needed')
+      const cleanup = this.groups.filter(this._groupIsEmpty)
+      cleanup
+        .map(group => {
+          const data = group.data
+          group.destroy()
+          return data
+        })
+        .map(data => this._notifyGroupRemoved(data))
+
+      console.log(`removed ${cleanup.length} empty groups`)
+
+      const keep = this.groups.filter(this._groupHasObjects)
+      console.log(`keep ${keep.length} groups`)
+
+      this.groups = keep
     },
 
     _setState: function (options) {
@@ -485,26 +536,18 @@
           // enable multi select
           this._fabricCanvas.selection = true;
           if (options.target && !this.activeGroup.contains(options.target)) {
-            // 
-            // const clone = options.target.clone()
             // remove target from all previous groups (should only be one)
             this.groups
-              .filter(g => g.contains(options.target))
-              .forEach(g => g.remove(options.target))
+              .filter(group => group.contains(options.target))
+              .forEach(group => {
+                group.remove(options.target)
+                this._notifyGroupChanged(group)
+              })
 
-            if (this.groups.some(g=> g.getObjects().length === 0)) {
-              console.log('group cleanup needed')
-              const cleanup = this.groups.filter(g => g.getObjects().length === 0)
-              const keep = this.groups.filter(g => g.getObjects().length > 0)
-              console.log('cleanup', cleanup)
-              console.log('keep', keep)
-
-              cleanup.map(g => g.destroy())
-              this.groups = keep
-            }
-            // TODO hide ungrouped base element
+            this._groupCleanup()
 
             this.activeGroup.add(options.target)
+            this._notifyGroupChanged(this.activeGroup)
             options.target.set(this.getFillAndStroke(this.activeGroup))
             this._fabricCanvas.renderAll()
           }
@@ -733,27 +776,50 @@
     },
 
     _notifyShapeCreated: function (object) {
-      const detail = this.serializeObject(object)
-      const event = new CustomEvent('shape-created', {composed:true, bubbles: true, detail: detail})
-      this._canvas.dispatchEvent(event);
+      const shape = this.serializeObject(object)
+      const event = new CustomEvent('shape-created', {composed:true, bubbles: true, detail: {shape: shape}})
+      this._canvas.dispatchEvent(event)
     },
 
     _notifyShapeChanged: function (object) {
       if (!object) { return }
-      const detail = this.serializeObject(object)
-      const event = new CustomEvent('shape-changed', {composed: true, bubbles: true, detail: detail})
-      this._canvas.dispatchEvent(event);
+      const shape = this.serializeObject(object)
+      const event = new CustomEvent('shape-changed', {composed: true, bubbles: true, detail: {shape: shape}})
+      this._canvas.dispatchEvent(event)
     },
 
     _notifyShapeSelected: function (options) {
+      // in group mode selections are handled elsewhere
+      if (this._annotator.mode === this._annotator.modes.GROUP) { return }
       if (!options) { return this._notifyEmptySelection(); }
-      const detail = this.serializeObject(options.target);
-      const event = new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: detail})
-      this._canvas.dispatchEvent(event);
+      const shape = this.serializeObject(options.target);
+      const event = new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: {shape: shape}})
+      this._canvas.dispatchEvent(event)
     },
 
     _notifyEmptySelection: function (options) {
       this._canvas.dispatchEvent(new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: {shape: null}}));
+    },
+
+    // group already removed, therefore 
+    _notifyGroupRemoved: function (data) {
+      if (!data) { return }
+      const event = new CustomEvent('group-removed', {composed:true, bubbles: true, detail: data})
+      this._canvas.dispatchEvent(event)
+    },
+
+    _notifyGroupCreated: function (group) {
+      if (!group) { return }
+      const detail = this.serializeGroup(group)
+      const event = new CustomEvent('group-created', {composed:true, bubbles: true, detail: detail})
+      this._canvas.dispatchEvent(event)
+    },
+
+    _notifyGroupChanged: function (group) {
+      if (!group) { return }
+      const detail = this.serializeGroup(group)
+      const event = new CustomEvent('group-changed', {composed:true, bubbles: true, detail: detail})
+      this._canvas.dispatchEvent(event)
     },
 
     _getShapeId: function () {

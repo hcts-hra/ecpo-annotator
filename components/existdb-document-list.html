@@ -101,6 +101,10 @@
                 flex: 1;
                 font-size: 1.5rem;
             } 
+            iron-list paper-item .mod-date {
+                flex: 1.5;
+                font-size: 1.5rem;
+            } 
             iron-list paper-item .actions {
                 flex: 3;
             }
@@ -167,12 +171,15 @@
                             <div class="file">
                                 <span class="label name">[[document.name]]</span>
                             </div>
+                            <div class="mod-date">
+                                <small class="label">[[formatModified(document.lastModified)]]</small>
+                            </div>
                             <div class="info">
                                 <div>
                                     <small class="label">annotations: [[formatCount(document.annotationsCount)]]</small>
                                 </div>
                                 <div>
-                                    <small class="label">[[formatModified(document.lastModified)]]</small>
+                                    <small class="label">groups: [[formatCount(document.groupsCount)]]</small>
                                 </div>
                             </div>
                             <div class="actions">

@@ -732,12 +732,22 @@ Custom property | Description | Default
             }
 
             addShapesFromAnnotations(annotations) {
-                annotations.forEach(annotation => {
-                    const attributes = {data: {label: annotation.body[0].value}}
-                    annotation.target.forEach(target => {
-                        this._fabricOverlay.importSVG(target.selector.value, attributes)
+                annotations
+                    .filter(a => !a.body.some(b => b.type === 'GroupAnnotation'))
+                    .forEach(annotation => {
+                        const attributes = {data: {label: annotation.body[0].value}}
+                        annotation.target.forEach(target => {
+                            this._fabricOverlay.importSVG(target.selector.value, attributes)
+                        })
                     })
-                })
+                
+                annotations
+                    .filter(a => a.body.some(b => b.type === 'GroupAnnotation'))
+                    .forEach(a => {
+                        const groupData = a.body.filter(b => b.type === 'GroupAnnotation')[0]
+                        this._fabricOverlay.importGroup(groupData, a.target)
+                    })
+
             }
 
             _fillMode() {

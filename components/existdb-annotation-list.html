@@ -13,10 +13,10 @@
         <style>
             :host {
                 display: block;
-                @apply(--paper-font-common-base);
                 box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
                 height: 100%;
                 text-align: center;
+                @apply(--paper-font-common-base);
             }
             
             paper-button {
@@ -32,7 +32,7 @@
 
         <paper-button raised on-click="save">submit</paper-button>
         
-        <existdb-annotation-item id="{{current.id}}" body="{{current.body}}" target="{{current.target}}"
+        <existdb-annotation-item id="{{current.id}}" body="{{current.body}}" target="{{current.target}}" type="{{current.type}}"
             on-annotation-changed="_handleAnnotationChange"></existdb-annotation-item>
 
     </template>
@@ -112,6 +112,34 @@
             handle (e) {
                 console.log('annotation-list handle e ',e);
 
+                if (e.type === 'group-created') {
+                    const body = this.createGroupAnnotationBody(e.detail)
+                    const newAnnotation = this.createAnnotation({
+                        id: e.detail.data.id,
+                        body: body,
+                        target: e.detail.objects.map(shape => this.createAnnotationTarget(shape))
+                    })
+
+                    this.setCurrent(newAnnotation)
+                    return this.push('annotations', newAnnotation)
+                }
+                if (e.type === 'group-changed') {
+                    const groupAnnotationIndex = this.itemIndexById(e.detail.data.id)
+                    const body = this.createGroupAnnotationBody(e.detail)
+                    this.set(['annotations', groupAnnotationIndex, 'body'], body)
+                    // this.notifyPath(['annotations', groupAnnotationIndex, 'body', 0, 'value', 'name'])
+                    const target = e.detail.objects.map(shape => this.createAnnotationTarget(shape))
+                    this.set(['annotations', groupAnnotationIndex, 'target'], target)
+                    this.setCurrent(this.get(['annotations', groupAnnotationIndex]))
+                    return this.notifyPath(['annotations', groupAnnotationIndex])
+                }
+                
+                if (e.type === 'group-removed') {
+                    const groupAnnotationIndex = this.itemIndexById(e.detail.id)
+                    this.splice('annotations', groupAnnotationIndex, 1)
+                    return console.log('annotation-list', 'group-event', e.detail)
+                }
+
                 if (e.type === 'shape-selected' && e.detail.shape == null) {
                     // nothing selected
                     console.log('no shape selected');
@@ -190,13 +218,13 @@
 
             createAnnotationTarget (shape) {
                 return {
-                    "id": shape.id,
-                    "type": "SpecificResource",
-                    "selector": {
-                        "type": "SvgSelector",
-                        "value": shape.svg
+                    id: shape.id,
+                    type: "SpecificResource",
+                    selector: {
+                        type: "SvgSelector",
+                        value: shape.svg
                     },
-                    "source": this.source
+                    source: this.source
                 }
             }
             
@@ -210,12 +238,29 @@
                 }
             }
 
+            createGroupAnnotationBody (detail) {
+                console.log('createGroupAnnotationBody', detail.data)
+                return [
+                    { 
+                        type: 'GroupAnnotation', 
+                        color: detail.data.color,
+                        id: detail.data.id
+                    },
+                    {
+                        type: 'CategoryLabel',
+                        value: { 
+                            name: this._determineGroupAnnotationType(detail.objects)
+                        }
+                    }
+                ]
+            }
+
             createAnnotation(annotation) {
                 const annotationDefaults = {
-                    "type": "Annotation",
-                    "created": (new Date()).toISOString()
+                    type: "Annotation",
+                    created: (new Date()).toISOString()
                 }
-                return Object.assign({}, annotation, annotationDefaults)
+                return Object.assign({}, annotationDefaults, annotation)
             }
 
             setAnnotationBody(annotationId, body) {
@@ -276,8 +321,8 @@
                 api.body = null;
                 api.method = 'get';
                 api.headers = {
-                    "Accept": "application/ld+json; profile=\"http://www.w3.org/ns/anno.jsonld\"",
-                    "Prefer": "return=representation;include=\"http://www.w3.org/ns/oa#PreferContainedDescriptions\""
+                    Accept: 'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"',
+                    Prefer: 'return=representation; include="http://www.w3.org/ns/oa#PreferContainedDescriptions"'
                 }
                 api.params = params
 
@@ -287,7 +332,7 @@
 
             load (newSrc, oldSrc) {
                 if (!newSrc || newSrc == '') { return }
-                this._getPage({ "document": newSrc })
+                this._getPage({ document: newSrc })
             }
 
             _handleLoadResponse(request) {
@@ -307,7 +352,7 @@
                 // needs some translations, since the response from existdb 
                 // target.selector.value has <> url-encoded 
                 function htmlDecode(input) {
-                    var doc = new DOMParser().parseFromString(input, "text/html");
+                    const doc = new DOMParser().parseFromString(input, 'text/html');
                     return doc.documentElement.textContent;
                 }
                 const items = container.items.map(item => {
@@ -329,8 +374,8 @@
                     const parsed = new URL(request.response.next.replace('&amp;', '&'))
                     // TODO: add page parameter
                     this._getPage({
-                        'document': parsed.searchParams.get('document'),
-                        'page': parsed.searchParams.get('page'),
+                        document: parsed.searchParams.get('document'),
+                        page: parsed.searchParams.get('page'),
                     })
                     return // do not dispatch event now
                 }
@@ -361,6 +406,26 @@
                 anno.body = e.detail.body;
                 anno.target = e.detail.target;
                 this.splice('annotations', index, 1, anno);
+            }
+
+            _determineGroupAnnotationType(members) {
+                const bodies = members.map(shape => {
+                    const annotation = this.itemByShapeId(shape.id)
+                    return annotation.body[0] // shapes only have 1 body element
+                })
+
+                if (bodies.some(b => b.value.name === 'article')) {
+                    return 'article'
+                }
+
+                if (bodies.some(b => b.value.name === 'advertisement')) {
+                    return 'advertisement'
+                }
+
+                if (bodies.every(b => b.value.name === 'image')) {
+                    return 'image'
+                }
+                return 'additional'
             }
         }
 
