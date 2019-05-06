@@ -809,7 +809,7 @@
     // group already removed, therefore 
     _notifyGroupRemoved: function (data) {
       if (!data) { return }
-      const event = new CustomEvent('group-removed', {composed:true, bubbles: true, detail: data})
+      const event = new CustomEvent('group-deleted', {composed:true, bubbles: true, detail: data})
       this._canvas.dispatchEvent(event)
     },
 
