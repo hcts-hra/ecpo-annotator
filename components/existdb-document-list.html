@@ -102,7 +102,7 @@
                 font-size: 1.5rem;
             } 
             iron-list paper-item .mod-date {
-                flex: 1.5;
+                flex: 2.5;
                 font-size: 1.5rem;
             } 
             iron-list paper-item .actions {
@@ -299,7 +299,7 @@
                 if (!date) {
                     return ''
                 }
-                return `last edit: ${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()}`
+                return `edit: ${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
             }
             formatCount (count) {
                 return count || '0'
