@@ -760,6 +760,14 @@ Custom property | Description | Default
             _group(e) {
                 // this.$.groupMode.toggleChecked()
                 // console.log('group keyboard action ', e);
+                this._switchToGroupMode();
+            }
+
+            _switchToGroupMode(){
+                console.log('grouping mode triggered');
+                this.mode = this.modes.GROUP;
+                this._fabricOverlay.deselect();
+                this._fabricOverlay.addGroup();
             }
 
             _noShapeSelected(selectedShape) {
@@ -775,10 +783,7 @@ Custom property | Description | Default
                         console.log(this.viewer.tileSource[0].imageToViewportCoordinates(0,0))
                         break
                     case 'g':
-                        console.log('grouping mode triggered');
-                        this.mode = this.modes.GROUP;
-                        this._fabricOverlay.deselect();
-                        this._fabricOverlay.addGroup();
+                        this._switchToGroupMode();
                         break;
                     case 'e':
                         console.log('edit mode');
