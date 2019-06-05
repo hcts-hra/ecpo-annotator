@@ -60,9 +60,15 @@ let $mapping-function := local:document-to-map(?, $root/@name/string())
 
 (:~ TODO filter based on year, month, permissions, etc ... ~:)
 (:~ TODO paged results ~:)
-let $files := $root//file
+let $page := xs:integer(request:get-parameter('page', 1))
+
+let $total := count($root//file)
+let $lower := ($page - 1) * 50 + 1
+let $files := subsequence($root//file, $lower, 50)
 
 return map {
+    'page': $page,
+    'total': $total,
     'images': array {
         for-each($files, $mapping-function(?))
     }
