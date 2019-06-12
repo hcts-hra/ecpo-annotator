@@ -19,19 +19,28 @@
             text-align: left;
             border-left: thin solid var(--paper-grey-300);
             padding: 10px;
+            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+
         }
 
         .logout{
             float: right;
         }
+        #annotationlist{
+            height: 400px;
+        }
+
     </style>
     <template>
-        <app-drawer-layout fullbleed>
+        <app-drawer-layout>
             <app-drawer id="drawer" slot="drawer" opened align="end">
-                <existdb-annotation-list id="annotationlist" source="{{document}}"
-                    on-annotations-loaded="drawLoadedAnnotations"
-                    on-highlight-target="highlightTarget"
-                    on-label-selected="handleLabelSelected"></existdb-annotation-list>
+                <div class="wrapper" style="box-shadow:0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);">
+                    <existdb-annotation-list id="annotationlist" source="{{document}}"
+                                             on-annotations-loaded="drawLoadedAnnotations"
+                                             on-highlight-target="highlightTarget"
+                                             on-label-selected="handleLabelSelected"></existdb-annotation-list>
+                    <slot></slot>
+                </div>
             </app-drawer>
 
             <existdb-image-annotator id="annotator"
