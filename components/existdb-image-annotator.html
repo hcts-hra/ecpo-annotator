@@ -465,6 +465,7 @@ Custom property | Description | Default
                 };
                 console.log('_initOpenSeadragon');
 
+                console.log('viewer dim ', this.viewer.width);
                 this.viewer = OpenSeadragon({
                     element: this.querySelector('#osd-slot-container'),
                     prefixUrl: "/exist/apps/ecpo/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
@@ -690,12 +691,15 @@ Custom property | Description | Default
                     case this.modes.RECTANGLE:
                     case this.modes.CIRCLE:
                     case this.modes.POLYGON:
+                        this.viewer.navigator.element.style.display = "none";
                         this.viewer.setMouseNavEnabled(false);
                         this._fabricOverlay.deselect();
                         this._fabricOverlay.lockAllObjects(true);
                         break;
                     case this.modes.SELECT:
                         // always call switchFillMode to switch back to shape colors
+                        this.viewer.navigator.element.style.display = "none";
+
                         this._fabricOverlay.switchFillMode(this.fill);
                         this.viewer.setMouseNavEnabled(false);
                         this._fabricOverlay.lockAllObjects(false);
@@ -704,10 +708,13 @@ Custom property | Description | Default
                         this._fabricOverlay.deselect();
                         break;
                     case this.modes.EDIT:
+                        this.viewer.navigator.element.style.display = "none";
                         this._fabricOverlay.lockAllObjects(true);
                         this._fabricOverlay.editActiveShape();
                         break
                     case this.modes.GROUP:
+                        this.viewer.navigator.element.style.display = "none";
+
                         this._fabricOverlay.lockAllObjects(false);
                         this.viewer.setMouseNavEnabled(false);
                         this._fabricOverlay._fabricCanvas.selection = true;
@@ -723,6 +730,8 @@ Custom property | Description | Default
                         break
                     case this.modes.NAVIGATE:
 //                        this._fabricOverlay.deselect();
+                        this.viewer.navigator.element.style.display = "inline-block";
+
                         this.viewer.setMouseNavEnabled(true);
                         break;
                     default:
