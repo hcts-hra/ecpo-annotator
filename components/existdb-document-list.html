@@ -14,6 +14,7 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
+<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 
 <!-- <link rel="import" href="existdb-document-list-item.html"> -->
 
@@ -71,6 +72,7 @@
                 flex: 1 0;
                 margin: 2rem 1rem 0 1rem;
                 width: 22rem;
+                white-space: nowrap;
             }
 
             .filter-info .label {
@@ -157,14 +159,16 @@
                         </paper-dropdown-menu>
                     </div>
                     <div class="filter-info">
-                        <span class='label'>showing: [[filteredItemsCount]] of [[documents.length]] total documents</span>
+<!--                        <span class='label'>showing: [[filteredItemsCount]] of [[documents.length]] total documents</span>-->
+                        <span class='label'>showing: [[filteredItemsCount]] of [[total]] documents</span>
                     </div>
                 </div>
 
                 </app-toolbar>
             </app-header>
+            <iron-scroll-threshold lower-threshold="500" on-lower-threshold="_handleScroll" id="threshold">
             <div id="doclist">
-                <iron-list items="[[filter(documents, selectedYear, selectedMonth)]]" as="document">
+                <iron-list id="list" on-scroll="_handleScroll" scroll-target="doclist" items="[[filter(documents, selectedYear, selectedMonth)]]" as="document">
                     <template>
                         <paper-item name="[[document.name]]" on-click="openImageAnnotator"  todo$="[[isTodo(document.annotationsCount)]]">
                             <div class="date"><span class="label">[[formatDate(document.date)]]</span></div>
@@ -189,6 +193,7 @@
                     </template>
                 </iron-list>
             </div>
+            </iron-scroll-threshold>
         </app-header-layout>
     </template>
 
@@ -224,13 +229,20 @@
                     filteredItemsCount: {
                         type: Number,
                         value: 0
+                    },
+                    total:{
+                        type: Number
+                    },
+                    page:{
+                        type: Number
                     }
                 }
             }
 
             connectedCallback () {
                 super.connectedCallback();
-                console.log('CONNECTED')
+                console.log('CONNECTED');
+                // this.$.threshold.scrollTarget = this.$.list;
             }
 
             _handleError () {
@@ -241,8 +253,28 @@
                 console.log(e)
             }
 
+            _handleScroll(e){
+                console.log("scroll event fired ", e);
+
+                this.page += 1;
+                if(this.page > 1){
+                    this.$.documentLoader.params = {'page':this.page};
+                }
+
+
+                // this.$.threshold.clearTriggers();
+
+            }
+
             _handleSuccess (event) {
-                const response = event.detail.response
+                this.$.threshold.clearTriggers();
+
+                const response = event.detail.response;
+
+                this.total = response.total;
+                this.page = response.page;
+
+
                 if (!response.images) {
                     return console.error(response)
                 }
@@ -253,14 +285,27 @@
                         date: new Date(d.date),
                         lastModified: d.lastModified ? new Date(d.lastModified) : null
                     })
-                })
-                this.set('documents', documents)
+                });
                 this.set('years', documents.reduce((res, next) => {
                     const YYYY = next.date.getFullYear()
                     if (res.indexOf(YYYY) < 0) { res.push(YYYY) }
                     return res
                 }, []).sort())
                 this.loaded = true
+
+                if(this.page == 1){
+                    this.set('documents', documents);
+                }else{
+                    console.log("new documents ", documents);
+                    // this.push('documents', documents);
+                    const old = this.documents;
+                    const newList = old.concat(documents);
+                    console.log('newlist ' , newList);
+
+                    this.set('documents', newList);
+
+                    console.log("this.documents ", this.documents);
+                }
             }
 
             openImageAnnotator (e) {
