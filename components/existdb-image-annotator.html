@@ -15,6 +15,7 @@
 <link rel="import" href="../bower_components/iron-icons/image-icons.html">
 <!--<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">-->
 <link rel="import" href="../bower_components/toggle-icon/toggle-icon.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <!--<link rel="import" href="bower_components/web-animations-js/web-animations.html">-->
 <!--<link rel="import" href="image-loader.html">-->
@@ -227,6 +228,7 @@ Custom property | Description | Default
         <slot></slot>
 
 
+
     </template>
     <script>
         class ExistdbImageAnnotator extends Polymer.Element {
@@ -363,7 +365,7 @@ Custom property | Description | Default
                     },
                     fill: {
                         type: Boolean,
-                        value: false
+                        value: true
                     },
                     mode: {
                         type: String,
@@ -408,6 +410,7 @@ Custom property | Description | Default
                 document.addEventListener('shape-selected', this._selectedShapeHandler.bind(this))
                 this.addEventListener('keydown', this._keyHandler);
                 this.$.focusDummy.focus();
+
             }
 
             initialize () {
@@ -420,6 +423,7 @@ Custom property | Description | Default
                 console.log('OSD init done');
                 this._initFabric();
                 this.dispatchEvent(new CustomEvent('annotator-initialized', {}));
+                this.$.fillMode.toggleChecked()
             }
 
             disconnectedCallback() {

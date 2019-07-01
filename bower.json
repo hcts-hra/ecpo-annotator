@@ -19,7 +19,8 @@
     "iron-ajax": "PolymerElements/iron-ajax#^2.0.0",
     "iron-list": "PolymerElements/iron-list#^2.0.0",
     "toggle-icon": "^2.0.0",
-    "web-animations-js": "^2.3.1"
+    "web-animations-js": "^2.3.1",
+    "paper-toast": "^3.0.1"
   },
   "devDependencies": {
     "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
