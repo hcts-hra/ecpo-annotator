@@ -61,14 +61,29 @@ let $mapping-function := local:document-to-map(?, $root/@name/string())
 (:~ TODO filter based on year, month, permissions, etc ... ~:)
 (:~ TODO paged results ~:)
 let $page := xs:integer(request:get-parameter('page', 1))
+let $year := request:get-parameter('year', ())
+let $month := request:get-parameter('month', ())
 
-let $total := count($root//file)
+let $all := $root//file
+let $total := count($all)
+
+let $files := $all[@year=$year][@month=$month]
+(:~
 let $lower := ($page - 1) * 50 + 1
-let $files := subsequence($root//file, $lower, 50)
+let $files := subsequence($all, $lower, 50)
+~:)
+
+let $years := 
+    for $year in $root//file/@year/string()
+    group by $year
+    order by $year ascending
+    return $year
 
 return map {
-    'page': $page,
+    (:~ 'page': $page, ~:)
+    (:~ 'lastPage': $total div 50, ~:)
     'total': $total,
+    'years': $years,
     'images': array {
         for-each($files, $mapping-function(?))
     }

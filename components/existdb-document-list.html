@@ -14,7 +14,6 @@
 <link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
 <link rel="import" href="../bower_components/app-layout/app-header/app-header.html">
 <link rel="import" href="../bower_components/app-layout/app-header-layout/app-header-layout.html">
-<link rel="import" href="../bower_components/iron-scroll-threshold/iron-scroll-threshold.html">
 
 <!-- <link rel="import" href="existdb-document-list-item.html"> -->
 
@@ -35,19 +34,21 @@
             .header {
                 height: 100px;
                 border-bottom: 1px solid grey;
-                display: flex;
-                background:white
+                background:white;
+                display: grid;
+                grid: 1fr 1fr / auto-flow;
             }
             .header h1 {
-                font-size: 5vw;
+                font-size: 2.4rem;
                 font-family: 'Roboto', sans-serif;
                 color: rgb(145, 26, 26);
                 flex: none;
-                margin: .4rem 1.2rem;
+                margin: .6rem 16px;
             }
 
-            .filter paper-item {
+            .filter paper-dropdown-menu {
                 z-index: 15;
+                width: 5rem;
             }
 
             .filter .label.filter-label {
@@ -59,10 +60,14 @@
             }
 
             .header .action-and-info-container {
-                flex: auto;
                 display: flex;
             }
-
+            .header .row-labels {
+                padding: 0 16px;
+                display: grid;
+                grid: auto-flow / 1fr 3fr 2fr 1fr 1fr 2fr;
+                align-items: center;
+            }
             .action-and-info-container .filter {
                 flex: auto;
                 margin: 0 1rem;
@@ -83,7 +88,8 @@
                 margin: .2rem .1rem;
             }
             iron-list paper-item {
-                display: flex;
+                display: grid;
+                grid: auto-flow / 1fr 3fr 2fr 1fr 1fr 2fr;
                 width: 100vw;
                 height: 6vh;
             }
@@ -93,23 +99,12 @@
             iron-list paper-item:hover {
                 background: rgb(232, 200, 200);
             }
-            iron-list paper-item .info {
-                flex: 2;
-            }
-            iron-list paper-item .file {
-                flex: 3;
-            }
             iron-list paper-item .date {
-                flex: 1;
                 font-size: 1.5rem;
             } 
             iron-list paper-item .mod-date {
-                flex: 2.5;
                 font-size: 1.5rem;
             } 
-            iron-list paper-item .actions {
-                flex: 3;
-            }
             iron-list paper-item:hover .actions paper-button {
                 background: rgb(255, 244, 210);
             }
@@ -126,49 +121,64 @@
         <app-header-layout fullbleed>
             <app-header slot="header" fixed>
                 <app-toolbar class="header">
-                    <h1>ECPO</h1>
                     <div class="action-and-info-container">
-                    <div class="filter">
-                        <div class="label filter-label">Filter by</div> 
+                        <h1>ECPO</h1>
+                        <div class="filter">
+                            <div class="label filter-label">Filter by</div> 
 
-                        <paper-dropdown-menu label="year">
-                            <paper-listbox slot="dropdown-content" selected="{{selectedYear}}" attr-for-selected="name">
-                                <paper-item name=""></paper-item>
-                                <template id="yearList" is="dom-repeat" items="[[years]]" as="year">
-                                    <paper-item name="[[year]]">[[year]]</paper-item>
-                                </template>
-                            </paper-listbox>            
-                        </paper-dropdown-menu>
+                            <paper-dropdown-menu label="year">
+                                <paper-listbox slot="dropdown-content" selected="{{selectedYear}}" attr-for-selected="name">
+                                    <!-- <paper-item name=""></paper-item> -->
+                                    <template id="yearList" is="dom-repeat" items="[[years]]" as="year">
+                                        <paper-item name="[[year]]">[[year]]</paper-item>
+                                    </template>
+                                </paper-listbox>            
+                            </paper-dropdown-menu>
             
-                        <paper-dropdown-menu label="month">
-                            <paper-listbox slot="dropdown-content" selected="{{selectedMonth}}" attr-for-selected="name">
-                                <paper-item name=""></paper-item>
-                                <paper-item name="0">1</paper-item>
-                                <paper-item name="1">2</paper-item>
-                                <paper-item name="2">3</paper-item>
-                                <paper-item name="3">4</paper-item>
-                                <paper-item name="4">5</paper-item>
-                                <paper-item name="5">6</paper-item>
-                                <paper-item name="6">7</paper-item>
-                                <paper-item name="7">8</paper-item>
-                                <paper-item name="8">9</paper-item>
-                                <paper-item name="9">10</paper-item>
-                                <paper-item name="10">11</paper-item>
-                                <paper-item name="11">12</paper-item>
-                            </paper-listbox>
-                        </paper-dropdown-menu>
+                            <paper-dropdown-menu label="month">
+                                <paper-listbox slot="dropdown-content" selected="{{selectedMonth}}" attr-for-selected="name">
+                                    <!-- <paper-item name=""></paper-item> -->
+                                    <paper-item name="01">01</paper-item>
+                                    <paper-item name="02">02</paper-item>
+                                    <paper-item name="03">03</paper-item>
+                                    <paper-item name="04">04</paper-item>
+                                    <paper-item name="05">05</paper-item>
+                                    <paper-item name="06">06</paper-item>
+                                    <paper-item name="07">07</paper-item>
+                                    <paper-item name="08">08</paper-item>
+                                    <paper-item name="09">09</paper-item>
+                                    <paper-item name="10">10</paper-item>
+                                    <paper-item name="11">11</paper-item>
+                                    <paper-item name="12">12</paper-item>
+                                </paper-listbox>
+                            </paper-dropdown-menu>
+                        </div>
+                        <div class="filter-info">
+                            <span class='label'>showing: [[documents.length]] of [[total]] documents</span>
+                        </div>
                     </div>
-                    <div class="filter-info">
-<!--                        <span class='label'>showing: [[filteredItemsCount]] of [[documents.length]] total documents</span>-->
-                        <span class='label'>showing: [[filteredItemsCount]] of [[total]] documents</span>
+                    <div class="row-labels">
+                        <div class="date"><span class="label">Published</span></div>
+                        <div class="file">
+                            <span class="label">File Name</span>
+                        </div>
+                        <div class="mod-date">
+                            <span class="label">Last Modified</span>
+                        </div>
+                        <div>
+                            <span class="label">Shapes</span>
+                        </div>
+                        <div>
+                            <span class="label">Groups</span>
+                        </div>
+                        <div class="actions">
+                            <span class='label'>Actions</span>
+                        </div>
                     </div>
-                </div>
-
                 </app-toolbar>
             </app-header>
-            <iron-scroll-threshold lower-threshold="500" on-lower-threshold="_handleScroll" id="threshold">
             <div id="doclist">
-                <iron-list id="list" on-scroll="_handleScroll" scroll-target="doclist" items="[[filter(documents, selectedYear, selectedMonth)]]" as="document">
+                <iron-list id="list" scroll-target="doclist" items="[[documents]]" as="document">
                     <template>
                         <paper-item name="[[document.name]]" on-click="openImageAnnotator"  todo$="[[isTodo(document.annotationsCount)]]">
                             <div class="date"><span class="label">[[formatDate(document.date)]]</span></div>
@@ -179,21 +189,18 @@
                                 <small class="label">[[formatModified(document.lastModified)]]</small>
                             </div>
                             <div class="info">
-                                <div>
-                                    <small class="label">annotations: [[formatCount(document.annotationsCount)]]</small>
-                                </div>
-                                <div>
-                                    <small class="label">groups: [[formatCount(document.groupsCount)]]</small>
-                                </div>
+                                <span class="label">[[formatCount(document.annotationsCount)]]</span>
+                            </div>
+                            <div class="info">
+                                <span class="label">[[formatCount(document.groupsCount)]]</span>
                             </div>
                             <div class="actions">
-                                <paper-button on-click="downloadAll">download all annotations</paper-button>
+                                <paper-button on-click="downloadAll">get annotations</paper-button>
                             </div>
                         </paper-item>
                     </template>
                 </iron-list>
             </div>
-            </iron-scroll-threshold>
         </app-header-layout>
     </template>
 
@@ -220,7 +227,7 @@
                     },
                     selectedMonth: {
                         type: Number,
-                        value: 0
+                        value: 0,
                     },
                     selectedYear: {
                         type: Number,
@@ -238,11 +245,13 @@
                     }
                 }
             }
-
+            static get observers() {
+                return [
+                    'changedSelection(selectedYear, selectedMonth, loaded)'
+                ]
+            }
             connectedCallback () {
                 super.connectedCallback();
-                console.log('CONNECTED');
-                // this.$.threshold.scrollTarget = this.$.list;
             }
 
             _handleError () {
@@ -253,22 +262,16 @@
                 console.log(e)
             }
 
-            _handleScroll(e){
+            _handleScroll (e) {
                 console.log("scroll event fired ", e);
 
                 this.page += 1;
-                if(this.page > 1){
+                if (this.page > 1) {
                     this.$.documentLoader.params = {'page':this.page};
                 }
-
-
-                // this.$.threshold.clearTriggers();
-
             }
 
             _handleSuccess (event) {
-                this.$.threshold.clearTriggers();
-
                 const response = event.detail.response;
 
                 this.total = response.total;
@@ -278,7 +281,8 @@
                 if (!response.images) {
                     return console.error(response)
                 }
-                console.log('LOADED', response.images)
+
+                // console.log('LOADED', response.images)
                 // tune document list by converting the date field into actual Date instances 
                 const documents = response.images.map(d => {
                     return Object.assign({}, d, {
@@ -286,26 +290,11 @@
                         lastModified: d.lastModified ? new Date(d.lastModified) : null
                     })
                 });
-                this.set('years', documents.reduce((res, next) => {
-                    const YYYY = next.date.getFullYear()
-                    if (res.indexOf(YYYY) < 0) { res.push(YYYY) }
-                    return res
-                }, []).sort())
+
+                this.set('years', response.years)
+
+                this.set('documents', documents);
                 this.loaded = true
-
-                if(this.page == 1){
-                    this.set('documents', documents);
-                }else{
-                    console.log("new documents ", documents);
-                    // this.push('documents', documents);
-                    const old = this.documents;
-                    const newList = old.concat(documents);
-                    console.log('newlist ' , newList);
-
-                    this.set('documents', newList);
-
-                    console.log("this.documents ", this.documents);
-                }
             }
 
             openImageAnnotator (e) {
@@ -326,6 +315,9 @@
                 const y = parseInt(year, 10)
                 const m = parseInt(month, 10)
                 console.log('year:', y, 'month:', m)
+
+                // load page
+
                 const filtered = documents.filter(d => {
                     const condition = (
                         (!year || d.date.getFullYear() === y) && 
@@ -344,7 +336,7 @@
                 if (!date) {
                     return ''
                 }
-                return `edit: ${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
+                return `${date.getDate()}.${date.getMonth()+1}.${date.getFullYear()} ${date.getHours()}:${date.getMinutes()}`
             }
             formatCount (count) {
                 return count || '0'
@@ -353,7 +345,13 @@
                 return count === 0
             }
 
+            changedSelection (year, month, loaded) {
+                this.set('documents', []);
+                this.$.documentLoader.params = {year: year, month: month};
+            }
+
             downloadAll(e) {
+                e.stopPropagation();
                 const document = e.model.document
                 window.open('/exist/apps/wap/annotations/?document=' + encodeURI(document.id) + '&items-per-page=1000')
             }
