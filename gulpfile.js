@@ -25,15 +25,15 @@ const targetConfiguration = {
     html5AsBinary: false
 }
 
-gulp.task('clean', function () {
+function clean () {
     return del(['build/**/*']);
-});
+}
 
-gulp.task('deploy:styles', function () {
+function deploy_styles () {
     return gulp.src('resources/css/*.css', {base: './'})
         .pipe(exClient.newer(targetConfiguration))
         .pipe(exClient.dest(targetConfiguration))
-})
+}
 
 // files in project root //
 
@@ -42,21 +42,32 @@ const components = [
     'components/**/*.js'
 ];
 
-gulp.task('deploy:components', function () {
+function deploy_components () {
     return gulp.src(components, {base: './'})
         .pipe(exClient.newer(html5TargetConfiguration))
         .pipe(exClient.dest(html5TargetConfiguration))
-})
+}
 
 // extracted for speed of normal development workflow
 
-const bower = 'bower_components/**/*'
+const bower = [
+    'bower_components/**/*',
+    '!bower_components/**/LICENSE',
+    '!bower_components/**/AUTHORS',
+    '!bower_components/**/Makefile',
+    '!bower_components/**/*.mustache',
+    '!bower_components/**/yarn.lock',
+    '!bower_components/**/bin/*',
+    '!bower_components/**/docs/*',
+    '!bower_components/**/man/*',
+    '!bower_components/**/test/*',
+]
 
-gulp.task('deploy:bower', function () {
+function deploy_bower () {
     return gulp.src(bower, {base: './'})
         .pipe(exClient.newer(html5TargetConfiguration))
         .pipe(exClient.dest(html5TargetConfiguration))
-})
+}
 
 const otherPaths = [
     '*.html',
@@ -69,27 +80,33 @@ const otherPaths = [
     'components/demo/**'
 ];
 
-gulp.task('deploy:other', function () {
+function deploy_other () {
     return gulp.src(otherPaths, {base: './'})
         .pipe(exClient.newer(targetConfiguration))
         .pipe(exClient.dest(targetConfiguration))
-})
-
-gulp.task('deploy', ['deploy:other', 'deploy:components', 'deploy:styles', 'deploy:bower'])
-
-// it is way faster not to watch bower dependencies due to massive amount of files to watch
-gulp.task('watch', ['deploy'], function () {
-    gulp.watch('resources/css/!*', ['deploy:styles'])
-    gulp.watch(otherPaths, ['deploy:other'])
-    gulp.watch(components, ['deploy:components'])
-})
+}
 
 // this will wath bower dependencies also
-gulp.task('watch:all', ['deploy'], function () {
-    gulp.watch('resources/css/!*', ['deploy:styles'])
-    gulp.watch(otherPaths, ['deploy:other'])
-    gulp.watch(components, ['deploy:components'])
-    gulp.watch(bower, ['deploy:bower'])
-})
+function watch_all () {
+    gulp.watch('resources/css/!*', deploy_styles)
+    gulp.watch(otherPaths, deploy_other)
+    gulp.watch(components, deploy_components)
+    gulp.watch(bower, deploy_bower)
+}
 
-gulp.task('default', ['watch:all'])
+// it is way faster not to watch bower dependencies due to massive amount of files to watch
+function watch () {
+    gulp.watch('resources/css/!*', deploy_styles)
+    gulp.watch(otherPaths, deploy_other)
+    gulp.watch(components, deploy_components)
+}
+
+exports.clean = clean
+const deploy = gulp.parallel(deploy_other, deploy_components, deploy_styles)
+    // , deploy_bower)
+
+exports.deploy = deploy
+
+exports.watch_all = gulp.series(deploy, watch_all)
+exports.watch = gulp.series(deploy, watch)
+exports.default = gulp.series(deploy, watch_all)
