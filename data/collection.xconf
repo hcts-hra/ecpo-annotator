@@ -2,7 +2,7 @@
     <index xmlns:xs="http://www.w3.org/2001/XMLSchema">
         <fulltext default="none" attributes="false"/>
         <range>
-            <create qname="@id" type="xs:string"/>
+            <create qname="@color" type="xs:string"/>
             <create qname="@name" type="xs:string"/>
             <create qname="@year" type="xs:string"/>
             <create qname="@month" type="xs:string"/>
