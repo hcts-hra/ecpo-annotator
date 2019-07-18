@@ -66,8 +66,8 @@
         
     <script>
         /**
-         * `ecpo-app`
-         *
+         * `ecpo-app` is the main entry point of the application and provides a basic drawer layout and hosts
+         * the `existdb-image-annotor` component.
          *
          * @customElement
          * @polymer
@@ -88,14 +88,6 @@
                 };
             }
 
-            connectedCallback() {
-                super.connectedCallback();
-            }
-
-            ready(){
-                super.ready();
-            }
-
             handleShapeEvent (e) {
                 this.$.annotationlist.handle(e)
             }
@@ -104,6 +96,10 @@
                 this.$.annotator.highlight(e.detail.id)
             }
 
+            /**
+             * this is called once the list of annotations is loaded by `existdb-annotation-list` and will pass
+             * them to `existdb-image-annotator' for display.
+             */
             drawLoadedAnnotations (e) {
                 const annotations = e.detail
                 // TODO listen for init event
@@ -111,15 +107,14 @@
                 setTimeout(() => { this.$.annotator.addShapesFromAnnotations(annotations) }, 150);
             }
 
+            /**
+             * whenever the label selection changes the associated shape will be highlighted.
+             * @param e
+             */
             handleLabelSelected (e) {
                 this.$.annotator.changeSelectedShapes({data: e.detail})
             }
 
-            // _addImage (oldVal, newVal) {
-            //     if (!newVal || oldVal == newVal) { return }
-            //     this.$.viewer.src(newVal)
-            //     this.$.viewer.initialize()
-            // }
         }
 
         window.customElements.define(EcpoApp.is, EcpoApp);

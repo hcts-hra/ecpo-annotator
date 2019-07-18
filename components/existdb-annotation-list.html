@@ -45,7 +45,7 @@
 
   <script>
     /**
-     * `existdb-annotation-list`
+     * `existdb-annotation-list` loads annotations via AJAX call to WAP app.
      *
      *
      * @customElement
@@ -81,11 +81,23 @@
         };
       }
 
+      /**
+       * get index in annotations array for a give shape id.
+       *
+       * @param id - the id of a fabricjs shape
+       * @returns {*}
+       */
       itemIndexByShapeId(id) {
         const annotationId = this.targetToAnnotationMap[id];
         return this.itemIndexById(annotationId);
       }
 
+      /**
+       * get the annotation for a given shape id
+       *
+       * @param shapeId - the id of a shape
+       * @returns {any}
+       */
       itemByShapeId(shapeId) {
         const annotationId = this.targetToAnnotationMap[shapeId];
         console.log("ANNOTATION", annotationId);

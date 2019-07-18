@@ -25,18 +25,12 @@
 <script src="../bower_components/fabric.js/dist/fabric.js"></script>
 
 <!--
-`img-pan-zoom` Image pan zoom element
 
-Images are preloaded by `img-loader` and a spinner is shown until loaded
-Deep Zoom Images are supported
+`existdb-image-annotator' is a component that wraps OpenSeaDragon image viewer and combines it
+with a Fabricjs overlay. Both libs establish their own overlay - one for rendering the image and one to
+draw shapes upon.
 
-### Styling
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--img-pan-zoom-spinner` | Mixin applied to spinner |
-`--img-pan-zoom-spinner-color` | Spinner color | `#2196F3`
-`--img-pan-zoom-spinner-width` | Spinner width | `5px`
+This component also creates the basic layout of the app along with a toolbar and a sidebar.
 
 ### Credits
 
@@ -146,11 +140,26 @@ Custom property | Description | Default
 
         <div class="buttonBar">
             <!-- Openseadragon controls -->
+            <!--
+            ### button to zoom in
+            -->
             <paper-icon-button id="zoomIn" icon="zoom-in" title="zoom in"></paper-icon-button>
+            <!--
+            ### button to zoom out
+            -->
             <paper-icon-button id="zoomOut" icon="zoom-out" title="zoom out"></paper-icon-button>
+            <!--
+            ### button to reset zoom and pan
+            -->
             <paper-icon-button id="homeBtn" icon="home" title="home" on-click="_onHome"></paper-icon-button>
+            <!--
+            ### button to switch to full screen mode
+            -->
             <paper-icon-button id="fullScreen" icon="fullscreen" title="fullscreen"
                                on-click="_onFullScreen"></paper-icon-button>
+            <!--
+            ### button to switch to zoom and pan mode
+            -->
             <toggle-icon id="panzoom"
                          icon="pan-tool"
                          title="mouse pan and zoom"
@@ -158,18 +167,27 @@ Custom property | Description | Default
 
             <div class="divider"></div>
 
+            <!--
+            ### icon to switch to 'select' mode
+            -->
             <toggle-icon id="selectMode"
                          icon="tap"
                          title="select"
                          animation="flip-horizontal"
                          class="checked-blue mode-selector" on-click="_select"></toggle-icon>
 
+            <!--
+            ### icon to switch to 'fill' mode
+            -->
             <toggle-icon id="fillMode"
                          icon="invert-colors"
                          animation="flip-horizontal"
                          on-click="_fillMode"
                          class="checked-blue"></toggle-icon>
 
+            <!--
+            ### icon to switch to 'group' mode
+            -->
             <toggle-icon id="groupMode"
                         icon="groupmode"
                         animation="flip-horizontal"
@@ -177,19 +195,27 @@ Custom property | Description | Default
                         on-click="_group"></toggle-icon>
 
             <div class="divider"></div>
-            <!-- TODO: hide if active selection -->
+            <!--
+            ### icon to switch to 'rect' mode
+            -->
             <toggle-icon id="rectMode"
                          icon="image:crop-3-2"
                          title="add rectangle"
                          on-click="_createRect"
                          class="checked-blue mode-selector"></toggle-icon>
 
+            <!--
+            ### icon to switch to 'circle' mode
+            -->
             <toggle-icon id="circleMode"
                          icon="image:panorama-fish-eye"
                          title="add circle"
                          on-click="_createCircle"
                          class="checked-blue mode-selector"></toggle-icon>
 
+            <!--
+            ### icon to switch to 'polygon' mode
+            -->
             <toggle-icon id="polyMode"
                           icon="device:signal-cellular-null"
                           title="add polygon"
@@ -198,6 +224,11 @@ Custom property | Description | Default
 
             <div class="divider"></div>
             <!-- TODO: show if active selection -->
+
+
+            <!--
+            ### icon to switch to 'edit' mode
+            -->
             <toggle-icon id="editMode"
                          icon="editnodes"
                          title="edit"
@@ -206,6 +237,9 @@ Custom property | Description | Default
                          class="checked-blue mode-selector"
                          disabled="[[_noShapeSelected(selectedShape)]]"></toggle-icon>
 
+            <!--
+            ### icon to delete a selected shape
+            -->
             <paper-icon-button icon="remove-circle" title="remove shape" on-click="_removeShape"></paper-icon-button>
 
             <div class="divider"></div>
@@ -238,110 +272,179 @@ Custom property | Description | Default
 
             static get properties() {
                 return {
-                    // Image source
+                    /**
+                     *  the Image source
+                     */
                     src: {
                         type: String,
                         observer: '_srcChanged'
                     },
-                    // Set to true if you are using a deep zoom image
+                    /**
+                     *  Set to true if you are using a deep zoom image
+                     */
                     dzi: {
                         type: Boolean,
                         value: false
                     },
-                    // Fade in new items added to the viewer
+                    /**
+                     *  Fade in new items added to the viewer
+                     */
                     fadeIn: {
                         type: Boolean,
                         value: true
                     },
-                    // loading
+
+                    /**
+                     *  loading
+                     */
+/*
                     loading: {
                         type: Boolean,
                         readonly: true,
                         notify: true
                     },
+*/
                     // hides spinner
+/*
                     hideSpinner: {
                         type: Boolean,
                         value: false
                     },
+*/
                     // loaded
+/*
                     loaded: {
                         type: Boolean,
                         readonly: true,
                         notify: true,
                         observer: "_loadedChanged"
                     },
-                    // Set to false to prevent the appearance of the default navigation controls. Note that if set to false, the customs buttons set by the options zoomInButton, zoomOutButton etc, are rendered inactive.
+*/
+
+                    /**
+                     * Set to false to prevent the appearance of the default navigation controls. Note that if set
+                     * to false, the customs buttons set by the options zoomInButton, zoomOutButton etc,
+                     * are rendered inactive.
+                     */
                     showNavigationControl: {
                         type: Boolean,
                         value: true
                     },
-                    // Set to true to make the navigator minimap appear.
+                    /**
+                     * Set to true to make the navigator minimap appear.
+                     */
                     showNavigator: {
                         type: Boolean,
                         value: false
                     },
-                    // The "zoom distance" per mouse click or touch tap. Note: Setting this to 1.0 effectively disables the click-to-zoom feature (also see gestureSettings[Mouse|Touch|Pen].clickToZoom/dblClickToZoom).
+                    /**
+                     * The "zoom distance" per mouse click or touch tap. Note: Setting this to 1.0 effectively
+                     * disables the click-to-zoom feature (also see
+                     * gestureSettings[Mouse|Touch|Pen].clickToZoom/dblClickToZoom).
+                     */
                     zoomPerClick: {
                         type: Number,
                         value: 2.0
                     },
-                    // The "zoom distance" per mouse scroll or touch pinch. Note: Setting this to 1.0 effectively disables the mouse-wheel zoom feature (also see gestureSettings[Mouse|Touch|Pen].scrollToZoom}).
+                    /**
+                     * The "zoom distance" per mouse scroll or touch pinch. Note: Setting this to 1.0 effectively
+                     * disables the mouse-wheel zoom feature (also see gestureSettings[Mouse|Touch|Pen].scrollToZoom}).
+                     */
                     zoomPerScroll: {
                         type: Number,
                         value: 1.2
                     },
-                    // Specifies the animation duration per each OpenSeadragon.Spring which occur when the image is dragged or zoomed.
+                    /**
+                     * Specifies the animation duration per each OpenSeadragon.Spring which occur when the image is
+                     * dragged or zoomed.
+                     */
                     animationTime: {
                         type: Number,
                         value: 1.2
                     },
-                    // If true then the 'previous' button will wrap to the last image when viewing the first image and the 'next' button will wrap to the first image when viewing the last image.
+                    /**
+                     * If true then the 'previous' button will wrap to the last image when viewing the first image
+                     * and the 'next' button will wrap to the first image when viewing the last image.
+                     */
                     navPrevNextWrap: {
                         type: Boolean,
                         value: false
                     },
-                    // If true then the rotate left/right controls will be displayed as part of the standard controls. This is also subject to the browser support for rotate (e.g. viewer.drawer.canRotate()).
+                    /**
+                     * If true then the rotate left/right controls will be displayed as part of the standard controls.
+                     * This is also subject to the browser support for rotate (e.g. viewer.drawer.canRotate()).
+                     */
                     showRotationControl: {
                         type: Boolean,
                         value: false
                     },
-                    // The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained. Setting it to 0, for example will allow you to zoom out infinity.
+                    /**
+                     * The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or
+                     * width at which the zoom out will be constrained. Setting it to 0, for example will allow
+                     * you to zoom out infinity.
+                     */
                     minZoomImageRatio: {
                         type: Number,
                         value: 1
                     },
-                    // The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. This can be set to Infinity to allow 'infinite' zooming into the image though it is less effective visually if the HTML5 Canvas is not availble on the viewing device.
+
+                    /**
+                     * The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. This can be set
+                     * to Infinity to allow 'infinite' zooming into the image though it is less effective visually
+                     * if the HTML5 Canvas is not availble on the viewing device.
+                     */
                     maxZoomPixelRatio: {
                         type: Number,
                         value: 1.1
                     },
-                    // Constrain during pan
+                    /**
+                     * Constrain during pan
+                     */
                     constrainDuringPan: {
                         type: Boolean,
                         value: false
                     },
-                    // The percentage ( as a number from 0 to 1 ) of the source image which must be kept within the viewport. If the image is dragged beyond that limit, it will 'bounce' back until the minimum visibility ratio is achieved. Setting this to 0 and wrapHorizontal ( or wrapVertical ) to true will provide the effect of an infinitely scrolling viewport.
+                    /**
+                     * The percentage ( as a number from 0 to 1 ) of the source image which must be kept within
+                     * the viewport. If the image is dragged beyond that limit, it will 'bounce' back until the
+                     * minimum visibility ratio is achieved. Setting this to 0 and wrapHorizontal ( or wrapVertical )
+                     * to true will provide the effect of an infinitely scrolling viewport.
+                     */
                     visibilityRatio: {
                         type: Number,
                         value: 1
                     },
+                    /**
+                     *  show/hide the zoom control
+                     */
                     showZoomControl: {
                         type: Boolean,
                         value: false
                     },
+                    /**
+                     *  show/hide the home control
+                     */
                     showHomeControl: {
                         type: Boolean,
                         value: false
                     },
+                    /**
+                     *  show/hide the fullpage control
+                     */
                     showFullPageControl: {
                         type: Boolean,
                         value: false
                     },
+                    /**
+                     *  preserve the viewport
+                     */
                     preserveViewport: {
                         type: Boolean,
                         value: true
                     },
+                    /**
+                     *  usually OSD show controls on its canvas. Suppress as we have our own toolbar buttons.
+                     */
                     autoHideControls: {
                         type: Boolean,
                         value: true
@@ -350,6 +453,9 @@ Custom property | Description | Default
                         type: Number,
                         value: 0
                     },
+                    /**
+                     *  reference to the viewer (OSD instance)
+                     */
                     viewer: {
                         type: Object,
                         value: () => {
@@ -359,20 +465,32 @@ Custom property | Description | Default
                     zoom: {
                         type: Number
                     },
+                    /**
+                     *  holds currently selected shape (a Fabricjs object)
+                     */
                     selectedShape: {
                         type: Object,
                         value: _ => null
                     },
+                    /**
+                     *  fill mode switch
+                     */
                     fill: {
                         type: Boolean,
                         value: true
                     },
+                    /**
+                     *  currently active mode
+                     */
                     mode: {
                         type: String,
                         observer: '_modeChange',
                         notify:true,
                         value: 'navigate' // open seadragon mode
                     },
+                    /**
+                     *  list of available modes
+                     */
                     modes: {
                         type: Object,
                         value: {
@@ -388,14 +506,12 @@ Custom property | Description | Default
                 };
             }
 
+            /**
+             * webcomponent lifecycle method. Processing starts here once component is registered and connected to
+             * browser.
+             */
             connectedCallback() {
                 super.connectedCallback();
-
-                // const mouseTrackerMoveHandler = this.onMouseTrackerMove.bind(this)
-                // const mouseTracker = new OpenSeadragon.MouseTracker({
-                //     element: document,
-                //     moveHandler: mouseTrackerMoveHandler
-                // });
 
                 this.addEventListener('annotator-initialized', function(){
                     console.log('Annotator init');
@@ -404,31 +520,43 @@ Custom property | Description | Default
                     // mouseTracker.setTracking(true)
                 });
 
-                // document.addEventListener('shape-created', this._newShapeHandler.bind(this))
-                // document.addEventListener('shape-changed', this._changedShapeHandler.bind(this))
-                // document.addEventListener('shape-deleted', this._deletedShapeHandler.bind(this))
                 document.addEventListener('shape-selected', this._selectedShapeHandler.bind(this))
                 this.addEventListener('keydown', this._keyHandler);
                 this.$.focusDummy.focus();
-
             }
 
+            /**
+             *  initializes the component by creating one OSD and one Fabricjs instance.
+             */
             initialize () {
                 console.log('initialize');
 
+                // ### create a wrapper div in the lightDOM that will holds the OSD instance
                 let d = document.createElement('div')
                 d.id = 'osd-slot-container'
                 this.appendChild(d)
+
+                // ### setup OSD and attach it to above div
                 this._initOpenSeadragon();
                 console.log('OSD init done');
+
+                // ### init fabricjs overlay
                 this._initFabric();
+
                 this.dispatchEvent(new CustomEvent('annotator-initialized', {}));
+
+                // ### switch to 'fill' mode as default
                 this.$.fillMode.toggleChecked()
             }
 
+
+            /**
+             *  webcomponent lifecycle method for teardown. Unregistering eventlisteners.
+             */
             disconnectedCallback() {
                 super.disconnectedCallback();
-                this.removeEventListener('keypress', this._keyHandler);
+                document.removeEventListener('shape-selected', this._selectedShapeHandler.bind(this));
+                this.removeEventListener('keydown', this._keyHandler);
             }
 
 
@@ -436,6 +564,7 @@ Custom property | Description | Default
                 return `${type}: ${point.x.toPrecision(4)}, ${point.y.toPrecision(4)}`;
             }
 
+/*
             onMouseTrackerMove(event) {
                 const viewerX = event.position.x;
                 const viewerY = event.position.y;
@@ -452,6 +581,7 @@ Custom property | Description | Default
                 this.$.cursorImagePosition.innerHTML = this.pointToString('i', imagePoint)
                 this.$.cursorViewportPosition.innerHTML = this.pointToString('v', viewportPoint)
             }
+*/
 
             _initFabric() {
                 console.log('_initFabric start');
@@ -460,7 +590,13 @@ Custom property | Description | Default
                 console.log('_initFabric done');
             }
 
-            // Init openseadragon
+            /**
+             *  init OSD using params exposed by this component e.g. `this.zoomPerClick`
+             *
+             *  OSD will append to 'osd-slot-container' div which has been created before in the lightDOM.
+             *
+             *  Note: it is important to keep OSD in lightDOM as the library does not play well with shadowDOM yet.
+             */
             _initOpenSeadragon() {
                 console.log('_initOpenSeadragon');
                 const tileSource = this.dzi ? this.src : {
@@ -513,6 +649,9 @@ Custom property | Description | Default
 //                console.log('DELETED SHAPE', e.detail.shape)
             }
 
+            /**
+             *  store latest selected shape
+             */
             _selectedShapeHandler(e) {
                 console.log('SELECTED SHAPE', e.detail.shape)
                 this.set('selectedShape', e.detail.shape)
@@ -545,7 +684,9 @@ Custom property | Description | Default
                 this.viewer.getBounds(true);
             }
 
-            // Zoom in
+            /**
+             *  zooms OSD canvas
+             */
             zoomIn() {
                 // TODO: Replace with native openseadragon zoomIn
                 var currentZoom = this.viewer.viewport.getZoom();
@@ -556,7 +697,9 @@ Custom property | Description | Default
                 }
             }
 
-            // Zoom out
+            /**
+             * zoom out OSD canvas
+             */
             zoomOut() {
                 // TODO: Replace with openseadragon native zoomOut
                 var currentZoom = this.viewer.viewport.getZoom();
@@ -571,7 +714,9 @@ Custom property | Description | Default
                 }
             }
 
-            // reset zoom
+            /**
+             *  reset OSD zoom factor
+             */
             resetZoom() {
                 this.viewer.viewport.goHome();
             }
@@ -675,6 +820,9 @@ Custom property | Description | Default
                 }
             }
 
+            /**
+             *  Manages mode changes. Is invoked whenever `this.mode` is modified as an observer.
+             */
             _modeChange(newVal, oldVal) {
                 console.log('_modeChanged ', newVal, oldVal);
 
@@ -783,6 +931,9 @@ Custom property | Description | Default
                 return selectedShape === null
             }
 
+            /**
+             *  keyboard shortcuts are handled here
+             */
             _keyHandler(e) {
                 const key = e.key;
                 console.log('_keyHandler', key);
