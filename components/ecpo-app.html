@@ -8,30 +8,30 @@
 <link rel="import" href="existdb-annotation-list.html">
 
 <dom-module id="ecpo-app">
-    <style>
-        :host {
-            @apply(--paper-font-common-base);
-            --app-drawer-width: 256px;
-
-        }
-
-        app-drawer {
-            text-align: left;
-            border-left: thin solid var(--paper-grey-300);
-            padding: 10px;
-            box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
-
-        }
-
-        .logout{
-            float: right;
-        }
-        #annotationlist{
-            height: 400px;
-        }
-
-    </style>
     <template>
+        <style>
+            :host {
+                @apply(--paper-font-common-base);
+                --app-drawer-width: 256px;
+
+            }
+
+            app-drawer {
+                text-align: left;
+                border-left: thin solid var(--paper-grey-300);
+                padding: 10px;
+                box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+
+            }
+
+            .logout{
+                float: right;
+            }
+            #annotationlist{
+                height: 400px;
+            }
+
+        </style>
         <app-drawer-layout>
             <app-drawer id="drawer" slot="drawer" opened align="end">
                 <div class="wrapper" style="box-shadow:0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);">
@@ -115,6 +115,9 @@
                 this.$.annotator.changeSelectedShapes({data: e.detail})
             }
 
+            _attachDom(dom) {
+                this.appendChild(dom);
+            }
         }
 
         window.customElements.define(EcpoApp.is, EcpoApp);
