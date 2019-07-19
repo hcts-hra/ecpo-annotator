@@ -32,8 +32,6 @@
       handle-as="json"
     ></iron-ajax>
 
-    <paper-button raised on-click="save">submit</paper-button>
-
     <existdb-annotation-item
       id="{{ current.id }}"
       body="{{ current.body }}"
@@ -41,6 +39,7 @@
       type="{{ current.type }}"
       on-annotation-changed="_handleAnnotationItemChange"
     ></existdb-annotation-item>
+    <paper-button raised on-click="save">submit</paper-button>
   </template>
 
   <script>

@@ -101,12 +101,10 @@ function watch () {
     gulp.watch(components, deploy_components)
 }
 
+const deploy = gulp.parallel(deploy_other, deploy_components, deploy_styles, deploy_bower)
+
 exports.clean = clean
-const deploy = gulp.parallel(deploy_other, deploy_components, deploy_styles)
-    // , deploy_bower)
-
 exports.deploy = deploy
-
 exports.watch_all = gulp.series(deploy, watch_all)
 exports.watch = gulp.series(deploy, watch)
 exports.default = gulp.series(deploy, watch_all)

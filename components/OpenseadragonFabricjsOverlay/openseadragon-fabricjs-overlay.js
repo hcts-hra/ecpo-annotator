@@ -341,6 +341,7 @@
       console.log('RESET')
       this.activeShape = null;
       this.activeLine = null;
+      this.activeGroup = null;
       this.pointArray.forEach(point => this._fabricCanvas.remove(point))
       this.pointArray = [];
       this.lineArray.forEach(line => this._fabricCanvas.remove(line));
@@ -642,6 +643,7 @@
           this._annotator.mode = this._annotator.modes.SELECT
           break
         case this._annotator.modes.SELECT:
+          console.log('mouse:down')
           if (options.target) {
             this._highlight(options.target); break
           }

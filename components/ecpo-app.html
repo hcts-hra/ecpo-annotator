@@ -19,27 +19,34 @@
             app-drawer {
                 text-align: left;
                 border-left: thin solid var(--paper-grey-300);
-                padding: 10px;
                 box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
-
             }
 
-            .logout{
+            .logout {
                 float: right;
             }
-            #annotationlist{
+
+            #annotationlist {
                 height: 400px;
             }
 
+            #navigator {
+                position: relative;
+                display:block;
+                height: 200px;
+                width: 100%; 
+            }
+
         </style>
+
         <app-drawer-layout>
             <app-drawer id="drawer" slot="drawer" opened align="end">
-                <div class="wrapper" style="box-shadow:0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);">
+                <div class="wrapper">
+                    <slot id="navigator"></slot>
                     <existdb-annotation-list id="annotationlist" source="{{document}}"
                                              on-annotations-loaded="drawLoadedAnnotations"
                                              on-highlight-target="highlightTarget"
                                              on-label-selected="handleLabelSelected"></existdb-annotation-list>
-                    <slot></slot>
                 </div>
             </app-drawer>
 
@@ -56,10 +63,6 @@
                                         on-group-changed="handleShapeEvent"
                                         on-group-deleted="handleShapeEvent" 
                                         src="{{document}}">
-
-                    <a class="logout" href="logout" slot="logout" title="logout">
-                        <paper-icon-button icon="logout" title="logout"></paper-icon-button>
-                    </a>
             </existdb-image-annotator>
         </app-drawer-layout>
     </template>
@@ -86,6 +89,13 @@
                         // observer: "_addImage"
                     }
                 };
+            }
+
+            ready () {
+                super.ready();
+                let n = document.createElement('div')
+                n.id = 'navigatorDiv'
+                this.$.navigator.appendChild(n)
             }
 
             handleShapeEvent (e) {

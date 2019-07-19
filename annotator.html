@@ -9,28 +9,20 @@
   <script src="/exist/apps/ecpo/bower_components/polymer/lib/elements/custom-style.html"></script>
   <link rel="import" href="/exist/apps/ecpo/components/ecpo-app.html"/>
   <style>
-    body {
-      height: 100%;
-      padding: 0;
+    .seamless {
+      padding:0;
       margin: 0;
-      display: block;
-      font-size: 20px;
     }
-
-    h2 {
-      color: blue;
-    }
-    #navigatorDiv{
-      width:100%;
-      height: 160px;
-      margin-top:5px !important;
+    
+    #navigatorDiv {
+      height: 200px;
+      width: 100%; 
     }
   </style>
 </head>
-<body>
-  <ecpo-app>
-    <div id="navigatorDiv"></div>
-  </ecpo-app>
+<body class="seamless">
+  <ecpo-app></ecpo-app>
+
   <script>
       document.addEventListener('WebComponentsReady', function () {
         // look for URL parameter

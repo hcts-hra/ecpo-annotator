@@ -3,7 +3,6 @@
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
 <link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
 
-<!--<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">-->
 <link rel="import" href="../bower_components/paper-styles/color.html">
 <link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
@@ -13,19 +12,14 @@
 <link rel="import" href="../bower_components/iron-icons/device-icons.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/iron-icons/image-icons.html">
-<!--<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">-->
 <link rel="import" href="../bower_components/toggle-icon/toggle-icon.html">
 <link rel="import" href="../bower_components/paper-toast/paper-toast.html">
-
-<!--<link rel="import" href="bower_components/web-animations-js/web-animations.html">-->
-<!--<link rel="import" href="image-loader.html">-->
 
 <script src="../bower_components/openseadragon/built-openseadragon/openseadragon/openseadragon.min.js"></script>
 <script src="OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
 <script src="../bower_components/fabric.js/dist/fabric.js"></script>
 
 <!--
-
 `existdb-image-annotator' is a component that wraps OpenSeaDragon image viewer and combines it
 with a Fabricjs overlay. Both libs establish their own overlay - one for rendering the image and one to
 draw shapes upon.
@@ -39,7 +33,6 @@ This component also creates the basic layout of the app along with a toolbar and
 
 @demo demo/index.html
 -->
-
 <dom-module id="existdb-image-annotator">
     <template>
         <style>
@@ -72,28 +65,6 @@ This component also creates the basic layout of the app along with a toolbar and
                 color: var(--paper-grey-700);
             }
 
-            paper-spinner-lite {
-                opacity: 0;
-                display: block;
-                transition: opacity 700ms;
-                position: absolute;
-                margin: auto;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                z-index: 1;
-                height: 70px;
-                width: 70px;
-                /*--paper-spinner-color: var(--img-pan-zoom-spinner-color, #2196F3);*/
-                /*--paper-spinner-stroke-width: var(--img-pan-zoom-spinner-width, 5px);*/
-                @apply(--img-pan-zoom-spinner);
-            }
-
-            paper-spinner-lite[active] {
-                opacity: 1;
-            }
-
             [hidden] {
                 display: none;
             }
@@ -117,11 +88,11 @@ This component also creates the basic layout of the app along with a toolbar and
                 font-family: monospace;
             }
 
-            :host ::slotted(.logout){
+            :host ::slotted(.logout) {
                 float:right;
             }
 
-            :host ::slotted(#osd-slot-container){
+            :host ::slotted(#osd-slot-container) {
                 position: relative;
                 top: 0;
                 left: 0;
@@ -135,6 +106,10 @@ This component also creates the basic layout of the app along with a toolbar and
                 right:60px;
                 font-size:14px;
                 color:var(--paper-blue-500);
+            }
+
+            .invisible {
+                width:0;height:0;border:0;display:inline;
             }
         </style>
 
@@ -254,7 +229,7 @@ This component also creates the basic layout of the app along with a toolbar and
             <span class="cursorposition" id="cursorViewportPosition"></span>
             -->
 
-            <div style="width:0;height:0;border:0;display:inline;" tabindex="0" id="focusDummy"></div>
+            <div class="invisible" tabindex="0" id="focusDummy"></div>
             <slot name="logout"></slot>
             <div class="displayMode">mode:[[mode]]</div>
         </div>
@@ -293,33 +268,6 @@ This component also creates the basic layout of the app along with a toolbar and
                         type: Boolean,
                         value: true
                     },
-
-                    /**
-                     *  loading
-                     */
-/*
-                    loading: {
-                        type: Boolean,
-                        readonly: true,
-                        notify: true
-                    },
-*/
-                    // hides spinner
-/*
-                    hideSpinner: {
-                        type: Boolean,
-                        value: false
-                    },
-*/
-                    // loaded
-/*
-                    loaded: {
-                        type: Boolean,
-                        readonly: true,
-                        notify: true,
-                        observer: "_loadedChanged"
-                    },
-*/
 
                     /**
                      * Set to false to prevent the appearance of the default navigation controls. Note that if set
@@ -855,7 +803,7 @@ This component also creates the basic layout of the app along with a toolbar and
                         this._fabricOverlay.switchFillMode(this.fill);
                         this.viewer.setMouseNavEnabled(false);
                         this._fabricOverlay.lockAllObjects(false);
-                        this._fabricOverlay._fabricCanvas.selection = false;
+                        this._fabricOverlay._fabricCanvas.selection = true;
                         //this must be called. Otherwise points from edit mode won't be removed from canvas.
                         this._fabricOverlay.deselect();
                         break;
