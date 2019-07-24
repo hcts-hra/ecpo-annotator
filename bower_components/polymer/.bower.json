@@ -75,15 +75,15 @@
   "resolutions": {
     "test-fixture": "3.0.0-rc.1"
   },
-  "homepage": "https://github.com/Polymer/polymer",
-  "version": "2.6.1",
-  "_release": "2.6.1",
+  "homepage": "https://github.com/polymer/polymer",
+  "version": "2.8.0",
+  "_release": "2.8.0",
   "_resolution": {
     "type": "version",
-    "tag": "v2.6.1",
-    "commit": "7e85d224d5f2828591103065f38336c321d6ca49"
+    "tag": "v2.8.0",
+    "commit": "0d7fe49a1ac992d287684c0ad5a01161c766971f"
   },
-  "_source": "https://github.com/Polymer/polymer.git",
-  "_target": "^2.0.0",
-  "_originalSource": "Polymer/polymer"
+  "_source": "https://github.com/polymer/polymer.git",
+  "_target": "^v2.0.0",
+  "_originalSource": "polymer/polymer"
 }

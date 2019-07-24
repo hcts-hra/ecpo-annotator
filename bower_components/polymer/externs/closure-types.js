@@ -877,6 +877,10 @@ Polymer_ElementMixin.createProperties = function(props){};
 */
 Polymer_ElementMixin._finalizeClass = function(){};
 /**
+* @return {undefined}
+*/
+Polymer_ElementMixin._prepareTemplate = function(){};
+/**
 * @param {Object} observers Array of observer descriptors for
   this class
 * @param {Object} dynamicFns Object containing keys for any properties
@@ -1413,3 +1417,21 @@ Polymer_DisableUpgradeMixin.prototype.connectedCallback = function(){};
 * @override
 */
 Polymer_DisableUpgradeMixin.prototype.disconnectedCallback = function(){};
+/**
+* @interface
+*/
+function Polymer_LegacyDataMixin(){}
+/**
+* @param {string} property Property that should trigger the effect
+* @param {string} type Effect type, from this.PROPERTY_EFFECT_TYPES
+* @param {Object=} effect Effect metadata object
+* @return {void}
+*/
+Polymer_LegacyDataMixin.prototype._addPropertyEffect = function(property, type, effect){};
+/**
+* @param {Object} templateInfo Template metadata to add effect to
+* @param {string} prop Property that should trigger the effect
+* @param {Object=} effect Effect metadata object
+* @return {void}
+*/
+Polymer_LegacyDataMixin._addTemplatePropertyEffect = function(templateInfo, prop, effect){};
