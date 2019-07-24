@@ -245,6 +245,14 @@
                     },
                     page:{
                         type: Number
+                    },
+                    year:{
+                        type:String,
+                        reflectToAttribute:true
+                    },
+                    month:{
+                        type: String,
+                        reflectToAttribute:true
                     }
                 }
             }
@@ -255,6 +263,8 @@
             }
             connectedCallback () {
                 super.connectedCallback();
+                this.selectedYear = this.year;
+                this.selectedMonth = this.month;
             }
 
             _handleError () {

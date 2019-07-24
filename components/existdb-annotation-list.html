@@ -312,6 +312,7 @@
 
       _handleSaveResponse(result) {
         console.log("_handleLoadResponse", result);
+        this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message':'Annotations saved'}}));
       }
 
       _getPage(params) {
