@@ -9,6 +9,6 @@
     <type>application</type>
     <target>ecpo</target>
     <prepare/>
-    <finish/>
+    <finish>modules/migrate.xq</finish>
     <permissions user="ecpo" group="ecpo" mode="rwxrwxr--"/>
 </meta>

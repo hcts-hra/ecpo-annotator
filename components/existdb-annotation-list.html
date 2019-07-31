@@ -286,6 +286,13 @@
       }
 
       save() {
+        const annotations = this.get("annotations")
+        const categorized = annotations.filter(annotations => annotations.body.length)
+        if (annotations.length > categorized.length) {
+          // const amount = annotations.length - categorized.length
+          // this.dispatchEvent(new CustomEvent('show-warning', {composed: true, bubbles: true, detail: {'message': amount + ' uncategorized annotations will not be saved'}}));
+        }
+
         const basicContainer = {
           "@context": [
             "http://www.w3.org/ns/anno.jsonld",
@@ -293,14 +300,12 @@
           ],
           document: this.source,
           type: "BasicContainer",
-          items: this.get("annotations").filter(
-            annotations => annotations.body.length
-          )
+          items: categorized
         };
 
         // also store state in localstorage
         const stringified = JSON.stringify(basicContainer);
-        console.log("save", stringified);
+        // console.log("save", stringified);
 
         // store on server
         const api = this.$.annotationsAPI;
@@ -314,9 +319,10 @@
         localStorage.setItem("annotations", stringified);
       }
 
-      _handleSaveResponse(result) {
-        console.log("_handleLoadResponse", result);
-        this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message':'Annotations saved'}}));
+      _handleSaveResponse(request) {
+        const savedAnnotations = request.response.result.filter(r => r && r.id)
+        console.log("_handleLoadResponse", savedAnnotations);
+        this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message': savedAnnotations.length + ' annotations saved'}}));
       }
 
       _getPage(params) {
@@ -356,32 +362,15 @@
         }
 
         // add annotations
-        // needs some translations, since the response from existdb
-        // target.selector.value has <> url-encoded
-        function htmlDecode(input) {
-          const doc = new DOMParser().parseFromString(input, "text/html");
-          return doc.documentElement.textContent;
-        }
-        const items = container.items.map(item => {
-          const convertedTargets = item.target.map(target => {
-            const decoded = htmlDecode(target.selector.value);
-            target.selector.value = decoded;
-            return target;
-          });
-          item.target = convertedTargets;
-          return item;
-        });
-
-        console.log("got Annotations", items);
-
+        const items = container.items
+        console.debug("got Annotations", items);
         items.forEach(annotation => this.addAnnotation(annotation));
-        const loaded = this.get(["annotations"]);
 
         // need to fetch next paged result?
         if (this._hasNextPage(request.response)) {
-          console.log("request next page");
+          console.debug("request next page");
           // replacement needed because exist will always encode &
-          const parsed = new URL(request.response.next.replace("&amp;", "&"));
+          const parsed = new URL(request.response.next);
           // TODO: add page parameter
           this._getPage({
             document: parsed.searchParams.get("document"),
@@ -389,14 +378,11 @@
           });
           return; // do not dispatch event now
         }
+
         console.info("All annotations received. Finishing up...");
 
         // inform about new annotations
-        this.dispatchEvent(
-          new CustomEvent("annotations-loaded", {
-            detail: loaded
-          })
-        );
+        this.dispatchEvent(new CustomEvent("annotations-loaded"));
 
         console.log("loaded Annotations", loaded);
       }

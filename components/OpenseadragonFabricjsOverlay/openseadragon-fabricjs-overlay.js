@@ -103,7 +103,7 @@
     unassignedColor: 'grey',
     currentHue: 0,
     defaultStyle: {
-      strokeWidth: 2,
+      strokeWidth: 5,
       opacity: 0.6,
       hasBorders: true,
       hasControls: false,
@@ -115,10 +115,10 @@
       lockRotation: true
     },
     pointStyle: {
-      radius: 5,
+      radius: 35,
       fill: 'transparent',
       stroke: '#336',
-      strokeWidth: 1,
+      strokeWidth: 5,
       selectable: false,
       hasBorders: false,
       hasControls: false,
@@ -127,7 +127,7 @@
       objectCaching: false
     },
     lineStyle: {
-      strokeWidth: 1,
+      strokeWidth: 5,
       fill: '#449',
       stroke: '#449',
       class:'line',
@@ -140,9 +140,9 @@
       objectCaching:false
     },
     polyPointStyle: {
-      radius: 5,
+      radius: 35,
       stroke:'#336',
-      strokeWidth: 1,
+      strokeWidth: 5,
       fill: 'transparent',
       selectable: false,
       hasBorders: false,
@@ -634,8 +634,8 @@
           if (this._isPointHandle(options.target)) {
             console.log('point', options.target)
             this.currentPointHandle = options.target
-            this.pointArray.forEach(point => point.set({ fill: 'transparent' }))
-            options.target.set({ fill: 'tomato' })
+            this.pointArray.forEach(point => point.set({ stroke: this.pointStyle.stroke }))
+            options.target.set({ stroke: 'tomato' })
             this._fabricCanvas.renderAll()
             break
           }
@@ -818,7 +818,7 @@
     addPointFromEvent: function (options) {
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
       // first point marker is special
-      const attributes = this.pointArray.length === 0 ? { fill: 'tomato' } : null
+      const attributes = this.pointArray.length === 0 ? { stroke: 'tomato' } : null
       const circle = this._addPoint(pointer, attributes)
       this.pointArray.push(circle);
 

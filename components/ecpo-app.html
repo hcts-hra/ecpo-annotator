@@ -45,7 +45,7 @@
                 <div class="wrapper">
                     <slot id="navigator"></slot>
                     <existdb-annotation-list id="annotationlist" source="{{document}}"
-                                             on-annotations-loaded="drawLoadedAnnotations"
+                                             on-annotations-loaded="setAnnotationsLoaded"
                                              on-highlight-target="highlightTarget"
                                              on-label-selected="handleLabelSelected"></existdb-annotation-list>
                 </div>
@@ -62,7 +62,8 @@
                                         on-shape-selected="handleShapeEvent"
                                         on-group-created="handleShapeEvent" 
                                         on-group-changed="handleShapeEvent"
-                                        on-group-deleted="handleShapeEvent" 
+                                        on-group-deleted="handleShapeEvent"
+                                        on-annotator-initialized="setAnnotatorInitialized"
                                         src="{{document}}">
             </existdb-image-annotator>
         </app-drawer-layout>
@@ -90,10 +91,24 @@
                         type: String,
                         value: "",
                         // observer: "_addImage"
+                    },
+                    annotatorInitialized: {
+                        type: Boolean,
+                        value: false
+                    },
+                    annotationsLoaded: {
+                        type: Boolean,
+                        value: false
                     }
                 };
             }
-
+ 
+            static get observers() {
+                return [
+                    // Observer method name, followed by a list of dependencies, in parenthesis
+                    'drawLoadedAnnotations(annotatorInitialized, annotationsLoaded)'
+                ]
+            }
             ready () {
                 super.ready();
                 let n = document.createElement('div')
@@ -101,7 +116,6 @@
                 this.$.navigator.appendChild(n)
 
                 this.addEventListener('show-message', this._showMessage);
-
             }
 
             _showMessage(e){
@@ -118,14 +132,15 @@
             }
 
             /**
-             * this is called once the list of annotations is loaded by `existdb-annotation-list` and will pass
-             * them to `existdb-image-annotator' for display.
+             * Import and draw loaded annotations
+             * after the annotator is initialized
+             * and the list of annotations is loaded 
              */
-            drawLoadedAnnotations (e) {
-                const annotations = e.detail
-                // TODO listen for init event
-                console.log('drawLoadedAnnotations', annotations)
-                setTimeout(() => { this.$.annotator.addShapesFromAnnotations(annotations) }, 150);
+            drawLoadedAnnotations (annotatorInitialized, annotationsLoaded) {
+                if (!(annotatorInitialized && annotationsLoaded)) { return }
+
+                const annotations = this.$.annotationlist.annotations
+                this.$.annotator.addShapesFromAnnotations(annotations)
             }
 
             /**
@@ -134,6 +149,14 @@
              */
             handleLabelSelected (e) {
                 this.$.annotator.changeSelectedShapes({data: e.detail})
+            }
+
+            setAnnotatorInitialized (e) {
+                this.annotatorInitialized = true
+            }
+
+            setAnnotationsLoaded (e) {
+                this.annotationsLoaded = true
             }
 
             _attachDom(dom) {

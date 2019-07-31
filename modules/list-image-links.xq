@@ -7,11 +7,13 @@ declare option output:media-type "application/json";
 declare variable $local:file := '/db/apps/ecpo/data/image-list.xml';
 
 declare variable $local:base-url := 'http://kjc-sv010.kjc.uni-heidelberg.de:8080/fcgi-bin/iipsrv.fcgi?IIIF=imageStorage/ecpo_new';
-declare variable $local:suffix := 'full/!4096,4096/0/default.jpg';
+declare variable $local:suffix := 'full/full/0/default.jpg';
+declare variable $local:all-sources := collection('/db/apps/wap-data');
 
 declare function local:get-annotation-info ($document-id) {
-    let $groups := collection('/db/apps/wap-data')/annotation[$document-id = ./target/@source/string()][./body/group]
-    let $shapes := collection('/db/apps/wap-data')/annotation[$document-id = ./target/@source/string()][not(./body/group)]
+    let $referenced := $local:all-sources//target/@source[.=$document-id]/../..
+    let $groups := $referenced[./body/group]
+    let $shapes := $referenced[not(./body/group)]
 
     let $dates := 
         for $created in $shapes/@created/string()
@@ -67,7 +69,7 @@ let $month := request:get-parameter('month', ())
 let $all := $root//file
 let $total := count($all)
 
-let $files := $all[@year=$year][@month=$month]
+let $files := $all/@year[.=$year]/../@month[.=$month]/..
 (:~
 let $lower := ($page - 1) * 50 + 1
 let $files := subsequence($all, $lower, 50)
