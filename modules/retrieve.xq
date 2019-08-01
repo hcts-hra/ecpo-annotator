@@ -45,4 +45,4 @@ let $request :=
 
 let $response := http:send-request($request)
 
-return array { for-each($response[2]//exist:resource, local:check(?, $server)) }
+return array { for-each($response[2]//exist:resource, local:check($server, ?)) }
