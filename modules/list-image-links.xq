@@ -6,7 +6,7 @@ declare option output:media-type "application/json";
 
 declare variable $local:file := '/db/apps/ecpo/data/image-list.xml';
 
-declare variable $local:base-url := 'http://kjc-sv010.kjc.uni-heidelberg.de:8080/fcgi-bin/iipsrv.fcgi?IIIF=imageStorage/ecpo_new';
+declare variable $local:base-url := 'http://kjc-sv002.kjc.uni-heidelberg.de:8080/fcgi-bin/iipsrv.fcgi?IIIF=imageStorage/ecpo_new';
 declare variable $local:suffix := 'full/full/0/default.jpg';
 declare variable $local:all-sources := collection('/db/apps/wap-data');
 
