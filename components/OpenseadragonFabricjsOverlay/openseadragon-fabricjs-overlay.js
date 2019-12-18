@@ -362,7 +362,8 @@
       this._fabricCanvas.renderAll();
       this._canvas.dispatchEvent(new CustomEvent('shape-deleted', {
         composed: true, bubbles: true,
-        detail: this.serializeObject(ao)}));
+        detail: { shape: this.serializeObject(ao) }
+      }));
     },
 
     /**

@@ -838,7 +838,10 @@ This component also creates the basic layout of the app along with a toolbar and
                 annotations
                     .filter(a => !a.body.some(b => b.type === 'GroupAnnotation'))
                     .forEach(annotation => {
-                        const attributes = {data: {label: annotation.body[0].value}}
+                        const attributes = {
+                            data: {label: annotation.body[0].value},
+                            id:annotation.target[0].id
+                        }
                         annotation.target.forEach(target => {
                             this._fabricOverlay.importSVG(target.selector.value, attributes)
                         })
