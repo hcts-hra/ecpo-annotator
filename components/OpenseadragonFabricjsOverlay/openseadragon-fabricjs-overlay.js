@@ -92,7 +92,8 @@
 
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
-    this._fabricCanvas.on('selection:created', this._notifyShapeSelected.bind(this))
+    this._fabricCanvas.on('selection:created', options => console.log(options))
+    // this._notifyShapeSelected.bind(this))
     // this will be dynamically registered
     this._boundMouseMoveListener = this._mouseMove.bind(this)
   };
@@ -246,8 +247,9 @@
         this.deselect();
         console.log('highlight', object);
         this.activeShape = object;
-        object.borderColor = 'red';
-        object.borderScaleFactor = 3;
+        // object.borderColor = 'red';
+        // object.borderScaleFactor = 3;
+        // object.setCoords()
 
         this._fabricCanvas.setActiveObject(object);
         this._fabricCanvas.renderAll();
@@ -287,6 +289,15 @@
       this._fabricCanvas.renderAll()
     },
 
+    selectAll: function () {
+      this._fabricCanvas.discardActiveObject();
+      var sel = new fabric.ActiveSelection(this._fabricCanvas.getObjects(), {
+        canvas: this._fabricCanvas,
+      });
+      this._fabricCanvas.setActiveObject(sel);
+      this._fabricCanvas.requestRenderAll();
+    },
+
     /**
      * unselect the currently active shape.
      */
@@ -301,9 +312,10 @@
           lockMovementX: false,
           lockMovementY: false
         })
+        this.activeShape.setCoords()
       }
       this._fabricCanvas.discardActiveObject()
-      this._notifyShapeSelected()
+      // this._notifyShapeSelected()
       this.reset()
     },
 
@@ -411,6 +423,7 @@
             this._fabricCanvas.add(object)
             object.set(attributes)
             object.set(this.getFillAndStroke(object))
+            object.setCoords()
           })
         }
       )
@@ -427,8 +440,15 @@
       group.data = data
       group.subTargetCheck = true;
       this.groups.push(group)
+      members.forEach(m => {
+        const object = this.getObjectById(m.id)
+        if (!object) { return console.error('no ID found for', m.id, object) }
+        group.add(object)
+        object.setCoords()
+      })
+      group.setCoords()
       this._fabricCanvas.add(group)
-      members.forEach(m => group.add(this.getObjectById(m.id)))
+      this._fabricCanvas.renderAll()
     },
 
     /**
@@ -444,13 +464,17 @@
         if (this._isPointHandle(object)) { return }
         console.log('fill and stroke', this.getFillAndStroke(object))
         object.set(this.getFillAndStroke(object))
+        object.setCoords()
       });
 
       if (this._annotator.mode === this._annotator.modes.GROUP) {
   
         this._fabricCanvas.getObjects('group').map(g => {
           let props = this.getFillAndStroke(g)
-          g.getObjects().map(o => o.set(props))
+          g.getObjects().map(o => {
+            o.set(props)
+            o.setCoords()
+          })
         })
         this._fabricCanvas.renderAll()
         return 
@@ -494,6 +518,7 @@
             this.getFillAndStroke(object)
           )
           newObject.set(props)
+          // newObject.setCoords()
         }
       )
       return newObject
@@ -646,9 +671,11 @@
         case this._annotator.modes.SELECT:
           console.log('mouse:down')
           if (options.target) {
-            this._highlight(options.target); break
+            this._highlight(options.target);
+            // options.target.setCoords()
+            break
           }
-          this.deselect()
+          // this.deselect()
           break
         case this._annotator.modes.GROUP:
           // enable multi select
@@ -665,8 +692,10 @@
             this._groupCleanup()
 
             this.activeGroup.add(options.target)
+            this.activeGroup.setCoords()
             this._notifyGroupChanged(this.activeGroup)
             options.target.set(this.getFillAndStroke(this.activeGroup))
+            options.target.setCoords()
             this._fabricCanvas.renderAll()
           }
           // log selection
@@ -806,6 +835,7 @@
           this.activeShape.id = this._getShapeId()
           this._highlight(this.activeShape)
           this.activeShape.set(this.getFillAndStroke(this.activeShape))
+          this.setCoords()
           this._notifyShapeCreated(this.activeShape)
           // this._annotator.mode = this._annotator.modes.SELECT
           break;
@@ -929,6 +959,7 @@
     _notifyGroupCreated: function (group) {
       if (!group) { return }
       const detail = this.serializeGroup(group)
+      console.info('serialized Group', detail)
       const event = new CustomEvent('group-created', {composed:true, bubbles: true, detail: detail})
       this._canvas.dispatchEvent(event)
     },
