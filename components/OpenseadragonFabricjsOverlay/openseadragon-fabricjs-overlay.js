@@ -574,11 +574,11 @@
     },
 
     _groupIsEmpty: function (group) {
-      group.getObjects().length === 0
+      return group.getObjects().length === 0
     },
 
     _groupHasObjects: function (group) {
-      group.getObjects().length > 0
+      return group.getObjects().length > 0
     },
 
     _groupCleanup: function () {
