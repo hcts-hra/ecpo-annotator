@@ -34,20 +34,47 @@
 
       app-toolbar {
         background: var(--paper-grey-300);
-        font-size: 16px;
+        font-size: 14px;
       }
 
       .type {
-        font-weight: 500;
+        font-weight: 900;
         padding: 12px;
-        background-color: var(--paper-blue-500);
+        background-color: var(--paper-grey-500);
         color: white;
-        font-size: 16px;
+        font-size: 14px;
+      }
+      .color {
+        display: flex;
+        flex-direction: row;
+        background-color: var(--paper-grey-300);
       }
 
-      .item-body, .item-target {
+      .color-label {
+        font-weight: 500;
+        margin: 12px 12px 6px 12px;
+        background-color: inherit;
+        color: var(--paper-grey-800);
+        font-size: 14px;
+        flex: none;
+      }
+
+      .color-display {
+        margin: 12px 12px 6px 12px;
+        flex: auto;
+      }
+
+      .item-target {
+        font-weight: 500;
+        font-size: 14px;
+        padding: 6px 12px 0 12px;
+        color: var(--paper-grey-800);
+        background: var(--paper-grey-300);
+      }
+      .item-body {
         padding: 10px;
-        background: var(--paper-blue-300);
+        background: var(--paper-grey-300);
+        border-bottom: 2px solid var(--paper-grey-300);
       }
 
       [hidden] {
@@ -56,15 +83,19 @@
     </style>
 
     <div class="item">
+      <div class="type">ID: [[id]]</div>
       <template is="dom-if" if="[[_isGroup(body)]]">
         <div class="item-target">Group with <span>[[_formatTarget(target)]]</span> Shapes</div>
+        <div class="color">
+          <div class="color-label">Color: </div>
+          <div class="color-display" style="[[_bgColor(body)]]">&nbsp;</div>
+        </div>
       </template>
-      <div class="type">[[id]]</div>
       <div class="item-body">
-        <existdb-fetch-labels id="labels" on-label-selected="_setLabel" 
-          selected="{{_selectedLabel(body)}}" 
-          readonly=[[_isGroup(body)]]></existdb-fetch-labels>
-      </div>
+          <existdb-fetch-labels id="labels" on-label-selected="_setLabel" 
+            selected="{{_selectedLabel(body)}}" 
+            readonly=[[_isGroup(body)]]></existdb-fetch-labels>
+        </div>
     </div>
   </template>
 
@@ -156,16 +187,33 @@
         );
       }
 
-      _isGroup(body) { 
-        if (!body || !body.length) { return false }
-        return body.some(b => b.type === 'GroupAnnotation') 
+      _hasBody (body) {
+        return body && body.length
       }
+
+      _isGroupBody (body) {
+        return body.type === 'GroupAnnotation'
+      }
+      _isCategoryLabel (body) {
+        return body.type === 'CategoryLabel'
+      }
+
+      _isGroup(body) { 
+        return this._hasBody(body) && body.some(this._isGroupBody) 
+      }
+      _isAnnotation(body) { 
+        return !this._hasBody(body) || !body.some(this._isGroupBody) 
+      }
+
+      _bgColor(body) {
+        return `background: ${body.filter(this._isGroupBody)[0].color}`
+      }
+
       _formatTarget(target) { return target.length }
       _selectedLabel(body) {
-        if (!body || !body.length) { return '' }
-        const firstCategory = body
-          .filter(b => b.type === 'CategoryLabel')
-          .pop()
+        if (!this._hasBody(body)) { return '' }
+
+        const firstCategory = body.filter(this._isCategoryLabel)[0]
         if (!firstCategory) { return '' }
 
         return firstCategory.value.name

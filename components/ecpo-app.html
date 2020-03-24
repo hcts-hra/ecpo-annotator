@@ -46,6 +46,7 @@
                     <slot id="navigator"></slot>
                     <existdb-annotation-list id="annotationlist" source="{{document}}"
                                              on-annotations-loaded="setAnnotationsLoaded"
+                                             on-annotations-reload="resetAnnotationsLoaded"
                                              on-highlight-target="highlightTarget"
                                              on-label-selected="handleLabelSelected"></existdb-annotation-list>
                 </div>
@@ -153,6 +154,11 @@
 
             setAnnotatorInitialized (e) {
                 this.annotatorInitialized = true
+            }
+
+            resetAnnotationsLoaded (e) {
+                this.$.annotator.clear()
+                this.annotationsLoaded = false
             }
 
             setAnnotationsLoaded (e) {

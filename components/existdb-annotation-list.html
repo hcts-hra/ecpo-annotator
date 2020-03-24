@@ -17,9 +17,21 @@
         @apply(--paper-font-common-base);
       }
 
+      .actions {
+        background-color: var(--paper-grey-800);
+      }
+
       paper-button {
         margin: 10px 0;
-        font-size: 12px;
+        font-size: 14px;
+      }
+
+      .button-save {
+        background: var(--paper-green-200);
+      }
+
+      .button-reset {
+        background: var(--paper-orange-200);
       }
     </style>
 
@@ -39,8 +51,12 @@
       type="{{ current.type }}"
       on-annotation-changed="_handleAnnotationItemChange"
     ></existdb-annotation-item>
-    <paper-button raised on-click="save">submit</paper-button>
-  </template>
+
+    <div class="actions">
+      <paper-button class="button-save" raised on-click="save">save</paper-button>
+      <paper-button class="button-reset" raised on-click="reset">reset</paper-button>
+    </div>
+</template>
 
   <script>
     /**
@@ -65,16 +81,16 @@
           },
           annotations: {
             type: Array,
-            value: []
+            value: _ => []
           },
           // TODO: refactor to data attribute in shape
           targetToAnnotationMap: {
             type: Object,
-            value: {}
+            value: _ => { return {} }
           },
           current: {
             type: Object,
-            value: _ => {},
+            value: _ => { return {} },
             notify: true
           }
         };
@@ -287,10 +303,15 @@
 
       save() {
         const annotations = this.get("annotations")
-        const categorized = annotations.filter(annotations => annotations.body.length)
+        const categorized = annotations.filter(annotation => annotation.body.length)
         if (annotations.length > categorized.length) {
-          // const amount = annotations.length - categorized.length
-          // this.dispatchEvent(new CustomEvent('show-warning', {composed: true, bubbles: true, detail: {'message': amount + ' uncategorized annotations will not be saved'}}));
+          const amount = annotations.length - categorized.length
+          this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message': amount + ' uncategorized annotations will not be saved'}}));
+        }
+  
+        const validAnnotations = categorized.filter(annotation => annotation.target.length)
+        if (categorized.length > validAnnotations.length) {
+          console.log("cleanup of", categorized.length - validAnnotations.length, "invalid annotations")
         }
 
         const basicContainer = {
@@ -300,7 +321,7 @@
           ],
           document: this.source,
           type: "BasicContainer",
-          items: categorized
+          items: validAnnotations
         };
 
         // also store state in localstorage
@@ -348,6 +369,15 @@
         this._getPage({ document: newSrc });
       }
 
+      reset(e) {
+        this.targetToAnnotationMap = {};
+        this.current = {};
+        this.annotations = []
+        
+        this.dispatchEvent(new CustomEvent("annotations-reload"));
+        this._getPage({ document: this.source });
+      }
+
       _handleLoadResponse(request) {
         console.log("_handleLoadResponse", request.response);
         const container = request.response;
@@ -383,7 +413,7 @@
 
         // inform about new annotations
         this.dispatchEvent(new CustomEvent("annotations-loaded"));
-
+        this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message': this.annotations.length + ' annotations loaded'}}));
         console.log("loaded Annotations", this.annotations);
       }
 
