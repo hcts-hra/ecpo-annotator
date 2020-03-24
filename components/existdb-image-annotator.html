@@ -600,7 +600,6 @@ This component also creates the basic layout of the app along with a toolbar and
              *  store latest selected shape
              */
             _selectedShapeHandler(e) {
-                console.log('SELECTED SHAPE', e.detail.shape)
                 this.set('selectedShape', e.detail.shape)
             }
 
@@ -619,7 +618,6 @@ This component also creates the basic layout of the app along with a toolbar and
             }
 
             getPoint() {
-//                console.log('getPoint ', OpenSeadragon.Point(0, 0));
                 return OpenSeadragon.Point(0, 0);
             }
 
@@ -698,10 +696,6 @@ This component also creates the basic layout of the app along with a toolbar and
                 this.viewer.addTiledImage({tileSource: this.src, index: 0, replace: true});
             }
 
-            _removeShape(e) {
-                this._fabricOverlay.remove()
-            }
-
             _logShapes() {
                 this._data = this._fabricOverlay.serialize();
             }
@@ -726,24 +720,35 @@ This component also creates the basic layout of the app along with a toolbar and
                 this.mode = this.modes.POLYGON
             }
 
+            _removeShape() {
+                if (this._noShapeSelected(this.selectedShape)) { return }
+                this._fabricOverlay.remove()
+                this.mode = this.modes.SELECT
+            }
+
             _edit() {
                 if (this._noShapeSelected(this.selectedShape)) { return }
                 this.mode = this.modes.EDIT
             }
 
-            _onHome(e) {
-                this._fabricOverlay.deselect();
+            _onHome() {
                 this.viewer.viewport.goHome();
                 this.viewer.setMouseNavEnabled(true);
                 this.mode = this.modes.NAVIGATE
             }
 
-            _panzoom(e) {
+            _panzoom() {
                 this.mode = this.modes.NAVIGATE
             }
 
-            _select(e) {
+            _select() {
                 this.mode = this.modes.SELECT
+            }
+
+            _group() {
+                this.mode = this.modes.GROUP;
+                this._fabricOverlay.deselect();
+                this._fabricOverlay.addGroup();
             }
 
             /*
@@ -770,7 +775,7 @@ This component also creates the basic layout of the app along with a toolbar and
              *  Manages mode changes. Is invoked whenever `this.mode` is modified as an observer.
              */
             _modeChange(newVal, oldVal) {
-                console.log('_modeChanged ', newVal, oldVal);
+                console.log('Mode changed from %s to %s', oldVal, newVal);
 
                 if (!this.init) { return }
                 if (newVal === oldVal) { return }
@@ -798,12 +803,18 @@ This component also creates the basic layout of the app along with a toolbar and
                         break;
                     case this.modes.SELECT:
                         // always call switchFillMode to switch back to shape colors
-                        this._fabricOverlay.switchFillMode(this.fill);
-                        this.viewer.setMouseNavEnabled(false);
-                        this._fabricOverlay.lockAllObjects(false);
                         this._fabricOverlay._fabricCanvas.selection = true;
                         //this must be called. Otherwise points from edit mode won't be removed from canvas.
-                        this._fabricOverlay.deselect();
+                        this._fabricOverlay.removeLineHandles();
+                        this._fabricOverlay.removePointHandles();
+                        console.log("mode SELECT: selectedShape", this.selectedShape)
+                        if (this.selectedShape) {
+                            this.highlight(this.selectedShape.id);
+                        }
+                        this._fabricOverlay.switchFillMode(this.fill);
+
+                        this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay.lockAllObjects(false);
                         break;
                     case this.modes.EDIT:
                         this._fabricOverlay.lockAllObjects(true);
@@ -865,21 +876,8 @@ This component also creates the basic layout of the app along with a toolbar and
                 this._fabricOverlay.switchFillMode(this.fill);
             }
 
-            _group(e) {
-                // this.$.groupMode.toggleChecked()
-                // console.log('group keyboard action ', e);
-                this._switchToGroupMode();
-            }
-
-            _switchToGroupMode(){
-                console.log('grouping mode triggered');
-                this.mode = this.modes.GROUP;
-                this._fabricOverlay.deselect();
-                this._fabricOverlay.addGroup();
-            }
-
-            _noShapeSelected(selectedShape) {
-                return selectedShape === null
+            _noShapeSelected(shape) {
+                return shape === null
             }
 
             /**
@@ -890,44 +888,20 @@ This component also creates the basic layout of the app along with a toolbar and
                 console.log('_keyHandler', key);
 
                 switch (key) {
-                    case 'i':
-                        console.log(this.viewer.tileSource[0].imageToViewportCoordinates(0,0))
-                        break
-                    case 'g':
-                        this._switchToGroupMode();
-                        break;
-                    case 'e':
-                        console.log('edit mode');
-                        if (this._noShapeSelected(this.selectedShape)) { return }
-                        this.mode = this.modes.EDIT
-                        break;
-                    case 'r':
-                        console.log('add rectangle');
-                        this.mode = this.modes.RECTANGLE
-                        break;
-                    case 'c':
-                        console.log('add circle');
-                        this.mode = this.modes.CIRCLE
-                        break;
-                    case 'p':
-                        console.log('add polygon');
-                        this.mode = this.modes.POLYGON
-                        break;
-                    case 's':
-                        console.log('select');
-                        this.mode = this.modes.SELECT
-                        break;
-                    case 'n':
-                        console.log('navigate');
-                        this.mode = this.modes.NAVIGATE
-                        break;
+                    case 's': this._select(); break;
+                    case 'n': this._panzoom(); break;
+                    case 'r': this._createRect(); break;
+                    case 'c': this._createCircle(); break;
+                    case 'p': this._createPolygon(); break;
+                    case 'g': this._group(); break;
+                    case 'e': this._edit(); break;
+                    case 'Backspace': this._removeShape(); break;
                     case 'Escape':
                         this._fabricOverlay.deselect()
                         this.mode = this.modes.SELECT
                         break;
-                    case 'Backspace':
-                        this._fabricOverlay.remove()
-                        this.mode = this.modes.SELECT
+                    case 'i':
+                        console.log(this.viewer.tileSource[0].imageToViewportCoordinates(0,0))
                         break;
                     default:
                         console.log('undefined key ', key);

@@ -92,7 +92,7 @@
 
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
-    this._fabricCanvas.on('selection:created', options => console.log(options))
+    this._fabricCanvas.on('selection:created', options => console.log('selection:created', options))
     // this._notifyShapeSelected.bind(this))
     // this will be dynamically registered
     this._boundMouseMoveListener = this._mouseMove.bind(this)
@@ -241,18 +241,18 @@
     },
 
     _highlight: function (object) {
-        if (object === this.activeShape) {
-            return console.log('same same but different');
-        }
-        this.deselect();
-        console.log('highlight', object);
+      console.log('highlight');
+      if (object !== this.activeShape) {
+        console.log("new object", object);
         this.activeShape = object;
-        // object.borderColor = 'red';
-        // object.borderScaleFactor = 3;
-        // object.setCoords()
+      }
+      this._fabricCanvas.setActiveObject(this.activeShape);
+      this._objectEndEditMode()
+      object.borderColor = 'red';
+      object.borderScaleFactor = 2;
+      object.setCoords()
 
-        this._fabricCanvas.setActiveObject(object);
-        this._fabricCanvas.renderAll();
+      this._fabricCanvas.requestRenderAll();
     },
 
     /**
@@ -298,24 +298,28 @@
       this._fabricCanvas.requestRenderAll();
     },
 
+    _objectEndEditMode: function () {
+      console.log('end edit mode of activeShape', this.activeShape)
+      this.activeShape.set({
+        selectable: true,
+        hasBorders: true,
+        objectCaching: true,
+        evented: true,
+        lockMovementX: false,
+        lockMovementY: false
+      })
+    },
+
     /**
      * unselect the currently active shape.
      */
     deselect: function () {
-      console.log('DESELECT activeShape?', this.activeShape)
       if (this.activeShape) {
-        this.activeShape.set({
-          selectable: true,
-          hasBorders: true,
-          objectCaching: true,
-          evented: true,
-          lockMovementX: false,
-          lockMovementY: false
-        })
+        this._objectEndEditMode()
         this.activeShape.setCoords()
       }
       this._fabricCanvas.discardActiveObject()
-      // this._notifyShapeSelected()
+      this._notifyEmptySelection()
       this.reset()
     },
 
@@ -354,12 +358,20 @@
       this.activeShape = null;
       this.activeLine = null;
       this.activeGroup = null;
-      this.pointArray.forEach(point => this._fabricCanvas.remove(point))
-      this.pointArray = [];
-      this.lineArray.forEach(line => this._fabricCanvas.remove(line));
-      this.lineArray = [];
+      this.removeLineHandles();
+      this.removePointHandles();
       this._fabricCanvas.discardActiveObject();
       this._fabricCanvas.renderAll();
+    },
+
+    removeLineHandles: function () {
+      this.lineArray.forEach(line => this._fabricCanvas.remove(line));
+      this.lineArray = [];
+    },
+
+    removePointHandles: function () {
+      this.pointArray.forEach(point => this._fabricCanvas.remove(point))
+      this.pointArray = [];
     },
 
     /**
@@ -369,13 +381,9 @@
       const ao = this._fabricCanvas.getActiveObject() || this.activeShape;
       if (!ao) { return; }
       this.reset()
-      this._annotator.mode = this._annotator.modes.SELECT
+      this._notifyShapeRemoved(ao);
       this._fabricCanvas.remove(ao);
       this._fabricCanvas.renderAll();
-      this._canvas.dispatchEvent(new CustomEvent('shape-deleted', {
-        composed: true, bubbles: true,
-        detail: { shape: this.serializeObject(ao) }
-      }));
     },
 
     /**
@@ -422,7 +430,7 @@
             object.set(props)
             this._fabricCanvas.add(object)
             object.set(attributes)
-            object.set(this.getFillAndStroke(object))
+            object.set(this._getFillAndStroke(object))
             object.setCoords()
           })
         }
@@ -457,31 +465,38 @@
      * @param newValue - the new value
      */
     switchFillMode: function(newValue) {
-      this.fillMode = newValue
-      console.log('switchFillMode to', this.fillMode)
-
-      this._fabricCanvas.forEachObject(object => {
-        if (this._isPointHandle(object)) { return }
-        console.log('fill and stroke', this.getFillAndStroke(object))
-        object.set(this.getFillAndStroke(object))
-        object.setCoords()
-      });
-
-      if (this._annotator.mode === this._annotator.modes.GROUP) {
-  
-        this._fabricCanvas.getObjects('group').map(g => {
-          let props = this.getFillAndStroke(g)
-          g.getObjects().map(o => {
-            o.set(props)
-            o.setCoords()
-          })
-        })
-        this._fabricCanvas.renderAll()
-        return 
+      if (newValue !== this.fillMode) {
+        console.log('switchFillMode to', this.fillMode)
+        this.fillMode = newValue
       }
 
-      this._fabricCanvas.renderAll()
+      // set fill and stroke for
+      this._fabricCanvas.forEachObject(object => {
+        if (this._isPointHandle(object) || object.type === 'group') {
+          return
+        }
+        object.set(this._getFillAndStroke(object))
+        object.setCoords()
+      });
+      this._fabricCanvas.requestRenderAll()
+
+      if (this._annotator.mode === this._annotator.modes.GROUP) {
+        this._fabricCanvas
+          .getObjects('group')
+          .map(group => this._setPropertiesForGroupMembers(group))
+      }
+
+      this._fabricCanvas.requestRenderAll()
     },
+
+    _setPropertiesForGroupMembers: function (group) {
+      let groupProperties = this._getFillAndStroke(group)
+      group.getObjects().map(member => {
+        member.set(groupProperties)
+        member.setCoords()
+      })
+      group.setCoords()
+    }, 
 
     /**
      * switch active shape into edit mode
@@ -515,7 +530,7 @@
           newObject = objects[0]
           const props = Object.assign({}, this.defaultStyle, 
             { data: Object.assign({}, object.data) },
-            this.getFillAndStroke(object)
+            this._getFillAndStroke(object)
           )
           newObject.set(props)
           // newObject.setCoords()
@@ -524,7 +539,7 @@
       return newObject
     },
 
-    getFillAndStroke: function(object) {
+    _getFillAndStroke: function(object) {
       let color = this.unassignedColor
       if ( object.data && object.data.label) {
         color = object.data.label.color
@@ -548,11 +563,9 @@
     changeSelectedShapes: function (newData) {
       const object = this._fabricCanvas.getActiveObject()
       const currentData = object.data
-      console.log('currentData', currentData)
       const mergedData = Object.assign({}, currentData, newData)
-      console.log('mergedData', mergedData)
       object.set(mergedData)
-      object.set(this.getFillAndStroke(object))
+      object.set(this._getFillAndStroke(object))
       this._fabricCanvas.renderAll()
     },
 
@@ -568,8 +581,9 @@
       this.activeGroup.subTargetCheck = true;
       this.groups.push(this.activeGroup)
       this.currentHue = (this.currentHue + 12) % colors.length
-      console.log(this.currentHue, this.activeGroup.data)
       this._fabricCanvas.add(this.activeGroup)
+      this.activeGroup.setCoords()
+      this._fabricCanvas.requestRenderAll()
       this._notifyGroupCreated(this.activeGroup)
     },
 
@@ -615,7 +629,7 @@
       console.log('_state', this._state)
     },
 
-    _objectMove: function(options) {
+    _objectMove: function (options) {
       if (!this._isPointHandle(options.target)) { return }
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
@@ -634,7 +648,7 @@
       this._fabricCanvas.renderAll()
     },
 
-    _nextState: function (options) {
+    _nextState: function () {
       const clone = this.reimport(this.activeShape)
       this._fabricCanvas.remove(this.activeShape)
       this.activeShape = clone
@@ -650,7 +664,7 @@
     *
     */
 
-    _mouseDown: function(options) {
+    _mouseDown: function (options) {
       const mode = this._annotator.mode
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
 
@@ -669,13 +683,14 @@
           this._annotator.mode = this._annotator.modes.SELECT
           break
         case this._annotator.modes.SELECT:
-          console.log('mouse:down')
+          console.log('mouse:down', options.target)
           if (options.target) {
             this._highlight(options.target);
             // options.target.setCoords()
+            this._notifyShapeSelected(options)
             break
           }
-          // this.deselect()
+          this.deselect()
           break
         case this._annotator.modes.GROUP:
           // enable multi select
@@ -685,17 +700,17 @@
             this.groups
               .filter(group => group.contains(options.target))
               .forEach(group => {
+                console.log("remove", options.target.id, "from", group.data.id)
                 group.remove(options.target)
                 this._notifyGroupChanged(group)
               })
 
-            this._groupCleanup()
-
             this.activeGroup.add(options.target)
-            this.activeGroup.setCoords()
-            this._notifyGroupChanged(this.activeGroup)
-            options.target.set(this.getFillAndStroke(this.activeGroup))
+            options.target.set(this._getFillAndStroke(this.activeGroup))
             options.target.setCoords()
+            this.activeGroup.setCoords()
+            this._groupCleanup()
+            this._notifyGroupChanged(this.activeGroup)
             this._fabricCanvas.renderAll()
           }
           // log selection
@@ -711,7 +726,7 @@
             left: pointer.x,
             top: pointer.y
           }));
-          rect.set(this.getFillAndStroke(rect))
+          rect.set(this._getFillAndStroke(rect))
           this._fabricCanvas.add(rect);
           this.activeShape = rect;
           this._fabricCanvas.setActiveObject(rect);
@@ -728,7 +743,7 @@
             top: pointer.y,
             selectionBackgroundColor: "transparent"
           }));
-          circle.set(this.getFillAndStroke(circle))
+          circle.set(this._getFillAndStroke(circle))
 
           this._fabricCanvas.add(circle);
           this.activeShape = circle;
@@ -746,17 +761,16 @@
           ) {
             // register event listener
             this._fabricCanvas.on('mouse:move', this._boundMouseMoveListener)
-            this.addPointFromEvent(options);
+            this._addPointFromEvent(options);
             break;
           }
 
           // if the target id is the same as the first one created
           const polygon = this._generatePolygon();
-          polygon.set(this.getFillAndStroke(polygon))
+          polygon.set(this._getFillAndStroke(polygon))
           this._fabricCanvas.add(polygon);
           this._highlight(polygon);
           this._notifyShapeCreated(polygon)
-          // this._annotator.mode = this._annotator.modes.SELECT
           break;
       }
       return options
@@ -822,31 +836,30 @@
           reimport.selectable = false
           this._fabricCanvas.add(reimport)
           this._highlight(reimport)
-          this.activeShape.set(this.getFillAndStroke(this.activeShape))
+          this.activeShape.set(this._getFillAndStroke(this.activeShape))
+          this.activeShape.setCoords();
+
           this._notifyShapeCreated(reimport)
-          // this._annotator.mode = this._annotator.modes.SELECT
           break
         case this._annotator.modes.CIRCLE:
           this._fabricCanvas.off('mouse:move', this._boundMouseMoveListener)
           // circle is special
           this.activeShape.set("hasBorders", true);
-          // this.activeShape.set("hasControls", false);
-          this.activeShape.setCoords();
           this.activeShape.id = this._getShapeId()
           this._highlight(this.activeShape)
-          this.activeShape.set(this.getFillAndStroke(this.activeShape))
-          this.setCoords()
+          this.activeShape.set(this._getFillAndStroke(this.activeShape))
+          this.activeShape.setCoords();
+
           this._notifyShapeCreated(this.activeShape)
-          // this._annotator.mode = this._annotator.modes.SELECT
-          break;
         case this._annotator.modes.POLYGON:
           this._fabricCanvas.off('mouse:move', this._boundMouseMoveListener)
           break
       }
+
       if (!this.activeShape) { return }
     },
 
-    addPointFromEvent: function (options) {
+    _addPointFromEvent: function (options) {
       const pointer = this._fabricCanvas.getPointer(options.originalEvent);
       // first point marker is special
       const attributes = this.pointArray.length === 0 ? { stroke: 'tomato' } : null
@@ -923,6 +936,8 @@
       return this.reimport(polygon)
     },
 
+    // NOTIFY
+
     _notifyShapeCreated: function (object) {
       const shape = this.serializeObject(object)
       const event = new CustomEvent('shape-created', {composed:true, bubbles: true, detail: {shape: shape}})
@@ -943,6 +958,12 @@
       const shape = this.serializeObject(options.target);
       const event = new CustomEvent('shape-selected', {composed: true, bubbles: true, detail: {shape: shape}})
       this._canvas.dispatchEvent(event)
+    },
+
+    _notifyShapeRemoved: function (object) {
+      const shape = this.serializeObject(object)
+      const event = new CustomEvent('shape-deleted', {composed: true, bubbles: true, detail: {shape: shape}})
+      this._canvas.dispatchEvent(event);
     },
 
     _notifyEmptySelection: function (options) {
@@ -970,6 +991,8 @@
       const event = new CustomEvent('group-changed', {composed:true, bubbles: true, detail: detail})
       this._canvas.dispatchEvent(event)
     },
+
+    // ID generator
 
     _getShapeId: function () {
       return 's-' + Date.now() + Math.floor(Math.random() * 11)
