@@ -413,7 +413,8 @@
 
         // inform about new annotations
         this.dispatchEvent(new CustomEvent("annotations-loaded"));
-        this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message': this.annotations.length + ' annotations loaded'}}));
+        this.dispatchEvent(new CustomEvent('show-message', {
+          composed: true, bubbles: true, detail: { message: this.annotations.length + ' annotations loaded'}}));
         console.log("loaded Annotations", this.annotations);
       }
 
@@ -422,8 +423,9 @@
       }
 
       _handleError(e) {
-        console.error("_handleError", e, this.$.annotationsAPI.lastError);
-        alert("FAILURE: \n" + this.$.annotationsAPI.lastError);
+        console.error("Error loading annotations:", e, this.$.annotationsAPI.lastError);
+        this.dispatchEvent(new CustomEvent('show-message', {
+            composed: true, bubbles: true, detail: { message: 'Annotations could not be loaded!'}}));
       }
 
       _handleAnnotationItemChange(e) {
