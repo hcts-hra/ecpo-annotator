@@ -10,7 +10,6 @@
     "iron-icons": "PolymerElements/iron-icons#^2.0.0",
     "app-layout": "PolymerElements/app-layout#^2.0.0",
     "paper-spinner": "^2.0.0",
-    "img-pan-zoom": "^2.0.0",
     "openseadragon": "^2.4.0",
     "paper-item": "PolymerElements/paper-item#^2.0.0",
     "paper-input": "PolymerElements/paper-input#^2.0.0",
