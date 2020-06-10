@@ -366,7 +366,7 @@
             downloadAll(e) {
                 e.stopPropagation();
                 const document = e.model.document
-                window.open('/exist/apps/wap/annotations/?document=' + encodeURI(document.id) + '&items-per-page=1000')
+                window.open('/exist/apps/ecpo/api/annotations/?document=' + encodeURI(document.id) + '&items-per-page=1000')
             }
         }
         window.customElements.define(ExistdbDocumentList.is, ExistdbDocumentList);
