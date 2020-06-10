@@ -92,7 +92,7 @@
 
     this._fabricCanvas.on('mouse:down', this._mouseDown.bind(this))
     this._fabricCanvas.on('mouse:up', this._mouseUp.bind(this))
-    this._fabricCanvas.on('selection:created', options => console.log('selection:created', options))
+    // this._fabricCanvas.on('selection:created', options => console.log('selection:created', options))
     // this._notifyShapeSelected.bind(this))
     // this will be dynamically registered
     this._boundMouseMoveListener = this._mouseMove.bind(this)
@@ -343,9 +343,16 @@
      */
     lockAllObjects: function (lock) {
       const objects = this._fabricCanvas.getObjects()
+      objects.map(object => object.set({ selectable: !lock, evented: !lock }))
+      this._fabricCanvas.renderAll()
+    },
+
+    lockAllMovement: function (lock) {
+      const objects = this._fabricCanvas.getObjects()
       objects.map(object => object.set({ 
-        selectable: !lock, 
-        evented: !lock
+        hasBorders: !lock,
+        lockMovementX: lock,
+        lockMovementY: lock
       }))
       this._fabricCanvas.renderAll()
     },
@@ -405,8 +412,8 @@
      * @returns {{data: *, objects: Array, dimensions: (null|*)}}
      */
     serializeGroup: function (group) {
-       const contents = group.getObjects()
-       const serializedContents = contents.map(object => this.serializeObject(object))
+      const contents = group.getObjects()
+      const serializedContents = contents.map(object => this.serializeObject(object))
 
       return {
         data: group.data,
@@ -694,7 +701,7 @@
           break
         case this._annotator.modes.GROUP:
           // enable multi select
-          this._fabricCanvas.selection = true;
+          // this._fabricCanvas.selection = true;
           if (options.target && !this.activeGroup.contains(options.target)) {
             // remove target from all previous groups (should only be one)
             this.groups

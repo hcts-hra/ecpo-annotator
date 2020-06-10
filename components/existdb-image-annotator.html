@@ -198,8 +198,6 @@ This component also creates the basic layout of the app along with a toolbar and
                           class="checked-blue mode-selector"></toggle-icon>
 
             <div class="divider"></div>
-            <!-- TODO: show if active selection -->
-
 
             <!--
             ### icon to switch to 'edit' mode
@@ -467,28 +465,22 @@ This component also creates the basic layout of the app along with a toolbar and
                     this.mode = this.modes.SELECT;
                     // mouseTracker.setTracking(true)
                 });
-
-                document.addEventListener('shape-selected', this._selectedShapeHandler.bind(this))
                 this.addEventListener('keydown', this._keyHandler);
                 this.$.focusDummy.focus();
+                document.addEventListener('shape-selected', this._selectedShapeHandler.bind(this))
             }
 
             /**
              *  initializes the component by creating one OSD and one Fabricjs instance.
              */
             initialize () {
-                console.log('initialize');
-
-                // ### create a wrapper div in the lightDOM that will holds the OSD instance
-                let d = document.createElement('div')
-                d.id = 'osd-slot-container'
-                this.appendChild(d)
-
-                // ### setup OSD and attach it to above div
-                this._initOpenSeadragon();
-                console.log('OSD init done');
+                // setup OSD and attach it to above div
+                this.viewer = this._initOpenSeadragon();
+                this.viewer.world.addOnceHandler('add-item', e => this._handleImageAddSuccess(e))
+                this.viewer.addOnceHandler('add-item-failed', e => this._handleImageAddFailed(e))
+                // FIXME: this will have to change when info.json can be consumed
+                this.viewer.addSimpleImage({ url: this.src })
             }
-
 
             /**
              *  webcomponent lifecycle method for teardown. Unregistering eventlisteners.
@@ -499,108 +491,8 @@ This component also creates the basic layout of the app along with a toolbar and
                 this.removeEventListener('keydown', this._keyHandler);
             }
 
-
             pointToString(type, point) {
                 return `${type}: ${point.x.toPrecision(4)}, ${point.y.toPrecision(4)}`;
-            }
-
-/*
-            onMouseTrackerMove(event) {
-                const viewerX = event.position.x;
-                const viewerY = event.position.y;
-                const windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
-
-                const containerPoint = windowPoint.minus(OpenSeadragon.getElementPosition(this.viewer.element));
-
-                const image1 = this.viewer.world.getItemAt(0);
-                const imagePoint = image1.windowToImageCoordinates(windowPoint);
-
-                const viewportPoint = this.viewer.viewport.windowToViewportCoordinates(windowPoint);
-                this.$.cursorWindowPosition.innerHTML = this.pointToString('w', windowPoint)
-                this.$.cursorContainerPosition.innerHTML = this.pointToString('c', containerPoint)
-                this.$.cursorImagePosition.innerHTML = this.pointToString('i', imagePoint)
-                this.$.cursorViewportPosition.innerHTML = this.pointToString('v', viewportPoint)
-            }
-*/
-
-            _initFabric(options) {
-                this._fabricOverlay = this.viewer.fabricjsOverlay(options);
-
-                // ### switch to 'fill' mode as default
-                this.$.fillMode.toggleChecked()
-            }
-
-            /**
-             *  init OSD using params exposed by this component e.g. `this.zoomPerClick`
-             *
-             *  OSD will append to 'osd-slot-container' div which has been created before in the lightDOM.
-             *
-             *  Note: it is important to keep OSD in lightDOM as the library does not play well with shadowDOM yet.
-             */
-            _initOpenSeadragon() {
-                this.viewer = OpenSeadragon({
-                    element: this.querySelector('#osd-slot-container'),
-                    prefixUrl: "/exist/apps/ecpo/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
-                    visibilityRatio: this.visibilityRatio,
-                    constrainDuringPan: this.constrainDuringPan,
-                    showNavigationControl: this.showNavigationControl,
-                    showNavigator: this.showNavigator,
-                    navigatorId:"navigatorDiv",
-                    navigatorAutoFade:  false,
-                    zoomPerClick: this.zoomPerClick,
-                    zoomPerScroll: this.zoomPerScroll,
-                    animationTime: this.animationTime,
-                    navPrevNextWrap: this.navPrevNextWrap,
-                    showRotationControl: this.showRotationControl,
-                    minZoomImageRatio: this.minZoomImageRatio,
-                    maxZoomPixelRatio: this.maxZoomPixelRatio,
-                    showZoomControl: this.showZoomControl,
-                    showHomeControl: false,
-                    showFullPageControl: false,
-                    sequenceMode: true,
-                    gestureSettingsMouse: {
-                        clickToZoom: false
-                    },
-                    crossOriginPolicy: 'Anonymous',
-                    zoomInButton: this.$.zoomIn,
-                    zoomOutButton: this.$.zoomOut
-                })
-                this.viewer.world.addOnceHandler('add-item', e => {
-                    const size = e.item.getContentSize()
-                    // scale needs to be set to image width
-                    this._initFabric({
-                        scale: size.x, //e.item.getContentSize()
-                        annotator: this
-                    });
-                    this.dispatchEvent(new CustomEvent('annotator-initialized', {}));
-                })
-                this.viewer.addOnceHandler('add-item-failed', e => {
-                    console.error("add-item-failed", e)
-                    // scale needs to be set to image width
-                    this.dispatchEvent(new CustomEvent('show-message', {
-                        composed: true, bubbles: true, detail: {
-                            'message': 'An error occurred, while load the image!'}}));
-                })
-                this.viewer.addSimpleImage({url: this.src })
-            }
-
-            _newShapeHandler(e) {
-//                console.log('NEW SHAPE', e.detail.shape)
-            }
-
-            _changedShapeHandler(e) {
-//                console.log('CHANGED SHAPE', e.detail.shape)
-            }
-
-            _deletedShapeHandler(e) {
-//                console.log('DELETED SHAPE', e.detail.shape)
-            }
-
-            /**
-             *  store latest selected shape
-             */
-            _selectedShapeHandler(e) {
-                this.set('selectedShape', e.detail.shape)
             }
 
             highlight(shapeId) {
@@ -666,16 +558,131 @@ This component also creates the basic layout of the app along with a toolbar and
                 this.viewer.viewport.goHome();
             }
 
-            _srcChanged(newVal, oldVal) {
-                console.log('_srcChanged');
-                if (!newVal || newVal == '') {return}
-                if (!this.init) {
-                    this.initialize();
-                    return
+            addShapesFromAnnotations(annotations) {
+                const isGroupAnnotationBody = b => b.type === 'GroupAnnotation'
+                const isGroupAnnotation = a => a.body.some(isGroupAnnotationBody)
+                const isShapeAnnotation = a => !isGroupAnnotationBody(a)
+                annotations
+                    .filter(isShapeAnnotation)
+                    .forEach(annotation => {
+                        const target = annotation.target[0]
+                        const attributes = {
+                            data: { label: annotation.body[0].value },
+                            id: target.id
+                        }
+                        this._fabricOverlay.importSVG(target.selector.value, attributes)
+                    })
+
+                annotations
+                    .filter(isGroupAnnotation)
+                    .forEach(a => {
+                        const groupData = a.body.filter(b => b.type === 'GroupAnnotation')[0]
+                        groupData.id = a.id
+                        this._fabricOverlay.importGroup(groupData, a.target)
+                    })
+
+                this._fabricOverlay.switchFillMode(this.fill);
+                this._fixShapeSelection()
+            }
+
+            changeSelectedShapes(attributes) {
+                console.log('changeSelectedShapes.label', attributes)
+                this._fabricOverlay.changeSelectedShapes(attributes)
+            }
+
+            clear() {
+                this._fabricOverlay.clear();
+            }
+
+            // INITIALIZATION
+
+            /**
+             *  init OSD using params exposed by this component e.g. `this.zoomPerClick`
+             *
+             *  OSD will append to 'osd-slot-container' div which has been created before in the lightDOM.
+             *
+             *  Note: it is important to keep OSD in lightDOM as the library does not play well with shadowDOM yet.
+             */
+            _initOpenSeadragon() {
+                // create a wrapper div in the lightDOM that holds the OSD instance
+                const osdContainer = document.createElement('div')
+                osdContainer.id = 'osd-slot-container'
+                this.appendChild(osdContainer)
+
+                return OpenSeadragon({
+                    element: this.querySelector('#osd-slot-container'),
+                    prefixUrl: "/exist/apps/ecpo/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
+                    visibilityRatio: this.visibilityRatio,
+                    constrainDuringPan: this.constrainDuringPan,
+                    showNavigationControl: this.showNavigationControl,
+                    showNavigator: this.showNavigator,
+                    navigatorId:"navigatorDiv",
+                    navigatorAutoFade:  false,
+                    zoomPerClick: this.zoomPerClick,
+                    zoomPerScroll: this.zoomPerScroll,
+                    animationTime: this.animationTime,
+                    navPrevNextWrap: this.navPrevNextWrap,
+                    showRotationControl: this.showRotationControl,
+                    minZoomImageRatio: this.minZoomImageRatio,
+                    maxZoomPixelRatio: this.maxZoomPixelRatio,
+                    showZoomControl: this.showZoomControl,
+                    showHomeControl: false,
+                    showFullPageControl: false,
+                    sequenceMode: true,
+                    gestureSettingsMouse: {
+                        clickToZoom: false
+                    },
+                    crossOriginPolicy: 'Anonymous',
+                    zoomInButton: this.$.zoomIn,
+                    zoomOutButton: this.$.zoomOut
+                })
+            }
+
+            _handleImageAddSuccess (e) {
+                // scale needs to be set to image width
+                const size = e.item.getContentSize()
+                this._fabricOverlay = this.viewer.fabricjsOverlay({
+                    scale: size.x,
+                    annotator: this
+                });
+
+                // shapes should be filled by default
+                if (!this.fill) {
+                    this.$.fillMode.toggleChecked()
+                    this.fill = true
                 }
-                if (this.dzi && this.init) {
-                    return this._addTiledImage();
-                }                
+                    
+                console.info('OSD and fabric.js overlay initialized. scale=', size.x);
+                this.dispatchEvent(new CustomEvent('annotator-initialized', {}));
+            }
+
+            _handleImageAddFailed (e) {
+                console.error("add-item-failed", e)
+                // scale needs to be set to image width
+                this.dispatchEvent(new CustomEvent('show-message', {
+                    composed: true, bubbles: true, detail: {
+                        'message': 'The image could not be loaded!'}}));
+            }
+
+            // EVENT HANDLER
+
+            _newShapeHandler(e) {
+//                console.log('NEW SHAPE', e.detail.shape)
+            }
+
+            _changedShapeHandler(e) {
+//                console.log('CHANGED SHAPE', e.detail.shape)
+            }
+
+            _deletedShapeHandler(e) {
+//                console.log('DELETED SHAPE', e.detail.shape)
+            }
+
+            /**
+             *  store latest selected shape
+             */
+            _selectedShapeHandler(e) {
+                this.set('selectedShape', e.detail.shape)
             }
 
             // // Add loaded images to viewer
@@ -702,10 +709,6 @@ This component also creates the basic layout of the app along with a toolbar and
 
             _loadShapes() {
                 this._fabricOverlay.load(this._data);
-            }
-
-            clear() {
-                this._fabricOverlay.clear();
             }
 
             _createRect() {
@@ -747,12 +750,12 @@ This component also creates the basic layout of the app along with a toolbar and
 
             _group() {
                 this.mode = this.modes.GROUP;
-                this._fabricOverlay.deselect();
+                this._fixShapeSelection()
                 this._fabricOverlay.addGroup();
             }
 
-            /*
-            code stolen from osd and routed to this.viewer.
+            /**
+             * code stolen from OSD and routed to this.viewer.
              */
             _onFullScreen(e) {
                 if (this.viewer.isFullPage() && !this.viewer.isFullScreen()) {
@@ -771,104 +774,6 @@ This component also creates the basic layout of the app along with a toolbar and
                 }
             }
 
-            /**
-             *  Manages mode changes. Is invoked whenever `this.mode` is modified as an observer.
-             */
-            _modeChange(newVal, oldVal) {
-                console.log('Mode changed from %s to %s', oldVal, newVal);
-
-                if (!this.init) { return }
-                if (newVal === oldVal) { return }
-
-                const mapMode2Toggle = {}
-                mapMode2Toggle[this.modes.NAVIGATE] = this.$.panzoom
-                mapMode2Toggle[this.modes.SELECT] = this.$.selectMode
-                mapMode2Toggle[this.modes.RECTANGLE] = this.$.rectMode
-                mapMode2Toggle[this.modes.CIRCLE] = this.$.circleMode
-                mapMode2Toggle[this.modes.POLYGON] = this.$.polyMode
-                mapMode2Toggle[this.modes.EDIT] = this.$.editMode
-                mapMode2Toggle[this.modes.GROUP] = this.$.groupMode
-
-                mapMode2Toggle[oldVal].checked = false
-                mapMode2Toggle[newVal].checked = true
-
-                const mode = newVal;
-                switch (mode) {
-                    case this.modes.RECTANGLE:
-                    case this.modes.CIRCLE:
-                    case this.modes.POLYGON:
-                        this.viewer.setMouseNavEnabled(false);
-                        this._fabricOverlay.deselect();
-                        this._fabricOverlay.lockAllObjects(true);
-                        break;
-                    case this.modes.SELECT:
-                        // always call switchFillMode to switch back to shape colors
-                        this._fabricOverlay._fabricCanvas.selection = true;
-                        //this must be called. Otherwise points from edit mode won't be removed from canvas.
-                        this._fabricOverlay.removeLineHandles();
-                        this._fabricOverlay.removePointHandles();
-                        console.log("mode SELECT: selectedShape", this.selectedShape)
-                        if (this.selectedShape) {
-                            this.highlight(this.selectedShape.id);
-                        }
-                        this._fabricOverlay.switchFillMode(this.fill);
-
-                        this.viewer.setMouseNavEnabled(false);
-                        this._fabricOverlay.lockAllObjects(false);
-                        break;
-                    case this.modes.EDIT:
-                        this._fabricOverlay.lockAllObjects(true);
-                        this._fabricOverlay.editActiveShape();
-                        break
-                    case this.modes.GROUP:
-                        this._fabricOverlay.lockAllObjects(false);
-                        this.viewer.setMouseNavEnabled(false);
-                        this._fabricOverlay._fabricCanvas.selection = true;
-
-                        if (!this.fill) {
-                            // show button state, always fill at the beginning of group mode
-                            this.$.fillMode.toggleChecked()
-                            this.fill = true
-                        }
-
-                        // always call switchFillMode to change to group colors
-                        this._fabricOverlay.switchFillMode(this.fill);
-                        break
-                    case this.modes.NAVIGATE:
-//                        this._fabricOverlay.deselect();
-
-                        this.viewer.setMouseNavEnabled(true);
-                        break;
-                    default:
-                        console.log('mode ', mode, ' is not known');
-                }
-
-            }
-
-            addShapesFromAnnotations(annotations) {
-                annotations
-                    .filter(a => !a.body.some(b => b.type === 'GroupAnnotation'))
-                    .forEach(annotation => {
-                        const attributes = {
-                            data: {label: annotation.body[0].value},
-                            id:annotation.target[0].id
-                        }
-                        annotation.target.forEach(target => {
-                            this._fabricOverlay.importSVG(target.selector.value, attributes)
-                        })
-                    })
-                
-                annotations
-                    .filter(a => a.body.some(b => b.type === 'GroupAnnotation'))
-                    .forEach(a => {
-                        const groupData = a.body.filter(b => b.type === 'GroupAnnotation')[0]
-                        this._fabricOverlay.importGroup(groupData, a.target)
-                    })
-
-                this._fabricOverlay.selectAll()
-                this._fabricOverlay.deselect()
-            }
-
             _fillMode() {
                 if (!this.init) { return }
                 this.$.fillMode.toggleChecked()
@@ -876,16 +781,12 @@ This component also creates the basic layout of the app along with a toolbar and
                 this._fabricOverlay.switchFillMode(this.fill);
             }
 
-            _noShapeSelected(shape) {
-                return shape === null
-            }
-
             /**
              *  keyboard shortcuts are handled here
              */
             _keyHandler(e) {
                 const key = e.key;
-                console.log('_keyHandler', key);
+                console.debug('_keyHandler', key);
 
                 switch (key) {
                     case 's': this._select(); break;
@@ -909,9 +810,134 @@ This component also creates the basic layout of the app along with a toolbar and
                 }
             }
 
-            changeSelectedShapes(attributes) {
-                console.log('changeSelectedShapes.label', attributes)
-                this._fabricOverlay.changeSelectedShapes(attributes)
+/*
+            onMouseTrackerMove(event) {
+                const viewerX = event.position.x;
+                const viewerY = event.position.y;
+                const windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
+
+                const containerPoint = windowPoint.minus(OpenSeadragon.getElementPosition(this.viewer.element));
+
+                const image1 = this.viewer.world.getItemAt(0);
+                const imagePoint = image1.windowToImageCoordinates(windowPoint);
+
+                const viewportPoint = this.viewer.viewport.windowToViewportCoordinates(windowPoint);
+                this.$.cursorWindowPosition.innerHTML = this.pointToString('w', windowPoint)
+                this.$.cursorContainerPosition.innerHTML = this.pointToString('c', containerPoint)
+                this.$.cursorImagePosition.innerHTML = this.pointToString('i', imagePoint)
+                this.$.cursorViewportPosition.innerHTML = this.pointToString('v', viewportPoint)
+            }
+*/
+
+            // OBSERVERS
+
+            _srcChanged(newVal, oldVal) {
+                console.log('_srcChanged');
+                if (!newVal || newVal == '') {return}
+                if (!this.init) {
+                    this.initialize();
+                    return
+                }
+                if (this.dzi && this.init) {
+                    return this._addTiledImage();
+                }                
+            }
+
+            /**
+             *  Manages mode changes. Is invoked whenever `this.mode` is modified as an observer.
+             */
+            _modeChange(newVal, oldVal) {
+                console.log('Mode changed from %s to %s', oldVal, newVal);
+
+                if (!this.init) { return }
+                if (newVal === oldVal) { return }
+
+                // call workaround when user exits group mode 
+                if (oldVal === this.modes.GROUP) { this._fixShapeSelection() }
+
+                const mapMode2Toggle = {}
+                mapMode2Toggle[this.modes.NAVIGATE] = this.$.panzoom
+                mapMode2Toggle[this.modes.SELECT] = this.$.selectMode
+                mapMode2Toggle[this.modes.RECTANGLE] = this.$.rectMode
+                mapMode2Toggle[this.modes.CIRCLE] = this.$.circleMode
+                mapMode2Toggle[this.modes.POLYGON] = this.$.polyMode
+                mapMode2Toggle[this.modes.EDIT] = this.$.editMode
+                mapMode2Toggle[this.modes.GROUP] = this.$.groupMode
+
+                mapMode2Toggle[oldVal].checked = false
+                mapMode2Toggle[newVal].checked = true
+
+                const mode = newVal;
+                switch (mode) {
+                    case this.modes.RECTANGLE:
+                    case this.modes.CIRCLE:
+                    case this.modes.POLYGON:
+                        this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay.deselect();
+                        this._fabricOverlay.lockAllObjects(true);
+                        break;
+                    case this.modes.SELECT:
+                        // this must be called. Otherwise points from edit mode won't be removed from canvas.
+                        this._fabricOverlay.removeLineHandles();
+                        this._fabricOverlay.removePointHandles();
+                        console.log("mode SELECT: selectedShape", this.selectedShape)
+                        if (this.selectedShape) {
+                            this.highlight(this.selectedShape.id);
+                        }
+                        // always call switchFillMode to switch back to shape colors
+                        this._fabricOverlay.switchFillMode(this.fill);
+                        this._fabricOverlay.lockAllMovement(false);
+                        this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay.lockAllObjects(false);
+                        break;
+                    case this.modes.EDIT:
+                        this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay.lockAllObjects(true);
+                        this._fabricOverlay.editActiveShape();
+                        break
+                    case this.modes.GROUP:
+                        this._fabricOverlay.deselect();
+                        this._fabricOverlay.lockAllObjects(false);
+                        this._fabricOverlay.lockAllMovement(true);
+                        this.viewer.setMouseNavEnabled(false);
+                        // this._fabricOverlay._fabricCanvas.selection = true;
+
+                        if (!this.fill) {
+                            // show button state, always fill at the beginning of group mode
+                            this.$.fillMode.toggleChecked()
+                            this.fill = true
+                        }
+
+                        // always call switchFillMode to change to group colors
+                        this._fabricOverlay.switchFillMode(this.fill);
+                        break
+                    case this.modes.NAVIGATE:
+                        this._fabricOverlay.removeLineHandles();
+                        this._fabricOverlay.removePointHandles();
+                        if (this.selectedShape) {
+                            this.highlight(this.selectedShape.id);
+                        }
+                        this.viewer.setMouseNavEnabled(true);
+                        break;
+                    default:
+                        console.log('mode ', mode, ' is not known');
+                }
+
+            }
+
+            // HELPERS
+
+            _noShapeSelected(shape) {
+                return shape === null
+            }
+
+            /**
+             * workaround to make sure all shapes are selectable
+             * at their appropriate positions
+             */
+            _fixShapeSelection() {
+                this._fabricOverlay.selectAll()
+                this._fabricOverlay.deselect()
             }
 
         }
