@@ -31,18 +31,55 @@ on Polymer 2.0 Web Components in the frontend.
 
 ## Requirements and Dependencies
 
-* eXist-db 5.0rc8 or higher
-* [WAP](https://gitlab.existsolutions.com/foss/web-annotation-protocol) 3.0.0 or higher
+* eXist-db 5.0.0 or higher
+* [WAP](https://github.com/eXistSolutions/web-annotation-service/releases) 3.0.3 or higher
 * Polymer 2.x (bundled)
-* OpenSeadragon 2.3.0 or higher (bundled)
-* Fabricjs 2.6.0 or higher (bundled)
+
+* OpenSeadragon 2.4.0 or higher (bundled)
+* Fabricjs 3.6.1 or higher (bundled)
 
 
 ## Building the app
 
-The app is built via Ant with this command:
+Install npm and bower dependencies
+
+```
+npm install
+```
+
+```
+bower install
+```
+
+The app is then built via Ant with this command:
 
 ```
 ant xar
 ```
 
+Since the xar task is the default you can also just call
+
+```
+ant
+```
+
+## Development
+
+`gulpfile.js` in the project root defines two tasks `gulp deploy` and `gulp watch` that lets you 
+upload and test changes you made to the code without having to package and install ecpo each time.
+
+For this to work you might have to adapt the connection settings on your local checkout to match
+your settings.
+
+NOTE: do not commit those changes
+
+The default connection settings are:
+
+```
+const exClient = exist.createClient({
+    host: 'localhost',
+    port: '8080',
+    path: '/exist/xmlrpc',
+    basic_auth: {user: 'admin', pass: ''}
+})
+```
