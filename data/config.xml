@@ -1,0 +1,6 @@
+<labels>
+    <label name="image" color="blue">Image or Drawing</label>
+    <label name="article" color="orange">Article</label>
+    <label name="advertisement" color="green">Advertisement</label>
+    <label name="additional" color="purple">Additional Information</label>
+</labels>

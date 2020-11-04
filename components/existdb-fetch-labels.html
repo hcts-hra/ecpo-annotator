@@ -1,0 +1,98 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-listbox/paper-listbox.html">
+<link rel="import" href="../bower_components/paper-item/paper-item.html">
+
+<dom-module id="existdb-fetch-labels">
+    <template>
+        <style>
+            :host {
+                display: block;
+            }
+            paper-item{
+                --paper-item-selected:{
+                    background: var(--paper-grey-500);
+                    color:var(--paper-blue-500);
+                    font-weight:900;
+                    font-style: italic;
+                    font-size:1.2em;
+                };
+                color:white;
+            }
+            paper-listbox{
+                padding: 0;
+            }
+        </style>
+        <iron-ajax id="loadLabels"
+                   verbose with-credentials
+                   method="get"
+                   handle-as="json"
+                   last-response="{{labels}}"
+                   url="/exist/apps/ecpo/labels/"
+                   on-error="_handleError"
+                   auto></iron-ajax>
+
+        <paper-listbox id="label" selected="{{selected}}" items="[[labels]]" as="label" attr-for-selected="name" disabled="[[readonly]]">
+            <template id="labelList" is="dom-repeat" items="[[labels]]" as="label">
+                <paper-item name="[[label.name]]" style="color:[[label.color]];">[[label.label]]</paper-item>
+            </template>
+        </paper-listbox>
+
+    </template>
+
+    <script>
+        /**
+         * Loads a list of labels that are used to classify an annotation. Is used by `existdb-annotation-item`.
+         *
+         * Will auto-load the list of labels in a JSON format.
+         *
+         * @customElement
+         * @polymer
+         * @demo demo/index.html
+         */
+        class ExistdbFetchLabels extends Polymer.Element {
+            static get is() {
+                return 'existdb-fetch-labels';
+            }
+
+            static get properties() {
+                return {
+                    labels: {
+                        type: Array,
+                        value: _ => []
+                    },
+                    selected: {
+                        type: String,
+                        reflectToAttribute: true,
+                        observer: '_selectedChanged'
+                    },
+                    readonly: {
+                        type: Boolean,
+                        value: false
+                    }
+                };
+            }
+
+            connectedCallback() {
+                super.connectedCallback();
+            }
+
+            _handleError(){
+                alert("Couldn't load labels " + this.$.loadLabels.lastError);
+            }
+
+            getLabelByName (name) {
+                return this.labels.filter(label => label.name === name)[0]
+            }
+
+            _selectedChanged(newVal, oldVal) {
+                const label = this.getLabelByName(newVal)
+                if (!newVal || !label) { return }
+                if (this.readonly) { return }
+                this.dispatchEvent(new CustomEvent('label-selected', {bubbles: true, composed: true, detail: {label:label}}));
+            }
+        }
+
+        window.customElements.define(ExistdbFetchLabels.is, ExistdbFetchLabels);
+    </script>
+</dom-module>

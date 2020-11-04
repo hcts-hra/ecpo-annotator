@@ -1,0 +1,61 @@
+{
+  "name": "paper-chip",
+  "version": "1.1.0",
+  "description": "A chip web component made with Polymer 2 following Material Design guidelines",
+  "main": "paper-chip.html",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fabbricadigitale/paper-chip.git"
+  },
+  "bug": {
+    "url": "https://github.com/fabbricadigitale/paper-chip/issues"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "bower": "^1.8.0",
+    "conventional-changelog-cli": "^1.2.0",
+    "eslint": "^3.12.2",
+    "eslint-plugin-html": "^2.0.3",
+    "git-rev-sync": "^1.8.0",
+    "polyserve": "^0.15.0",
+    "shx": "^0.2.2",
+    "validate-commit": "^3.2.1",
+    "web-component-tester": "^6.0.0"
+  },
+  "config": {
+    "directories": {
+      "src": "scripts",
+      "demo": "demo",
+      "component": "paper-chip",
+      "deps": "bower_components"
+    }
+  },
+  "scripts": {
+    "reset": "shx rm -rf node_modules/ $npm_package_config_directories_deps *.log",
+    "clean": "shx rm -rf *.log $npm_package_config_directories_deps/$npm_package_config_directories_component",
+    "get:deps": "bower install --config.directory=$npm_package_config_directories_deps",
+    "lint": "eslint *.html **/*.html",
+    "postinstall": "npm run get:deps",
+    "changelog": "conventional-changelog -p eslint -i CHANGELOG.md -s",
+    "from:master": "node -e 'process.exit(require(\"git-rev-sync\").branch(process.cwd()) !== \"master\")'",
+    "changelog:edit": "$(git var GIT_EDITOR) CHANGELOG.md",
+    "preversion": "npm run from:master",
+    "version": "npm run changelog && npm run changelog:edit && git add CHANGELOG.md",
+    "postversion": "git push && git push --tags && git checkout develop && git merge master && git push && git checkout master",
+    "serve": "polyserve -c $npm_package_config_directories_deps",
+    "test": "wct"
+  },
+  "keywords": [
+    "polymer",
+    "web component",
+    "material design",
+    "chip",
+    "tag",
+    "es2015"
+  ],
+  "git": {
+    "scripts": {
+      "commit-msg": "./node_modules/.bin/validate-commit-msg --preset eslint $1"
+    }
+  }
+}

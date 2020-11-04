@@ -1,0 +1,95 @@
+{
+  "@context": "http://www.w3.org/ns/anno.jsonld",
+  "id": "http://host:port/annotation/w3c/aea27124-b3be-417a-a3f3-ce9803f9afb4/ad00151a-463c-4566-8f7b-2093e8e613b2",
+  "type": "Annotation",
+  "created": "2018-06-21T08:01:25.011Z",
+  "creator": [
+    {
+      "type": "Software",
+      "name": "Akita"
+    },
+    {
+      "type": "Person",
+      "name": "MK"
+    }
+  ],
+  "modified": "2018-06-21T08:02:31.048Z",
+  "body": [
+    {
+      "type": "TextualBody",
+      "format": "text/plain",
+      "dc:subject": "TextRegion",
+      "creator": [
+        {
+          "type": "Software",
+          "name": "Akita"
+        },
+        {
+          "type": "Person",
+          "name": "MK"
+        }
+      ],
+      "value": "Interlinearglosse",
+      "purpose": "classifying"
+    },
+    {
+      "type": "TextualBody",
+      "format": "text/plain",
+      "dc:subject": "TextRegion",
+      "creator": [
+        {
+          "type": "Software",
+          "name": "Akita"
+        },
+        {
+          "type": "Person",
+          "name": "MK"
+        }
+      ],
+      "value": "16a1",
+      "purpose": "tagging"
+    },
+    {
+      "type": "TextualBody",
+      "dc:subject": "TextRegion",
+      "creator": [
+        {
+          "type": "Software",
+          "name": "Akita"
+        },
+        {
+          "type": "Person",
+          "name": "MK"
+        }
+      ],
+      "value": "bestimmt werden",
+      "purpose": "tadirah:translation"
+    },
+    {
+      "type": "TextualBody",
+      "dc:subject": "TextRegion",
+      "creator": [
+        {
+          "type": "Software",
+          "name": "Akita"
+        },
+        {
+          "type": "Person",
+          "name": "MK"
+        }
+      ],
+      "value": "ὁρίσασθαι",
+      "purpose": "tadirah:transcription"
+    }
+  ],
+  "target": {
+    "type": "SpecificResource",
+    "selector": {
+      "type": "SvgSelector",
+      "value": "<svg><rect x=\"591\" y=\"2610\" width=\"192\" height=\"78\"/></svg>"
+    },
+    "source": "http://host:port/pathToImage"
+  },
+  "motivation": "describing",
+  "via": "2018-06-21T08:01:25.011Z"
+}

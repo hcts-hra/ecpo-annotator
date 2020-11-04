@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <meta xmlns="http://exist-db.org/xquery/repo">
-    <description>epco</description>
+    <description>ecpo</description>
     <author/>
     <website/>
     <status>alpha</status>
     <license>GNU-LGPL</license>
     <copyright>true</copyright>
     <type>application</type>
-    <target>epco</target>
-    <prepare></prepare>
-    <finish/>
+    <target>ecpo</target>
+    <prepare/>
+    <finish>modules/migrate.xq</finish>
+    <permissions user="ecpo" group="ecpo" mode="rwxrwxr--"/>
 </meta>

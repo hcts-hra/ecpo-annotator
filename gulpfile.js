@@ -1,89 +1,75 @@
 'use strict';
 
 var gulp = require('gulp'),
-    exist = require('gulp-exist'),
-    watch = require('gulp-watch'),
-    less = require('gulp-less'),
-    del = require('del'),
-    path = require('path'),
-    LessPluginCleanCSS = require('less-plugin-clean-css'),
-    LessAutoprefix = require('less-plugin-autoprefix')
+    exist = require('@existdb/gulp-exist'),
+    del = require('del')
 
 var PRODUCTION = (!!process.env.NODE_ENV || process.env.NODE_ENV === 'production')
 
 console.log('Production? %s', PRODUCTION)
 
-exist.defineMimeTypes({
-    'application/xml': ['odd']
-})
-
-var exClient = exist.createClient({
+const exClient = exist.createClient({
     host: 'localhost',
     port: '8080',
     path: '/exist/xmlrpc',
     basic_auth: {user: 'admin', pass: ''}
 })
 
-var html5TargetConfiguration = {
-    target: '/db/apps/epco',
+const html5TargetConfiguration = {
+    target: '/db/apps/ecpo',
     html5AsBinary: true
 }
 
-var targetConfiguration = {
-    target: '/db/apps/epco/',
-    html5AsBinary: true
+const targetConfiguration = {
+    target: '/db/apps/ecpo/',
+    html5AsBinary: false
 }
 
-gulp.task('clean', function () {
+function clean () {
     return del(['build/**/*']);
-});
+}
 
-// styles //
-
-var lessPath = './resources/css/style.less'
-var stylesPath = 'resources/css/*'
-var cleanCSSPlugin = new LessPluginCleanCSS({advanced: true})
-var autoprefix = new LessAutoprefix({browsers: ['last 2 versions']})
-
-gulp.task('styles', function () {
-    return gulp.src(lessPath)
-        .pipe(less({plugins: [cleanCSSPlugin, autoprefix]}))
-        .pipe(gulp.dest('./resources/css'))
-})
-
-gulp.task('deploy:styles', ['styles'], function () {
+function deploy_styles () {
     return gulp.src('resources/css/*.css', {base: './'})
         .pipe(exClient.newer(targetConfiguration))
         .pipe(exClient.dest(targetConfiguration))
-})
-
-// odd files //
-
-var oddPath = 'resources/odd/**/*';
-gulp.task('odd:deploy', function () {
-    return gulp.src(oddPath, {base: './'})
-        .pipe(exClient.newer(targetConfiguration))
-        .pipe(exClient.dest(targetConfiguration))
-})
-
-gulp.task('odd:watch', function () {
-    gulp.watch(oddPath, ['odd:deploy'])
-})
+}
 
 // files in project root //
 
-var componentPaths = [
+const components = [
     'components/*.html',
-    'bower_components/**/*'
+    'components/**/*.js'
 ];
 
-gulp.task('deploy:components', function () {
+function deploy_components () {
     return gulp.src(components, {base: './'})
         .pipe(exClient.newer(html5TargetConfiguration))
         .pipe(exClient.dest(html5TargetConfiguration))
-})
+}
 
-var otherPaths = [
+// extracted for speed of normal development workflow
+
+const bower = [
+    'bower_components/**/*',
+    '!bower_components/**/LICENSE',
+    '!bower_components/**/AUTHORS',
+    '!bower_components/**/Makefile',
+    '!bower_components/**/*.mustache',
+    '!bower_components/**/yarn.lock',
+    '!bower_components/**/bin/*',
+    '!bower_components/**/docs/*',
+    '!bower_components/**/man/*',
+    '!bower_components/**/test/*',
+]
+
+function deploy_bower () {
+    return gulp.src(bower, {base: './'})
+        .pipe(exClient.newer(html5TargetConfiguration))
+        .pipe(exClient.dest(html5TargetConfiguration))
+}
+
+const otherPaths = [
     '*.html',
     '*.xql',
     'templates/**/*',
@@ -94,25 +80,31 @@ var otherPaths = [
     'components/demo/**'
 ];
 
-gulp.task('deploy:other', function () {
+function deploy_other () {
     return gulp.src(otherPaths, {base: './'})
         .pipe(exClient.newer(targetConfiguration))
         .pipe(exClient.dest(targetConfiguration))
-})
+}
 
-var components = [
-    'components/*.html',
-    'components/**/*.js',
-    // 'bower_components/**/*'
-];
+// this will wath bower dependencies also
+function watch_all () {
+    gulp.watch('resources/css/!*', deploy_styles)
+    gulp.watch(otherPaths, deploy_other)
+    gulp.watch(components, deploy_components)
+    gulp.watch(bower, deploy_bower)
+}
 
+// it is way faster not to watch bower dependencies due to massive amount of files to watch
+function watch () {
+    gulp.watch('resources/css/!*', deploy_styles)
+    gulp.watch(otherPaths, deploy_other)
+    gulp.watch(components, deploy_components)
+}
 
-gulp.task('deploy', ['deploy:other', 'deploy:components', 'deploy:styles'])
+const deploy = gulp.parallel(deploy_other, deploy_components, deploy_styles, deploy_bower)
 
-gulp.task('watch', ['deploy'], function () {
-    gulp.watch('resources/css/!*', ['deploy:styles'])
-    gulp.watch(otherPaths, ['deploy:other'])
-    gulp.watch(components, ['deploy:components'])
-})
-
-gulp.task('default', ['watch'])
+exports.clean = clean
+exports.deploy = deploy
+exports.watch_all = gulp.series(deploy, watch_all)
+exports.watch = gulp.series(deploy, watch)
+exports.default = gulp.series(deploy, watch_all)

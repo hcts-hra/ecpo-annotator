@@ -1,0 +1,520 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html" />
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html" />
+<link rel="import" href="../bower_components/paper-styles/color.html" />
+<link rel="import" href="../bower_components/paper-styles/typography.html" />
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html" />
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html" />
+<link rel="import" href="../bower_components/paper-button/paper-button.html" />
+
+<link rel="import" href="existdb-annotation-item.html" />
+
+<dom-module id="existdb-annotation-list">
+  <template>
+    <style>
+      :host {
+        display: block;
+        text-align: center;
+        @apply --paper-font-common-base;
+      }
+
+      .actions {
+        background-color: var(--paper-grey-800);
+      }
+
+      paper-button {
+        margin: 10px 0;
+        font-size: 14px;
+      }
+
+      .button-save {
+        background: var(--paper-green-200);
+      }
+
+      .button-reset {
+        background: var(--paper-orange-200);
+      }
+    </style>
+
+    <iron-ajax
+      id="annotationsAPI"
+      url="/exist/apps/ecpo/api/annotations/"
+      on-error="_handleError"
+      verbose
+      with-credentials
+      handle-as="json"
+    ></iron-ajax>
+
+    <existdb-annotation-item
+      id="{{ current.id }}"
+      body="{{ current.body }}"
+      target="{{ current.target }}"
+      type="{{ current.type }}"
+      on-annotation-changed="_handleAnnotationItemChange"
+    ></existdb-annotation-item>
+
+    <div class="actions">
+      <paper-button class="button-save" raised on-click="save">save</paper-button>
+      <paper-button class="button-reset" raised on-click="reset">reset</paper-button>
+    </div>
+</template>
+
+  <script>
+    /**
+     * `existdb-annotation-list` loads annotations via AJAX call to WAP app.
+     *
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ExistdbAnnotationList extends Polymer.Element {
+      static get is() {
+        return "existdb-annotation-list";
+      }
+
+      static get properties() {
+        return {
+          source: {
+            type: String,
+            value: "",
+            observer: "load"
+          },
+          annotations: {
+            type: Array,
+            value: _ => []
+          },
+          // TODO: refactor to data attribute in shape
+          targetToAnnotationMap: {
+            type: Object,
+            value: _ => { return {} }
+          },
+          current: {
+            type: Object,
+            value: _ => { return {} },
+            notify: true
+          }
+        };
+      }
+
+      /**
+       * get index in annotations array for a give shape id.
+       *
+       * @param id - the id of a fabricjs shape
+       * @returns {*}
+       */
+      itemIndexByShapeId(id) {
+        const annotationId = this.targetToAnnotationMap[id];
+        return this.itemIndexById(annotationId);
+      }
+
+      /**
+       * get the annotation for a given shape id
+       *
+       * @param shapeId - the id of a shape
+       * @returns {any}
+       */
+      itemByShapeId(shapeId) {
+        const annotationId = this.targetToAnnotationMap[shapeId];
+        console.log("ANNOTATION", annotationId);
+        const index = this.itemIndexById(annotationId);
+
+        return this.get(["annotations", index]);
+      }
+
+      itemIndexById(id) {
+        return this.annotations.findIndex(annotation => annotation.id === id);
+      }
+
+      connectedCallback() {
+        super.connectedCallback();
+      }
+
+      ready() {
+        super.ready();
+      }
+
+      handle(e) {
+        console.log("annotation-list handle e ", e);
+
+        // group actions
+
+        if (e.type === "group-created") {
+            return this._handleGroupCreated(e)
+        }
+
+        if (e.type === "group-changed") {
+          return this._handleGroupChanged(e)
+        }
+
+        if (e.type === "group-deleted") {
+          return this._handleGroupDeleted(e)
+        }
+
+        // shape actions
+        if (e.type === "shape-selected") {
+          return this._handleShapeSelected(e)
+        }
+
+        if (!e.detail.shape || !e.detail.shape.id) {
+          return console.warn("list handler called without a shape");
+        }
+
+        const shapeId = e.detail.shape.id;
+        if (e.type === "shape-created") {
+          const newAnnotation = this.createAnnotation({
+            id: "s-" + Date.now(),
+            target: [this.createAnnotationTarget(e.detail.shape)]
+          });
+
+          this.targetToAnnotationMap[shapeId] = newAnnotation.id;
+          this.setCurrent(newAnnotation);
+          return this.push("annotations", newAnnotation);
+        }
+
+        const index = this.itemIndexByShapeId(shapeId);
+        if (index < 0) {
+          return console.warn('could not find shape with id ', shapeId);
+        }
+
+        const old = this.get(["annotations", index]);
+        const targetIndex = old.target.map(shape => shape.id).indexOf(shapeId);
+
+        if (e.type === "shape-deleted") {
+          // find index of connected entry by e.detail.id
+          console.log("shape", shapeId, "was removed");
+          const index = this.itemIndexByShapeId(shapeId);
+          if (index < 0) {
+            return console.warn("deleted shape had no annotation");
+          }
+          console.log("annotation index to remove:", index);
+          const anno = this.get(["annotations", index]);
+          console.log("remove annotation:", anno);
+          console.log("current targets:", anno.target);
+
+          // remove target from annotation
+          const targetIndex = anno.target.map(t => t.id).indexOf(shapeId);
+          this.splice(["annotations", index, "target"], targetIndex, 1);
+
+          // remove annotation if it has no target left
+          if (this.get(["annotations", index, "target"]).length === 0) {
+            console.log("remove empty annotation:", anno.id);
+            this.splice("annotations", index, 1);
+          }
+
+          return;
+        }
+
+        if (e.type === "shape-changed") {
+          // find index of connected entry by e.detail.id
+          const updated = this.createAnnotationTarget(e.detail.shape);
+          return this.splice(["annotations", index, "target"], targetIndex, 1, updated);
+        }
+
+
+        console.warn("annotation-list", "unhandled event", e);
+      }
+
+      setCurrent(annotation) {
+        this.set("current", annotation);
+        this.notifyPath("current.id");
+        this.notifyPath("current.target");
+        this.notifyPath("current.body");
+      }
+
+      createAnnotationTarget(shape) {
+        return {
+          id: shape.id,
+          type: "SpecificResource",
+          selector: {
+            type: "SvgSelector",
+            value: shape.svg
+          },
+          source: this.source
+        };
+      }
+
+      createAnnotationBody() {
+        return {
+          type: "CategoryLabel",
+          value: {
+            name: "uncategorized",
+            color: "grey"
+          }
+        };
+      }
+
+      createGroupAnnotationBody(detail) {
+        console.log("createGroupAnnotationBody", detail.data);
+        return [
+          {
+            type: "GroupAnnotation",
+            color: detail.data.color,
+            id: detail.data.id
+          },
+          {
+            type: "CategoryLabel",
+            value: {
+              name: this._determineGroupAnnotationType(detail.objects)
+            }
+          }
+        ];
+      }
+
+      createAnnotation(annotation) {
+        const annotationDefaults = {
+          type: "Annotation",
+          created: new Date().toISOString(),
+          body: [],
+          target: []
+        };
+        return Object.assign({}, annotationDefaults, annotation);
+      }
+
+      setAnnotationBody(annotationId, body) {
+        this.set(
+          ["annotations", this.itemIndexById(annotationId), "body"],
+          body
+        );
+      }
+
+      addAnnotationContext(annotation) {
+        annotation["@context"] = "http://www.w3.org/ns/anno.jsonld";
+        return annotation;
+      }
+
+      addAnnotation(annotation) {
+        this.push("annotations", annotation);
+        // only add shape annotations to targetToAnnotationMap
+        // group annotations have 2 body elements
+        if (annotation.body.some(b => b.type === 'GroupAnnotation')) { return }
+
+        annotation.target.map(
+          target => (this.targetToAnnotationMap[target.id] = annotation.id)
+        );
+      }
+
+      switchColorMode() {
+        annotations.forEach(annotation => this._switchColor(annotation));
+      }
+
+      _switchColor(annotation) {
+        console.log("annotation _switchColor ", annotation);
+      }
+
+      save() {
+        const annotations = this.get("annotations")
+        const categorized = annotations.filter(annotation => annotation.body.length)
+        if (annotations.length > categorized.length) {
+          const amount = annotations.length - categorized.length
+          this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message': amount + ' uncategorized annotations will not be saved'}}));
+        }
+  
+        const validAnnotations = categorized.filter(annotation => annotation.target.length)
+        if (categorized.length > validAnnotations.length) {
+          console.log("cleanup of", categorized.length - validAnnotations.length, "invalid annotations")
+        }
+
+        const basicContainer = {
+          "@context": [
+            "http://www.w3.org/ns/anno.jsonld",
+            "http://www.w3.org/ns/ldp.jsonld"
+          ],
+          document: this.source,
+          type: "BasicContainer",
+          items: validAnnotations
+        };
+
+        // also store state in localstorage
+        const stringified = JSON.stringify(basicContainer);
+        // console.log("save", stringified);
+
+        // store on server
+        const api = this.$.annotationsAPI;
+        api.body = stringified;
+        api.method = "post";
+        api.contentType = "application/ld+json";
+
+        const xhr = api.generateRequest();
+        xhr.completes.then(this._handleSaveResponse.bind(this));
+
+        localStorage.setItem("annotations", stringified);
+      }
+
+      _handleSaveResponse(request) {
+        const savedAnnotations = request.response.result.filter(r => r && r.id)
+        console.log("_handleLoadResponse", savedAnnotations);
+        this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message': savedAnnotations.length + ' annotations saved'}}));
+      }
+
+      _getPage(params) {
+        const api = this.$.annotationsAPI;
+        api.body = null;
+        api.method = "get";
+        api.headers = {
+          Accept:
+            'application/ld+json; profile="http://www.w3.org/ns/anno.jsonld"',
+          Prefer:
+            'return=representation; include="http://www.w3.org/ns/oa#PreferContainedDescriptions"'
+        };
+        api.params = params;
+
+        const xhr = api.generateRequest();
+        xhr.completes.then(this._handleLoadResponse.bind(this));
+      }
+
+      load(newSrc, oldSrc) {
+        if (!newSrc || newSrc == "") {
+          return;
+        }
+        this._getPage({ document: newSrc });
+      }
+
+      reset(e) {
+        this.targetToAnnotationMap = {};
+        this.current = {};
+        this.annotations = []
+        
+        this.dispatchEvent(new CustomEvent("annotations-reload"));
+        this._getPage({ document: this.source });
+      }
+
+      _handleLoadResponse(request) {
+        console.log("_handleLoadResponse", request.response);
+        const container = request.response;
+
+        // basic response validity check
+        if (
+          !container ||
+          !container.type ||
+          container.type.indexOf("AnnotationPage") < 0
+        ) {
+          return console.info("no annotations found", container);
+        }
+
+        // add annotations
+        const items = container.items
+        console.debug("got Annotations", items);
+        items.forEach(annotation => this.addAnnotation(annotation));
+
+        // need to fetch next paged result?
+        if (this._hasNextPage(request.response)) {
+          console.debug("request next page");
+          // replacement needed because exist will always encode &
+          const parsed = new URL(request.response.next);
+          // TODO: add page parameter
+          this._getPage({
+            document: parsed.searchParams.get("document"),
+            page: parsed.searchParams.get("page")
+          });
+          return; // do not dispatch event now
+        }
+
+        console.info("All annotations received. Finishing up...");
+
+        // inform about new annotations
+        this.dispatchEvent(new CustomEvent("annotations-loaded"));
+        this.dispatchEvent(new CustomEvent('show-message', {
+          composed: true, bubbles: true, detail: { message: this.annotations.length + ' annotations loaded'}}));
+        console.log("loaded Annotations", this.annotations);
+      }
+
+      _hasNextPage(container) {
+        return container.id !== container.last;
+      }
+
+      _handleError(e) {
+        console.error("Error loading annotations:", e, this.$.annotationsAPI.lastError);
+        this.dispatchEvent(new CustomEvent('show-message', {
+            composed: true, bubbles: true, detail: { message: 'Annotations could not be loaded!'}}));
+      }
+
+      _handleAnnotationItemChange(e) {
+        console.log("_handleAnnotationItemChange", e);
+        const index = this.itemIndexById(e.detail.id);
+        const anno = this.get(["annotations", index]);
+        anno.body = e.detail.body;
+        anno.target = e.detail.target;
+        this.splice("annotations", index, 1, anno);
+      }
+
+      _determineGroupAnnotationType(members) {
+        const bodies = members.map(shape => {
+          const annotation = this.itemByShapeId(shape.id);
+          return annotation.body[0]; // shapes only have 1 body element
+        });
+
+        if (bodies.some(b => b.value.name === "article")) {
+          return "article";
+        }
+
+        if (bodies.some(b => b.value.name === "advertisement")) {
+          return "advertisement";
+        }
+
+        if (bodies.every(b => b.value.name === "image")) {
+          return "image";
+        }
+        return "additional";
+      }
+
+      _handleGroupCreated(e) {
+        const body = this.createGroupAnnotationBody(e.detail);
+        const target = e.detail.objects.map(this.createAnnotationTarget.bind(this))
+        const newAnnotation = this.createAnnotation({ id: e.detail.data.id, body: body, target: target });
+
+        this.push("annotations", newAnnotation);
+        return this.setCurrent(newAnnotation);
+      }
+
+      _handleGroupChanged(e) {
+        const groupAnnotationIndex = this.itemIndexById(e.detail.data.id);
+        if (groupAnnotationIndex < 0) {
+          return console.warn('could not find group with id ', e.detail.data.id);
+        }
+
+        const body = this.createGroupAnnotationBody(e.detail);
+        this.set(["annotations", groupAnnotationIndex, "body"], body);
+
+        const target = e.detail.objects.map(this.createAnnotationTarget.bind(this));
+        this.set(["annotations", groupAnnotationIndex, "target"], target);
+
+        this.setCurrent(this.get(["annotations", groupAnnotationIndex]));
+        return this.notifyPath(["annotations", groupAnnotationIndex]);
+      }
+
+      _handleGroupDeleted(e) {
+        const groupAnnotationIndex = this.itemIndexById(e.detail.id);
+        if (groupAnnotationIndex < 0) {
+          return console.warn('could not find group with id ', e.detail.data.id);
+        }
+        this.splice("annotations", groupAnnotationIndex, 1);
+        return console.log("annotation-list", "group-event", e.detail);
+      }
+
+      _handleShapeSelected(e) {
+        // nothing selected
+        if (!e.detail.shape) {
+          console.log("no shape selected");
+          return this.setCurrent(e.detail)
+        }
+        const anno = this.itemByShapeId(e.detail.shape.id);
+        return this.setCurrent(anno);
+      }
+
+      _handleShapeCreated(e) {
+
+      }
+      _handleShapeChanged(e) {
+
+      }
+      _handleShapeDeleted(e) {
+
+      }
+    }
+
+    window.customElements.define(
+      ExistdbAnnotationList.is,
+      ExistdbAnnotationList
+    );
+  </script>
+</dom-module>

@@ -1,0 +1,24 @@
+{
+  "@context" : "http://iiif.io/api/image/2/context.json",
+  "@id" : "http://kjc-sv010.kjc.uni-heidelberg.de:8081/fcgi-bin/iipsrv.fcgi?IIIF=%2FimageStorage%2Fecpo_new%2Fjingbao%2F1919%2F04%2Fjb_0013_1919-04-09_0001%2B0004.tif%2",
+  "protocol" : "http://iiif.io/api/image",
+  "width" : 4864,
+  "height" : 3456,
+  "sizes" : [
+     { "width" : 76, "height" : 54 },
+     { "width" : 152, "height" : 108 },
+     { "width" : 304, "height" : 216 },
+     { "width" : 608, "height" : 432 },
+     { "width" : 1216, "height" : 864 },
+     { "width" : 2432, "height" : 1728 }
+  ],
+  "tiles" : [
+     { "width" : 256, "height" : 256, "scaleFactors" : [ 1, 2, 4, 8, 16, 32, 64 ] }
+  ],
+  "profile" : [
+     "http://iiif.io/api/image/2/level1.json",
+     { "formats" : [ "jpg" ],
+       "qualities" : [ "native","color","gray" ],
+       "supports" : ["regionByPct","regionSquare","sizeByForcedWh","sizeByWh","sizeAboveFull","rotationBy90s","mirroring"] }
+  ]
+}

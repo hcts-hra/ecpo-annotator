@@ -1,0 +1,105 @@
+{
+  "verbose": true,
+  "plugins": {
+    "local": {
+      "browsers": [
+        "firefox"
+      ]
+    },
+    "sauce": {
+      "disabled": true,
+      "browsers": [
+        {
+          "browserName": "microsoftedge",
+          "platform": "Windows 10",
+          "version": "13"
+        },
+        {
+          "browserName": "microsoftedge",
+          "platform": "Windows 10",
+          "version": "14"
+        },
+        {
+          "browserName": "microsoftedge",
+          "platform": "Windows 10",
+          "version": "15"
+        },
+        {
+          "browserName": "firefox",
+          "platform": "Windows 10",
+          "version": "latest"
+        },
+       {
+          "browserName": "chrome",
+          "platform": "Windows 10",
+          "version": "latest"
+        },
+        {
+          "browserName": "chrome",
+          "platform": "Windows 10",
+          "version": "beta"
+        },
+        {
+          "browserName": "safari",
+          "platform": "OS X 10.11",
+          "version": "9"
+        },
+        {
+          "browserName": "safari",
+          "platform": "OS X 10.11",
+          "version": "10"
+        },
+        {
+          "browserName": "firefox",
+          "platform": "OS X 10.11",
+          "version": "latest"
+        },
+        {
+          "browserName": "chrome",
+          "platform": "OS X 10.11",
+          "version": "latest"
+        },
+        {
+          "browserName": "safari",
+          "platform": "OS X 10.12",
+          "version": "10"
+        },
+        {
+          "browserName": "firefox",
+          "platform": "OS X 10.12",
+          "version": "latest"
+        },
+        {
+          "browserName": "chrome",
+          "platform": "OS X 10.12",
+          "version": "latest"
+        },
+        {
+          "browserName": "firefox",
+          "platform": "linux",
+          "version": "latest"
+        },
+
+        {
+          "browserName": "Safari",
+          "platformName": "ios",
+          "platformVersion": "9.0",
+          "deviceName": "iPhone 6 Simulator"
+        },
+        {
+          "browserName": "Safari",
+          "platformName": "ios",
+          "platformVersion": "10.0",
+          "deviceName": "iPhone 6 Simulator"
+        },
+        {
+          "browserName": "Chrome",
+          "platformName": "Android",
+          "platformVersion": "6.0",
+          "deviceName": "Android Emulator",
+          "appiumVersion": "1.6.5"
+        }
+      ]
+    }
+  }
+}

@@ -1,115 +1,28 @@
-<html>
+<html lang="en">
 <head>
-    <title>OpenSeadragon Fabricjs Overlay Demo</title>
-    <script src="../../bower_components/OpenseadragonFabricjsOverlay/openseadragon/openseadragon.js"> </script>
-    <script src="../../bower_components/OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"> </script>
-    <script src="../../bower_components/OpenseadragonFabricjsOverlay/fabric/fabric.adapted.js"> </script>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes"/>
 
+    <title>Image Annotator demo with list</title>
 
-    <script src="//code.jquery.com/jquery-1.11.2.min.js"> </script>
-    <!--<script src="fabric/fabric.adapted.js"></script>-->
-    <style type="text/css">
-
-        html,
-        body,
-        .openseadragon1 {
-            width: 100%;
+    <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../../bower_components/polymer/lib/elements/custom-style.html"></script>
+    <link rel="import" href="../ecpo-app.html"/>
+    <style>
+        body {
             height: 100%;
+            padding: 0;
             margin: 0;
+            display: block;
+            font-size: 20px;
         }
 
+        h2 {
+            color: blue;
+        }
     </style>
-    <script>
-
-        // ----------
-        App = {
-            // ----------
-            init: function() {
-                var self = this;
-
-                var tileSource = {
-                    Image: {
-                        xmlns: "http://schemas.microsoft.com/deepzoom/2008",
-                        Url: "http://openseadragon.github.io/example-images/highsmith/highsmith_files/",
-                        Format: "jpg",
-                        Overlap: "2",
-                        TileSize: "256",
-                        Size: {
-                            Height: "9221",
-                            Width:  "7026"
-                        }
-                    }
-                };
-                var tileSourceIIIF = {
-                    "@context": "http://iiif.io/api/image/2/context.json",
-                    "@id": "https://libimages1.princeton.edu/loris/pudl0001%2F4609321%2Fs42%2F00000001.jp2",
-                    "height": 7200,
-                    "width": 5233,
-                    "profile": [ "http://iiif.io/api/image/2/level2.json" ],
-                    "protocol": "http://iiif.io/api/image",
-                    "tiles": [{
-                        "scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
-                        "width": 1024
-                    }]
-                };
-
-                this.viewer = OpenSeadragon({
-                    id: "contentDiv",
-                    prefixUrl: "openseadragon/images/",
-                    tileSources: [{
-                        tileSource: tileSource,
-                        width: 1,
-                        y: 0,
-                        x: 0
-                    },
-                    ]
-                });
-
-                // initialize overlay
-                var options = {
-                    scale: 1000
-                }
-                var overlay = this.viewer.fabricjsOverlay(options);
-
-
-
-
-//                overlay.fabricCanvas().freeDrawingBrush.color='red';
-//                overlay.fabricCanvas().freeDrawingBrush.width=30;
-
-                // start freedrawing mode
-
-                overlay.fabricCanvas().on('mouse:down', function (options) {
-
-                    if (options.target&&(options.target.action=='button')) {
-                        self.viewer.setMouseNavEnabled(false);
-                        self.viewer.outerTracker.setTracking(false);
-                        circle2.set('fill','lightgreen');
-                        overlay.fabricCanvas().isDrawingMode=true;
-                    }
-                });
-
-
-
-                $(window).resize(function() {
-                    overlay.resize();
-                    overlay.resizecanvas();
-                });
-            }
-        };
-
-        // ----------
-        $(document).ready(function() {
-            App.init();
-        });
-
-        function draw(e){
-            console.log("drawing");
-        }
-    </script>
 </head>
 <body>
-    <button on-click="draw">draw</button>
-    <div id="contentDiv" class="openseadragon1"></div>
+    <ecpo-app></ecpo-app>
 </body>
 </html>

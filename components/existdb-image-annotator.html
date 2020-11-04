@@ -1,36 +1,30 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+
 <link rel="import" href="../bower_components/polymer/lib/elements/dom-if.html">
-<link rel="import" href="../bower_components/paper-spinner/paper-spinner-lite.html">
-<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/polymer/lib/elements/custom-style.html">
+
+<link rel="import" href="../bower_components/paper-styles/color.html">
+<link rel="import" href="../bower_components/paper-styles/typography.html">
 <link rel="import" href="../bower_components/iron-icon/iron-icon.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../bower_components/iron-icons/maps-icons.html">
 <link rel="import" href="../bower_components/iron-icons/device-icons.html">
 <link rel="import" href="../bower_components/iron-icons/hardware-icons.html">
 <link rel="import" href="../bower_components/iron-icons/image-icons.html">
-<link rel="import" href="../bower_components/paper-styles/color.html">
-
-<!--<link rel="import" href="bower_components/web-animations-js/web-animations.html">-->
-<!--<link rel="import" href="image-loader.html">-->
+<link rel="import" href="../bower_components/toggle-icon/toggle-icon.html">
+<link rel="import" href="../bower_components/paper-toast/paper-toast.html">
 
 <script src="../bower_components/openseadragon/built-openseadragon/openseadragon/openseadragon.min.js"></script>
 <script src="OpenseadragonFabricjsOverlay/openseadragon-fabricjs-overlay.js"></script>
 <script src="../bower_components/fabric.js/dist/fabric.js"></script>
-<!--<script src="../fabric.js/dist/fabric.min.js"></script>-->
-
 
 <!--
-`img-pan-zoom` Image pan zoom element
+`existdb-image-annotator' is a component that wraps OpenSeaDragon image viewer and combines it
+with a Fabricjs overlay. Both libs establish their own overlay - one for rendering the image and one to
+draw shapes upon.
 
-Images are preloaded by `img-loader` and a spinner is shown until loaded
-Deep Zoom Images are supported
-
-### Styling
-
-Custom property | Description | Default
-----------------|-------------|----------
-`--img-pan-zoom-spinner` | Mixin applied to spinner |
-`--img-pan-zoom-spinner-color` | Spinner color | `#2196F3`
-`--img-pan-zoom-spinner-width` | Spinner width | `5px`
+This component also creates the basic layout of the app along with a toolbar and a sidebar.
 
 ### Credits
 
@@ -39,7 +33,6 @@ Custom property | Description | Default
 
 @demo demo/index.html
 -->
-
 <dom-module id="existdb-image-annotator">
     <template>
         <style>
@@ -48,111 +41,200 @@ Custom property | Description | Default
                 position: relative;
                 width: 100%;
                 height: 100%;
-
+                --toggle-icon-buttons: {
+                    padding: 8px;
+                    width: 40px;
+                    height: 40px;
+                };
+                @apply --paper-font-common-base;
             }
 
-            #viewer {
-                /*position: relative;*/
-                height: 100%;
-                width: 100%;
-                position: absolute;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                right: 0;
+            toggle-icon {
+                --toggle-icon: {
+                    color: var(--paper-grey-700);
+                };
             }
 
-            paper-spinner-lite {
-                opacity: 0;
-                display: block;
-                transition: opacity 700ms;
-                position: absolute;
-                margin: auto;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                right: 0;
-                z-index: 1;
-                height: 70px;
-                width: 70px;
-                --paper-spinner-color: var(--img-pan-zoom-spinner-color, #2196F3);
-                --paper-spinner-stroke-width: var(--img-pan-zoom-spinner-width, 5px);
-                @apply(--img-pan-zoom-spinner);
+            .checked-blue {
+                --toggle-icon-checked: {
+                    color: var(--paper-blue-500);
+                };
             }
 
-            paper-spinner-lite[active] {
-                opacity: 1;
+            paper-icon-button{
+                color: var(--paper-grey-700);
             }
 
             [hidden] {
                 display: none;
             }
 
-            .toolbarDiv {
-                background: blue;
-                height: 40px;
-            }
-
-            .canvasDiv, #viewer, #viewer ::slotted(existdb-fabric-canvas) {
-                position: absolute;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-            }
-
-            .canvasDiv {
-                z-index: -1;
-            }
-
             .buttonBar {
-                position: absolute;
-                top: 0;
-                left: 0;
                 width: 100%;
-                z-index: 50;
+                height: 40px;
+                z-index: -1;
                 background: white;
                 border-bottom: 1px solid;
             }
 
-            .devider {
-                width: 0px;
-                border-right: thin solid var(--paper-grey-500);
+            .divider {
                 display: inline;
                 margin: 0 8px;
+                border-right: thin solid var(--paper-grey-500);
+            }
+
+            .cursorposition {
+                font-size: 0.8rem;
+                font-family: monospace;
+            }
+
+            :host ::slotted(.logout) {
+                float:right;
+            }
+
+            :host ::slotted(#osd-slot-container) {
+                position: relative;
+                top: 0;
+                left: 0;
+                height: calc(100% - 41px);
+                width: 100%; 
+            }
+
+            .displayMode{
+                position: absolute;
+                top:13px;
+                right:60px;
+                font-size:14px;
+                color:var(--paper-blue-500);
+            }
+
+            .invisible {
+                width:0;height:0;border:0;display:inline;
             }
         </style>
 
-        <!-- Only preload regular images -->
-        <!--
-                <template is="dom-if" if="[[!dzi]]">
-                    <paper-spinner-lite hidden$="[[hideSpinner]]" active="[[loading]]"></paper-spinner-lite>
-                    <image-loader loaded="{{loaded}}" loading="{{loading}}" src="[[src]]"></image-loader>
-                </template>
-        -->
-
-        <!-- Openseadragon -->
-        <!--<div id="toolbarDiv"></div>-->
         <div class="buttonBar">
-            <paper-icon-button icon="zoom-in" title="zoom in"></paper-icon-button>
-            <paper-icon-button icon="zoom-out" title="zoom out"></paper-icon-button>
-            <paper-icon-button icon="home" title="home" on-click="_setModeToOSD"></paper-icon-button>
-            <paper-icon-button icon="fullscreen" title="fullscreen"></paper-icon-button>
+            <!-- Openseadragon controls -->
+            <!--
+            ### button to zoom in
+            -->
+            <paper-icon-button id="zoomIn" icon="zoom-in" title="zoom in"></paper-icon-button>
+            <!--
+            ### button to zoom out
+            -->
+            <paper-icon-button id="zoomOut" icon="zoom-out" title="zoom out"></paper-icon-button>
+            <!--
+            ### button to reset zoom and pan
+            -->
+            <paper-icon-button id="homeBtn" icon="home" title="home" on-click="_onHome"></paper-icon-button>
+            <!--
+            ### button to switch to full screen mode
+            -->
+            <paper-icon-button id="fullScreen" icon="fullscreen" title="fullscreen"
+                               on-click="_onFullScreen"></paper-icon-button>
+            <!--
+            ### button to switch to zoom and pan mode
+            -->
+            <toggle-icon id="panzoom"
+                         icon="pan-tool"
+                         title="mouse pan and zoom"
+                         class="checked-blue mode-selector" on-click="_panzoom"></toggle-icon>
 
-            <div class="devider"></div>
+            <div class="divider"></div>
 
-            <paper-icon-button icon="hardware:computer" on-click="_logShapes"></paper-icon-button>
-            <paper-icon-button icon="image:crop-3-2" title="add rectangle" on-click="_createRect"></paper-icon-button>
+            <!--
+            ### icon to switch to 'select' mode
+            -->
+            <toggle-icon id="selectMode"
+                         icon="tap"
+                         title="select"
+                         animation="flip-horizontal"
+                         class="checked-blue mode-selector" on-click="_select"></toggle-icon>
 
-            <paper-icon-button icon="image:panorama-fish-eye" title="add circle"
-                               on-click="_createCircle"></paper-icon-button>
-            <paper-icon-button icon="device:signal-cellular-null" title="add polygon"
-                               on-click="_createPolygon"></paper-icon-button>
-            <paper-icon-button icon="remove-circle-outline" title="remove shape"
-                               on-click="_removeShape"></paper-icon-button>
-            <span id="cursorWindowPosition"></span>
+            <!--
+            ### icon to switch to 'fill' mode
+            -->
+            <toggle-icon id="fillMode"
+                         icon="invert-colors"
+                         animation="flip-horizontal"
+                         on-click="_fillMode"
+                         class="checked-blue"></toggle-icon>
+
+            <!--
+            ### icon to switch to 'group' mode
+            -->
+            <toggle-icon id="groupMode"
+                        icon="groupmode"
+                        animation="flip-horizontal"
+                        class="checked-blue mode-selector"
+                        on-click="_group"></toggle-icon>
+
+            <div class="divider"></div>
+            <!--
+            ### icon to switch to 'rect' mode
+            -->
+            <toggle-icon id="rectMode"
+                         icon="image:crop-3-2"
+                         title="add rectangle"
+                         on-click="_createRect"
+                         class="checked-blue mode-selector"></toggle-icon>
+
+            <!--
+            ### icon to switch to 'circle' mode
+            -->
+            <toggle-icon id="circleMode"
+                         icon="image:panorama-fish-eye"
+                         title="add circle"
+                         on-click="_createCircle"
+                         class="checked-blue mode-selector"></toggle-icon>
+
+            <!--
+            ### icon to switch to 'polygon' mode
+            -->
+            <toggle-icon id="polyMode"
+                          icon="device:signal-cellular-null"
+                          title="add polygon"
+                          on-click="_createPolygon"
+                          class="checked-blue mode-selector"></toggle-icon>
+
+            <div class="divider"></div>
+
+            <!--
+            ### icon to switch to 'edit' mode
+            -->
+            <toggle-icon id="editMode"
+                         icon="editnodes"
+                         title="edit"
+                         on-click="_edit"
+                         animation="flip-horizontal"
+                         class="checked-blue mode-selector"
+                         disabled="[[_noShapeSelected(selectedShape)]]"></toggle-icon>
+
+            <!--
+            ### icon to delete a selected shape
+            -->
+            <paper-icon-button icon="remove-circle" title="remove shape" on-click="_removeShape"></paper-icon-button>
+
+            <div class="divider"></div>
+
+            <!--
+            <span class="cursorposition" id="cursorWindowPosition"></span>
+            <div class="divider"></div>
+            <span class="cursorposition" id="cursorContainerPosition"></span>
+            <div class="divider"></div>
+            <span class="cursorposition" id="cursorImagePosition"></span>
+            <div class="divider"></div>
+            <span class="cursorposition" id="cursorViewportPosition"></span>
+            -->
+
+            <div class="invisible" tabindex="0" id="focusDummy"></div>
+            <slot name="logout"></slot>
+            <div class="displayMode">mode:[[mode]]</div>
         </div>
+        <!-- Openseadragon is attached to host inside a container element -->
         <slot></slot>
+
+
 
     </template>
     <script>
@@ -163,110 +245,152 @@ Custom property | Description | Default
 
             static get properties() {
                 return {
-                    // Image source
+                    /**
+                     *  the Image source
+                     */
                     src: {
                         type: String,
                         observer: '_srcChanged'
                     },
-                    // Set to true if you are using a deep zoom image
+                    /**
+                     *  Set to true if you are using a deep zoom image
+                     */
                     dzi: {
                         type: Boolean,
                         value: false
                     },
-                    // Fade in new items added to the viewer
+                    /**
+                     *  Fade in new items added to the viewer
+                     */
                     fadeIn: {
                         type: Boolean,
                         value: true
                     },
-                    // loading
-                    loading: {
-                        type: Boolean,
-                        readonly: true,
-                        notify: true
-                    },
-                    // hides spinner
-                    hideSpinner: {
-                        type: Boolean,
-                        value: false
-                    },
-                    // loaded
-                    loaded: {
-                        type: Boolean,
-                        readonly: true,
-                        notify: true,
-                        observer: "_loadedChanged"
-                    },
-                    // Set to false to prevent the appearance of the default navigation controls. Note that if set to false, the customs buttons set by the options zoomInButton, zoomOutButton etc, are rendered inactive.
+
+                    /**
+                     * Set to false to prevent the appearance of the default navigation controls. Note that if set
+                     * to false, the customs buttons set by the options zoomInButton, zoomOutButton etc,
+                     * are rendered inactive.
+                     */
                     showNavigationControl: {
                         type: Boolean,
                         value: true
                     },
-                    // Set to true to make the navigator minimap appear.
+                    /**
+                     * Set to true to make the navigator minimap appear.
+                     */
                     showNavigator: {
                         type: Boolean,
                         value: false
                     },
-                    // The "zoom distance" per mouse click or touch tap. Note: Setting this to 1.0 effectively disables the click-to-zoom feature (also see gestureSettings[Mouse|Touch|Pen].clickToZoom/dblClickToZoom).
+                    /**
+                     * The "zoom distance" per mouse click or touch tap. Note: Setting this to 1.0 effectively
+                     * disables the click-to-zoom feature (also see
+                     * gestureSettings[Mouse|Touch|Pen].clickToZoom/dblClickToZoom).
+                     */
                     zoomPerClick: {
                         type: Number,
                         value: 2.0
                     },
-                    // The "zoom distance" per mouse scroll or touch pinch. Note: Setting this to 1.0 effectively disables the mouse-wheel zoom feature (also see gestureSettings[Mouse|Touch|Pen].scrollToZoom}).
+                    /**
+                     * The "zoom distance" per mouse scroll or touch pinch. Note: Setting this to 1.0 effectively
+                     * disables the mouse-wheel zoom feature (also see gestureSettings[Mouse|Touch|Pen].scrollToZoom}).
+                     */
                     zoomPerScroll: {
                         type: Number,
                         value: 1.2
                     },
-                    // Specifies the animation duration per each OpenSeadragon.Spring which occur when the image is dragged or zoomed.
+                    /**
+                     * Specifies the animation duration per each OpenSeadragon.Spring which occur when the image is
+                     * dragged or zoomed.
+                     */
                     animationTime: {
                         type: Number,
                         value: 1.2
                     },
-                    // If true then the 'previous' button will wrap to the last image when viewing the first image and the 'next' button will wrap to the first image when viewing the last image.
+                    /**
+                     * If true then the 'previous' button will wrap to the last image when viewing the first image
+                     * and the 'next' button will wrap to the first image when viewing the last image.
+                     */
                     navPrevNextWrap: {
                         type: Boolean,
                         value: false
                     },
-                    // If true then the rotate left/right controls will be displayed as part of the standard controls. This is also subject to the browser support for rotate (e.g. viewer.drawer.canRotate()).
+                    /**
+                     * If true then the rotate left/right controls will be displayed as part of the standard controls.
+                     * This is also subject to the browser support for rotate (e.g. viewer.drawer.canRotate()).
+                     */
                     showRotationControl: {
                         type: Boolean,
                         value: false
                     },
-                    // The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or width at which the zoom out will be constrained. Setting it to 0, for example will allow you to zoom out infinity.
+                    /**
+                     * The minimum percentage ( expressed as a number between 0 and 1 ) of the viewport height or
+                     * width at which the zoom out will be constrained. Setting it to 0, for example will allow
+                     * you to zoom out infinity.
+                     */
                     minZoomImageRatio: {
                         type: Number,
                         value: 1
                     },
-                    // The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. This can be set to Infinity to allow 'infinite' zooming into the image though it is less effective visually if the HTML5 Canvas is not availble on the viewing device.
+
+                    /**
+                     * The maximum ratio to allow a zoom-in to affect the highest level pixel ratio. This can be set
+                     * to Infinity to allow 'infinite' zooming into the image though it is less effective visually
+                     * if the HTML5 Canvas is not availble on the viewing device.
+                     */
                     maxZoomPixelRatio: {
                         type: Number,
                         value: 1.1
                     },
-                    // Constrain during pan
+                    /**
+                     * Constrain during pan
+                     */
                     constrainDuringPan: {
                         type: Boolean,
                         value: false
                     },
-                    // The percentage ( as a number from 0 to 1 ) of the source image which must be kept within the viewport. If the image is dragged beyond that limit, it will 'bounce' back until the minimum visibility ratio is achieved. Setting this to 0 and wrapHorizontal ( or wrapVertical ) to true will provide the effect of an infinitely scrolling viewport.
+                    /**
+                     * The percentage ( as a number from 0 to 1 ) of the source image which must be kept within
+                     * the viewport. If the image is dragged beyond that limit, it will 'bounce' back until the
+                     * minimum visibility ratio is achieved. Setting this to 0 and wrapHorizontal ( or wrapVertical )
+                     * to true will provide the effect of an infinitely scrolling viewport.
+                     */
                     visibilityRatio: {
                         type: Number,
                         value: 1
                     },
+                    /**
+                     *  show/hide the zoom control
+                     */
                     showZoomControl: {
                         type: Boolean,
                         value: false
                     },
+                    /**
+                     *  show/hide the home control
+                     */
                     showHomeControl: {
                         type: Boolean,
                         value: false
                     },
+                    /**
+                     *  show/hide the fullpage control
+                     */
                     showFullPageControl: {
                         type: Boolean,
                         value: false
                     },
+                    /**
+                     *  preserve the viewport
+                     */
                     preserveViewport: {
                         type: Boolean,
                         value: true
                     },
+                    /**
+                     *  usually OSD show controls on its canvas. Suppress as we have our own toolbar buttons.
+                     */
                     autoHideControls: {
                         type: Boolean,
                         value: true
@@ -275,147 +399,117 @@ Custom property | Description | Default
                         type: Number,
                         value: 0
                     },
+                    /**
+                     *  reference to the viewer (OSD instance)
+                     */
                     viewer: {
-                        type: Object
+                        type: Object,
+                        value: () => {
+                            return {}
+                        }
                     },
                     zoom: {
                         type: Number
                     },
+                    /**
+                     *  holds currently selected shape (a Fabricjs object)
+                     */
                     selectedShape: {
-                        type: Object
+                        type: Object,
+                        value: _ => null
                     },
-                    mode:{
+                    /**
+                     *  fill mode switch
+                     */
+                    fill: {
+                        type: Boolean,
+                        value: true
+                    },
+                    /**
+                     *  currently active mode
+                     */
+                    mode: {
                         type: String,
-                        value: 'osd', // open seadragon mode
-                        observer: '_modeChanged'
+                        observer: '_modeChange',
+                        notify:true,
+                        value: 'navigate' // open seadragon mode
+                    },
+                    /**
+                     *  list of available modes
+                     */
+                    modes: {
+                        type: Object,
+                        value: {
+                            NAVIGATE: 'navigate',
+                            SELECT: 'select',
+                            GROUP: 'group',
+                            CIRCLE: 'circle',
+                            RECTANGLE: 'rectangle',
+                            POLYGON: 'polygon',
+                            EDIT: 'edit'
+                        }
                     }
-
                 };
             }
 
-
-
+            /**
+             * webcomponent lifecycle method. Processing starts here once component is registered and connected to
+             * browser.
+             */
             connectedCallback() {
                 super.connectedCallback();
-//                console.log('connected rootpath: ', this.rootPath);
-//                console.log('connected importPath: ', this.importPath);
-                this.mode = 'osd'; 
 
-                document.addEventListener('WebComponentsReady', function() {
-                    console.log('webcomponentsready');
-                    // Init openseadragon if we are using a deep zoom image
-                    if (this.dzi) {
-                        // Add src changed observer
-                        this._initOpenSeadragon();
-                        this._initFabric();
-
-                        function onMouseTrackerMove(event) {
-                            function pointToString(point) {
-            return point.x.toPrecision(4) + "," + point.y.toPrecision(4);
-        }
-
-            let viewerX = event.position.x;
-            let viewerY = event.position.y;
-            let windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
-            this.$.cursorWindowPosition.innerHTML = pointToString(windowPoint);
-            // let containerPoint = windowPoint.minus(
-            //         OpenSeadragon.getElementPosition(viewer.element));
-            //         this.$.cursorWindowPosition.text(pointToString(containerPoint));
-            // let image1 = viewer.world.getItemAt(0);
-            // let imagePoint = image1.windowToImageCoordinates(windowPoint);
-            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
-            // let image2 = viewer.world.getItemAt(1);
-            // let imagePoint = image2.windowToImageCoordinates(windowPoint);
-            // this.$.cursorWindowPosition.text(pointToString(imagePoint));
-            // let viewportPoint = viewer.viewport.windowToViewportCoordinates(windowPoint);
-            // this.$.cursorWindowPosition.text(pointToString(viewportPoint));
-        }
-        const mouseTracker = new OpenSeadragon.MouseTracker({
-            element: document,
-            moveHandler: onMouseTrackerMove.bind(this)
-        }).setTracking(true);
-                    }
-
-                }.bind(this));
-
-                /*
-                                this.animationConfig = {
-                                    'fade': {
-                                        name: 'fade-in-animation',
-                                        node: this.$.viewer
-                                    }
-                                };
-                */
-
-            }
-
-            _initFabric() {
-                const self = this;
-                const options = {
-                    annotator:this
-                };
-                this._fabricOverlay = this.viewer.fabricjsOverlay(options);
-            }
-
-
-            // Init openseadragon
-            _initOpenSeadragon() {
-                console.log('_initOpenSeadragon');
-                var tileSources = this.src;
-                if (!this.dzi) {
-                    tileSources = {
-                        type: 'image',
-                        url: this.src,
-                        buildPyramid: false
-                    }
-                }
-
-
-                console.log('showZoomControl ', this.showZoomControl);
-
-                this.viewer = OpenSeadragon({
-                    element: this,
-                    prefixUrl: "/exist/apps/epco/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
-                    visibilityRatio: this.visibilityRatio,
-                    constrainDuringPan: this.constrainDuringPan,
-                    showNavigationControl: this.showNavigationControl,
-                    showNavigator: this.showNavigator,
-                    zoomPerClick: this.zoomPerClick,
-                    zoomPerScroll: this.zoomPerScroll,
-                    animationTime: this.animationTime,
-                    navPrevNextWrap: this.navPrevNextWrap,
-                    showRotationControl: this.showRotationControl,
-                    minZoomImageRatio: this.minZoomImageRatio,
-                    maxZoomPixelRatio: this.maxZoomPixelRatio,
-                    showZoomControl: this.showZoomControl,
-                    showHomeControl: false,
-                    showFullPageControl: false,
-                    tileSources: tileSources,
-                    gestureSettingsMouse: {
-                        clickToZoom: true
-                    }
+                this.addEventListener('annotator-initialized', function(){
+                    console.log('Annotator init');
+                    this.init = true;
+                    this.mode = this.modes.SELECT;
+                    // mouseTracker.setTracking(true)
                 });
+                this.addEventListener('keydown', this._keyHandler);
+                this.$.focusDummy.focus();
+                document.addEventListener('shape-selected', this._selectedShapeHandler.bind(this))
+            }
 
+            /**
+             *  initializes the component by creating one OSD and one Fabricjs instance.
+             */
+            initialize () {
+                // setup OSD and attach it to above div
+                this.viewer = this._initOpenSeadragon();
+                this.viewer.world.addOnceHandler('add-item', e => this._handleImageAddSuccess(e))
+                this.viewer.addOnceHandler('add-item-failed', e => this._handleImageAddFailed(e))
+                // FIXME: this will have to change when info.json can be consumed
+                this.viewer.addSimpleImage({ url: this.src })
+            }
 
-                const self = this;
-               this.init = true;
+            /**
+             *  webcomponent lifecycle method for teardown. Unregistering eventlisteners.
+             */
+            disconnectedCallback() {
+                super.disconnectedCallback();
+                document.removeEventListener('shape-selected', this._selectedShapeHandler.bind(this));
+                this.removeEventListener('keydown', this._keyHandler);
+            }
+
+            pointToString(type, point) {
+                return `${type}: ${point.x.toPrecision(4)}, ${point.y.toPrecision(4)}`;
+            }
+
+            highlight(shapeId) {
+                this._fabricOverlay.highlight(shapeId)
             }
 
             getZoom() {
                 return this.viewer.viewport.getZoom(true);
             }
 
-            //Function to destroy the viewer and clean up everything created by OpenSeadragon.
+            // Function to destroy the viewer and clean up everything created by OpenSeadragon.
             destroy() {
+                // TODO destroy fabricJSoverlay?
                 this.viewer.destroy();
             }
 
-            getCanvas() {
-                return this.querySelector('canvas');
-            }
-
             getPoint() {
-                console.log('getPoint ', OpenSeadragon.Point(0, 0));
                 return OpenSeadragon.Point(0, 0);
             }
 
@@ -427,7 +521,9 @@ Custom property | Description | Default
                 this.viewer.getBounds(true);
             }
 
-            // Zoom in
+            /**
+             *  zooms OSD canvas
+             */
             zoomIn() {
                 // TODO: Replace with native openseadragon zoomIn
                 var currentZoom = this.viewer.viewport.getZoom();
@@ -438,7 +534,9 @@ Custom property | Description | Default
                 }
             }
 
-            // Zoom out
+            /**
+             * zoom out OSD canvas
+             */
             zoomOut() {
                 // TODO: Replace with openseadragon native zoomOut
                 var currentZoom = this.viewer.viewport.getZoom();
@@ -453,82 +551,395 @@ Custom property | Description | Default
                 }
             }
 
-            // reset zoom
+            /**
+             *  reset OSD zoom factor
+             */
             resetZoom() {
                 this.viewer.viewport.goHome();
             }
 
-            _srcChanged(newVal, oldVal) {
-                console.log('_srcChanged');
-                if (this.dzi && this.init) {
-                    this._addTiledImage();
-                }
+            addShapesFromAnnotations(annotations) {
+                const isGroupAnnotationBody = b => b.type === 'GroupAnnotation'
+                const isGroupAnnotation = a => a.body.some(isGroupAnnotationBody)
+                const isShapeAnnotation = a => !isGroupAnnotationBody(a)
+                annotations
+                    .filter(isShapeAnnotation)
+                    .forEach(annotation => {
+                        const target = annotation.target[0]
+                        const attributes = {
+                            data: { label: annotation.body[0].value },
+                            id: target.id
+                        }
+                        this._fabricOverlay.importSVG(target.selector.value, attributes)
+                    })
+
+                annotations
+                    .filter(isGroupAnnotation)
+                    .forEach(a => {
+                        const groupData = a.body.filter(b => b.type === 'GroupAnnotation')[0]
+                        groupData.id = a.id
+                        this._fabricOverlay.importGroup(groupData, a.target)
+                    })
+
+                this._fabricOverlay.switchFillMode(this.fill);
+                this._fixShapeSelection()
             }
 
-            // Add loaded images to viewer
-            _loadedChanged() {
-                if (this.loaded) {
-                    if (!this.init) {
-                        this._initOpenSeadragon();
-                    } else {
-                        this._addImage();
-                    }
-                }
+            changeSelectedShapes(attributes) {
+                console.log('changeSelectedShapes.label', attributes)
+                this._fabricOverlay.changeSelectedShapes(attributes)
             }
+
+            clear() {
+                this._fabricOverlay.clear();
+            }
+
+            // INITIALIZATION
+
+            /**
+             *  init OSD using params exposed by this component e.g. `this.zoomPerClick`
+             *
+             *  OSD will append to 'osd-slot-container' div which has been created before in the lightDOM.
+             *
+             *  Note: it is important to keep OSD in lightDOM as the library does not play well with shadowDOM yet.
+             */
+            _initOpenSeadragon() {
+                // create a wrapper div in the lightDOM that holds the OSD instance
+                const osdContainer = document.createElement('div')
+                osdContainer.id = 'osd-slot-container'
+                this.appendChild(osdContainer)
+
+                return OpenSeadragon({
+                    element: this.querySelector('#osd-slot-container'),
+                    prefixUrl: "/exist/apps/ecpo/bower_components/openseadragon/built-openseadragon/openseadragon/images/",
+                    visibilityRatio: this.visibilityRatio,
+                    constrainDuringPan: this.constrainDuringPan,
+                    showNavigationControl: this.showNavigationControl,
+                    showNavigator: this.showNavigator,
+                    navigatorId:"navigatorDiv",
+                    navigatorAutoFade:  false,
+                    zoomPerClick: this.zoomPerClick,
+                    zoomPerScroll: this.zoomPerScroll,
+                    animationTime: this.animationTime,
+                    navPrevNextWrap: this.navPrevNextWrap,
+                    showRotationControl: this.showRotationControl,
+                    minZoomImageRatio: this.minZoomImageRatio,
+                    maxZoomPixelRatio: this.maxZoomPixelRatio,
+                    showZoomControl: this.showZoomControl,
+                    showHomeControl: false,
+                    showFullPageControl: false,
+                    sequenceMode: true,
+                    gestureSettingsMouse: {
+                        clickToZoom: false
+                    },
+                    crossOriginPolicy: 'Anonymous',
+                    zoomInButton: this.$.zoomIn,
+                    zoomOutButton: this.$.zoomOut
+                })
+            }
+
+            _handleImageAddSuccess (e) {
+                // scale needs to be set to image width
+                const size = e.item.getContentSize()
+                this._fabricOverlay = this.viewer.fabricjsOverlay({
+                    scale: size.x,
+                    annotator: this
+                });
+
+                // shapes should be filled by default
+                if (!this.fill) {
+                    this.$.fillMode.toggleChecked()
+                    this.fill = true
+                }
+                    
+                console.info('OSD and fabric.js overlay initialized. scale=', size.x);
+                this.dispatchEvent(new CustomEvent('annotator-initialized', {}));
+            }
+
+            _handleImageAddFailed (e) {
+                console.error("add-item-failed", e)
+                // scale needs to be set to image width
+                this.dispatchEvent(new CustomEvent('show-message', {
+                    composed: true, bubbles: true, detail: {
+                        'message': 'The image could not be loaded!'}}));
+            }
+
+            // EVENT HANDLER
+
+            _newShapeHandler(e) {
+//                console.log('NEW SHAPE', e.detail.shape)
+            }
+
+            _changedShapeHandler(e) {
+//                console.log('CHANGED SHAPE', e.detail.shape)
+            }
+
+            _deletedShapeHandler(e) {
+//                console.log('DELETED SHAPE', e.detail.shape)
+            }
+
+            /**
+             *  store latest selected shape
+             */
+            _selectedShapeHandler(e) {
+                this.set('selectedShape', e.detail.shape)
+            }
+
+            // // Add loaded images to viewer
+            // _loadedChanged() {
+            //     if (!this.loaded) { return }
+            //     if (!this.init) {
+            //         return this._initOpenSeadragon();
+            //     }
+            //     this._clear()
+            //     this._addImage();
+            // }
 
             _addImage() {
                 this.viewer.addSimpleImage({url: this.src, index: 0, replace: true});
             }
 
             _addTiledImage() {
-                console.log('_addTiledImage ', this.viewer);
                 this.viewer.addTiledImage({tileSource: this.src, index: 0, replace: true});
             }
 
-            _removeShape(e) {
-                console.log('_removeShape ', e);
-                console.log('_removeShape ', this.canvas.getActiveObject());
-                this.canvas.remove(this.canvas.getActiveObject());
-                this.canvas.renderAll();
+            _logShapes() {
+                this._data = this._fabricOverlay.serialize();
             }
 
-            _logShapes(e) {
-                console.log('_logShapes ', e);
-                console.log('all objects ', this.canvas.getObjects());
-                console.log('_logShapes canvas ', this.canvas.toJSON('data'));
-            }
-
-            _rectSelected(o) {
-                console.log('_rectSelected ', o);
-                console.log('_rectSelected canvas ', this.canvas);
-                console.log('_rectSelected target', o.target);
-                this.selectedShape = o.target;
-                console.log('_rectSelected selected', this.canvas.getActiveObject());
-
+            _loadShapes() {
+                this._fabricOverlay.load(this._data);
             }
 
             _createRect() {
-                this.mode = "rectangle"
+                this.mode = this.modes.RECTANGLE
             }
 
             _createCircle() {
-                this.mode = 'circle';
+                this.mode = this.modes.CIRCLE
             }
-
 
             _createPolygon() {
-                this.mode = 'polygon';
+                this.mode = this.modes.POLYGON
             }
 
-            _modeChanged(newMode) {
-                if (!newMode || !this.viewer) { return }
-                this.viewer.setMouseNavEnabled(newMode === 'osd');
-                this._fabricOverlay.track(newMode)
+            _removeShape() {
+                if (this._noShapeSelected(this.selectedShape)) { return }
+                this._fabricOverlay.remove()
+                this.mode = this.modes.SELECT
             }
-            _setModeToOSD() { 
-                this.mode = 'osd'
-                this._fabricOverlay.reset();
+
+            _edit() {
+                if (this._noShapeSelected(this.selectedShape)) { return }
+                this.mode = this.modes.EDIT
             }
+
+            _onHome() {
+                this.viewer.viewport.goHome();
+                this.viewer.setMouseNavEnabled(true);
+                this.mode = this.modes.NAVIGATE
+            }
+
+            _panzoom() {
+                this.mode = this.modes.NAVIGATE
+            }
+
+            _select() {
+                this.mode = this.modes.SELECT
+            }
+
+            _group() {
+                this.mode = this.modes.GROUP;
+                this._fixShapeSelection()
+                this._fabricOverlay.addGroup();
+            }
+
+            /**
+             * code stolen from OSD and routed to this.viewer.
+             */
+            _onFullScreen(e) {
+                if (this.viewer.isFullPage() && !this.viewer.isFullScreen()) {
+                    // Is fullPage but not fullScreen
+                    this.viewer.setFullPage(false);
+                } else {
+                    this.viewer.setFullScreen(!this.viewer.isFullPage());
+                }
+                // correct for no mouseout event on change
+                if (this.viewer.buttons) {
+                    this.viewer.buttons.emulateExit();
+                }
+                this.viewer.fullPageButton.element.focus();
+                if (this.viewer.viewport) {
+                    this.viewer.viewport.applyConstraints();
+                }
+            }
+
+            _fillMode() {
+                if (!this.init) { return }
+                this.$.fillMode.toggleChecked()
+                this.fill = !this.fill
+                this._fabricOverlay.switchFillMode(this.fill);
+            }
+
+            /**
+             *  keyboard shortcuts are handled here
+             */
+            _keyHandler(e) {
+                const key = e.key;
+                console.debug('_keyHandler', key);
+
+                switch (key) {
+                    case 's': this._select(); break;
+                    case 'n': this._panzoom(); break;
+                    case 'r': this._createRect(); break;
+                    case 'c': this._createCircle(); break;
+                    case 'p': this._createPolygon(); break;
+                    case 'g': this._group(); break;
+                    case 'e': this._edit(); break;
+                    case 'Backspace': this._removeShape(); break;
+                    case 'Escape':
+                        this._fabricOverlay.deselect()
+                        this.mode = this.modes.SELECT
+                        break;
+                    case 'i':
+                        console.log(this.viewer.tileSource[0].imageToViewportCoordinates(0,0))
+                        break;
+                    default:
+                        console.log('undefined key ', key);
+
+                }
+            }
+
+/*
+            onMouseTrackerMove(event) {
+                const viewerX = event.position.x;
+                const viewerY = event.position.y;
+                const windowPoint = new OpenSeadragon.Point(viewerX, viewerY);
+
+                const containerPoint = windowPoint.minus(OpenSeadragon.getElementPosition(this.viewer.element));
+
+                const image1 = this.viewer.world.getItemAt(0);
+                const imagePoint = image1.windowToImageCoordinates(windowPoint);
+
+                const viewportPoint = this.viewer.viewport.windowToViewportCoordinates(windowPoint);
+                this.$.cursorWindowPosition.innerHTML = this.pointToString('w', windowPoint)
+                this.$.cursorContainerPosition.innerHTML = this.pointToString('c', containerPoint)
+                this.$.cursorImagePosition.innerHTML = this.pointToString('i', imagePoint)
+                this.$.cursorViewportPosition.innerHTML = this.pointToString('v', viewportPoint)
+            }
+*/
+
+            // OBSERVERS
+
+            _srcChanged(newVal, oldVal) {
+                console.log('_srcChanged');
+                if (!newVal || newVal == '') {return}
+                if (!this.init) {
+                    this.initialize();
+                    return
+                }
+                if (this.dzi && this.init) {
+                    return this._addTiledImage();
+                }                
+            }
+
+            /**
+             *  Manages mode changes. Is invoked whenever `this.mode` is modified as an observer.
+             */
+            _modeChange(newVal, oldVal) {
+                console.log('Mode changed from %s to %s', oldVal, newVal);
+
+                if (!this.init) { return }
+                if (newVal === oldVal) { return }
+
+                // call workaround when user exits group mode 
+                if (oldVal === this.modes.GROUP) { this._fixShapeSelection() }
+
+                const mapMode2Toggle = {}
+                mapMode2Toggle[this.modes.NAVIGATE] = this.$.panzoom
+                mapMode2Toggle[this.modes.SELECT] = this.$.selectMode
+                mapMode2Toggle[this.modes.RECTANGLE] = this.$.rectMode
+                mapMode2Toggle[this.modes.CIRCLE] = this.$.circleMode
+                mapMode2Toggle[this.modes.POLYGON] = this.$.polyMode
+                mapMode2Toggle[this.modes.EDIT] = this.$.editMode
+                mapMode2Toggle[this.modes.GROUP] = this.$.groupMode
+
+                mapMode2Toggle[oldVal].checked = false
+                mapMode2Toggle[newVal].checked = true
+
+                const mode = newVal;
+                switch (mode) {
+                    case this.modes.RECTANGLE:
+                    case this.modes.CIRCLE:
+                    case this.modes.POLYGON:
+                        this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay.deselect();
+                        this._fabricOverlay.lockAllObjects(true);
+                        break;
+                    case this.modes.SELECT:
+                        // this must be called. Otherwise points from edit mode won't be removed from canvas.
+                        this._fabricOverlay.removeLineHandles();
+                        this._fabricOverlay.removePointHandles();
+                        console.log("mode SELECT: selectedShape", this.selectedShape)
+                        if (this.selectedShape) {
+                            this.highlight(this.selectedShape.id);
+                        }
+                        // always call switchFillMode to switch back to shape colors
+                        this._fabricOverlay.switchFillMode(this.fill);
+                        this._fabricOverlay.lockAllMovement(false);
+                        this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay.lockAllObjects(false);
+                        break;
+                    case this.modes.EDIT:
+                        this.viewer.setMouseNavEnabled(false);
+                        this._fabricOverlay.lockAllObjects(true);
+                        this._fabricOverlay.editActiveShape();
+                        break
+                    case this.modes.GROUP:
+                        this._fabricOverlay.deselect();
+                        this._fabricOverlay.lockAllObjects(false);
+                        this._fabricOverlay.lockAllMovement(true);
+                        this.viewer.setMouseNavEnabled(false);
+                        // this._fabricOverlay._fabricCanvas.selection = true;
+
+                        if (!this.fill) {
+                            // show button state, always fill at the beginning of group mode
+                            this.$.fillMode.toggleChecked()
+                            this.fill = true
+                        }
+
+                        // always call switchFillMode to change to group colors
+                        this._fabricOverlay.switchFillMode(this.fill);
+                        break
+                    case this.modes.NAVIGATE:
+                        this._fabricOverlay.removeLineHandles();
+                        this._fabricOverlay.removePointHandles();
+                        if (this.selectedShape) {
+                            this.highlight(this.selectedShape.id);
+                        }
+                        this.viewer.setMouseNavEnabled(true);
+                        break;
+                    default:
+                        console.log('mode ', mode, ' is not known');
+                }
+
+            }
+
+            // HELPERS
+
+            _noShapeSelected(shape) {
+                return shape === null
+            }
+
+            /**
+             * workaround to make sure all shapes are selectable
+             * at their appropriate positions
+             */
+            _fixShapeSelection() {
+                this._fabricOverlay.selectAll()
+                this._fabricOverlay.deselect()
+            }
+
         }
 
         window.customElements.define(ExistdbImageAnnotator.is, ExistdbImageAnnotator);
