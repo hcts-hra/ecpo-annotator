@@ -53,6 +53,7 @@ function deploy_components () {
 const bower = [
     'bower_components/**/*',
     '!bower_components/**/LICENSE',
+    '!bower_components/**/COPYING',
     '!bower_components/**/AUTHORS',
     '!bower_components/**/Makefile',
     '!bower_components/**/*.mustache',
