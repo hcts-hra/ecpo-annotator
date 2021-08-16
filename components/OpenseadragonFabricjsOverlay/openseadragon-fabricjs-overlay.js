@@ -104,7 +104,7 @@
     unassignedColor: 'grey',
     currentHue: 0,
     defaultStyle: {
-      strokeWidth: 5,
+      strokeWidth: 1,
       opacity: 0.6,
       hasBorders: true,
       hasControls: false,
