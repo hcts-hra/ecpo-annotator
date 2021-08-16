@@ -3,7 +3,7 @@
   "main": "epco-app.html",
   "dependencies": {
     "polymer": "Polymer/polymer#^2.8.0",
-    "fabric.js": "fabric#^3.6.1",
+    "fabric.js": "fabric#^4.5.0",
     "iron-resizable-behavior": "PolymerElements/iron-resizable-behavior#^2.1.1",
     "paper-icon-button": "PolymerElements/paper-icon-button#^2.0.0",
     "paper-dropdown-menu": "PolymerElements/paper-dropdown-menu#^2.0.0",
