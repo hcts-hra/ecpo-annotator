@@ -349,7 +349,9 @@
 
     lockAllMovement: function (lock) {
       const objects = this._fabricCanvas.getObjects()
-      objects.map(object => object.set({ 
+      objects.map(object => object.set({
+        selectable: !lock,
+        evented: !lock,
         hasBorders: !lock,
         lockMovementX: lock,
         lockMovementY: lock
@@ -776,8 +778,8 @@
           const polygon = this._generatePolygon();
           polygon.set(this._getFillAndStroke(polygon))
           this._fabricCanvas.add(polygon);
-          this._highlight(polygon);
           this._notifyShapeCreated(polygon)
+          this.lockAllMovement(true);
           break;
       }
       return options
@@ -845,7 +847,7 @@
           this._highlight(reimport)
           this.activeShape.set(this._getFillAndStroke(this.activeShape))
           this.activeShape.setCoords();
-
+          this.lockAllMovement(true);
           this._notifyShapeCreated(reimport)
           break
         case this._annotator.modes.CIRCLE:
@@ -856,6 +858,7 @@
           this._highlight(this.activeShape)
           this.activeShape.set(this._getFillAndStroke(this.activeShape))
           this.activeShape.setCoords();
+          this.lockAllMovement(true);
 
           this._notifyShapeCreated(this.activeShape)
         case this._annotator.modes.POLYGON:
