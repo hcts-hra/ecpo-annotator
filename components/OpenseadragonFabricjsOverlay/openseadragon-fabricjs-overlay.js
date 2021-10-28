@@ -632,19 +632,20 @@
 
     _setState: function (options) {
       console.log('_setState', options.pointer)
-      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      const pointer = this._fabricCanvas.getPointer(options.e);
       this._clickOrigin = pointer
       this._state = this.activeShape.get('points')
       console.log('_state', this._state)
     },
 
     _objectMove: function (options) {
-      if (!this._isPointHandle(options.target)) { return }
-      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      const target = options.transform.target
+      if (!this._isPointHandle(target)) { return }
+      const pointer = this._fabricCanvas.getPointer(options.e);
 
       const dx = pointer.x - this._clickOrigin.x
       const dy = pointer.y - this._clickOrigin.y
-      const i = options.target.data.index
+      const i = target.data.index
       const points = this._state.concat([])
       const point = points[i]
       const newPoint = {
