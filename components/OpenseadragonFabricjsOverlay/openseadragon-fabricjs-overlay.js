@@ -350,8 +350,6 @@
     lockAllMovement: function (lock) {
       const objects = this._fabricCanvas.getObjects()
       objects.map(object => object.set({
-        selectable: !lock,
-        evented: !lock,
         hasBorders: !lock,
         lockMovementX: lock,
         lockMovementY: lock
