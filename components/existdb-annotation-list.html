@@ -245,11 +245,16 @@
 
       createGroupAnnotationBody(detail) {
         console.log("createGroupAnnotationBody", detail.data);
+
         return [
           {
             type: "GroupAnnotation",
             color: detail.data.color,
-            id: detail.data.id
+            id: detail.data.id,
+            top: detail.dimensions.top,
+            left: detail.dimensions.left,
+            width: detail.dimensions.width,
+            height: detail.dimensions.height
           },
           {
             type: "CategoryLabel",

@@ -414,11 +414,41 @@
     serializeGroup: function (group) {
       const contents = group.getObjects()
       const serializedContents = contents.map(object => this.serializeObject(object))
+      const contents = group.getObjects()
+      const serializedContents = contents.map(object => this.serializeObject(object))
 
+      const tlxs = contents.map(o => o.aCoords.tl.x)
+      const tlys = contents.map(o => o.aCoords.tl.y)
+      const brxs = contents.map(o => o.aCoords.br.x)
+      const brys = contents.map(o => o.aCoords.br.y)
+
+      const minX = Math.min(...tlxs)
+      const minY = Math.min(...tlys)
+      const maxX = Math.max(...brxs)
+      const maxY = Math.max(...brys)
+      const dimensions = {
+            top: minY,
+            left: minX,
+            width: maxX - minX,
+            height: maxY - minY
+      }
+
+      // visualize group bounding box for debugging
+      // const rect = new fabric.Rect(Object.assign({}, this.defaultStyle, {
+      //   evented: false,
+      //   selectable: false,
+      //   left: dimensions.left,
+      //   top: dimensions.top,
+      //   width: dimensions.width,
+      //   height: dimensions.height
+      //  }));
+      //  this._fabricCanvas.add(rect);
+
+        
       return {
         data: group.data,
         objects: serializedContents,
-        dimensions: group.aCoords
+        dimensions
       }
     },
 
