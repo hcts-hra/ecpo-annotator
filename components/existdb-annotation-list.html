@@ -96,6 +96,22 @@
         };
       }
 
+      static isGroupAnnotationBody(body) {
+        return body.type === 'GroupAnnotation'
+      }
+
+      static isGroupAnnotation(annotation) {
+        return annotation.body.some(ExistdbAnnotationList.isGroupAnnotationBody)
+      }
+
+      static isValidAnnotation(annotation) {
+        return Boolean(annotation.target.length) || ExistdbAnnotationList.isGroupAnnotation(annotation)
+      }
+
+      static isCategorizedAnnotation(annotation) {
+        return Boolean(annotation.body.length)
+      }
+
       /**
        * get index in annotations array for a give shape id.
        *
@@ -308,13 +324,13 @@
 
       save() {
         const annotations = this.get("annotations")
-        const categorized = annotations.filter(annotation => annotation.body.length)
+        const categorized = annotations.filter(ExistdbAnnotationList.isCategorizedAnnotation)
         if (annotations.length > categorized.length) {
           const amount = annotations.length - categorized.length
           this.dispatchEvent(new CustomEvent('show-message', {composed: true, bubbles: true, detail: {'message': amount + ' uncategorized annotations will not be saved'}}));
         }
-  
-        const validAnnotations = categorized.filter(annotation => annotation.target.length)
+
+        const validAnnotations = categorized.filter(ExistdbAnnotationList.isValidAnnotation)
         if (categorized.length > validAnnotations.length) {
           console.log("cleanup of", categorized.length - validAnnotations.length, "invalid annotations")
         }
@@ -490,9 +506,9 @@
       _handleGroupDeleted(e) {
         const groupAnnotationIndex = this.itemIndexById(e.detail.id);
         if (groupAnnotationIndex < 0) {
-          return console.warn('could not find group with id ', e.detail.data.id);
+          return console.warn('could not find group with id ', e.detail.id);
         }
-        this.splice("annotations", groupAnnotationIndex, 1);
+        this.set(["annotations", groupAnnotationIndex, "target"], []);
         return console.log("annotation-list", "group-event", e.detail);
       }
 
