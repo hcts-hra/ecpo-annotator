@@ -414,8 +414,6 @@
     serializeGroup: function (group) {
       const contents = group.getObjects()
       const serializedContents = contents.map(object => this.serializeObject(object))
-      const contents = group.getObjects()
-      const serializedContents = contents.map(object => this.serializeObject(object))
 
       const tlxs = contents.map(o => o.aCoords.tl.x)
       const tlys = contents.map(o => o.aCoords.tl.y)
