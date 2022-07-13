@@ -561,7 +561,7 @@ This component also creates the basic layout of the app along with a toolbar and
             addShapesFromAnnotations(annotations) {
                 const isGroupAnnotationBody = b => b.type === 'GroupAnnotation'
                 const isGroupAnnotation = a => a.body.some(isGroupAnnotationBody)
-                const isShapeAnnotation = a => !isGroupAnnotationBody(a)
+                const isShapeAnnotation = a => !isGroupAnnotation(a)
                 annotations
                     .filter(isShapeAnnotation)
                     .forEach(annotation => {

@@ -350,8 +350,6 @@
     lockAllMovement: function (lock) {
       const objects = this._fabricCanvas.getObjects()
       objects.map(object => object.set({
-        selectable: !lock,
-        evented: !lock,
         hasBorders: !lock,
         lockMovementX: lock,
         lockMovementY: lock
@@ -417,10 +415,38 @@
       const contents = group.getObjects()
       const serializedContents = contents.map(object => this.serializeObject(object))
 
+      const tlxs = contents.map(o => o.aCoords.tl.x)
+      const tlys = contents.map(o => o.aCoords.tl.y)
+      const brxs = contents.map(o => o.aCoords.br.x)
+      const brys = contents.map(o => o.aCoords.br.y)
+
+      const minX = Math.min(...tlxs)
+      const minY = Math.min(...tlys)
+      const maxX = Math.max(...brxs)
+      const maxY = Math.max(...brys)
+      const dimensions = {
+            top: minY,
+            left: minX,
+            width: maxX - minX,
+            height: maxY - minY
+      }
+
+      // visualize group bounding box for debugging
+      // const rect = new fabric.Rect(Object.assign({}, this.defaultStyle, {
+      //   evented: false,
+      //   selectable: false,
+      //   left: dimensions.left,
+      //   top: dimensions.top,
+      //   width: dimensions.width,
+      //   height: dimensions.height
+      //  }));
+      //  this._fabricCanvas.add(rect);
+
+        
       return {
         data: group.data,
         objects: serializedContents,
-        dimensions: group.aCoords
+        dimensions
       }
     },
 
@@ -632,19 +658,20 @@
 
     _setState: function (options) {
       console.log('_setState', options.pointer)
-      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      const pointer = this._fabricCanvas.getPointer(options.e);
       this._clickOrigin = pointer
       this._state = this.activeShape.get('points')
       console.log('_state', this._state)
     },
 
     _objectMove: function (options) {
-      if (!this._isPointHandle(options.target)) { return }
-      const pointer = this._fabricCanvas.getPointer(options.originalEvent);
+      const target = options.transform.target
+      if (!this._isPointHandle(target)) { return }
+      const pointer = this._fabricCanvas.getPointer(options.e);
 
       const dx = pointer.x - this._clickOrigin.x
       const dy = pointer.y - this._clickOrigin.y
-      const i = options.target.data.index
+      const i = target.data.index
       const points = this._state.concat([])
       const point = points[i]
       const newPoint = {
