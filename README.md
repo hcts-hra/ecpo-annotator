@@ -32,7 +32,11 @@ on Polymer 2.0 Web Components in the frontend.
 ## Requirements and Dependencies
 
 * eXist-db 5.0.0 or higher
-* [WAP](https://github.com/eXistSolutions/web-annotation-service/releases) 3.0.3 or higher
+* ant `1.10.12`
+* npm `8.x`
+* bower `1.8.14`
+* node  `14.x`
+* [WAP](https://github.com/eXistSolutions/web-annotation-service/releases) 4.0.0 or higher
 * Polymer 2.x (bundled)
 
 * OpenSeadragon 2.4.0 or higher (bundled)
