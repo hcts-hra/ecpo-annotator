@@ -23,7 +23,7 @@
     "less-plugin-clean-css": "^1.5.1"
   },
   "dependencies": {
-    "@existdb/gulp-exist": "^4.3.1",
+    "@existdb/gulp-exist": "^4.4.0",
     "@polymer/iron-scroll-threshold": "^3.0.1"
   }
 }
